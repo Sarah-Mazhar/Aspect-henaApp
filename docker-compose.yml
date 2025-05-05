@@ -1,0 +1,39 @@
+version: '3.8'
+
+services:
+  hena_db:
+    image: mysql:8.0
+    container_name: hena
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpass
+      MYSQL_DATABASE: hena_db
+      MYSQL_USER: hena_user
+      MYSQL_PASSWORD: henapass
+    ports:
+      - "3307:3306"
+
+    volumes:
+      - hena_mysql_data:/var/lib/mysql
+    networks:
+      - hena_network
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: hena_phpmyadmin
+    restart: always
+    environment:
+      PMA_HOST: hena_db
+      PMA_PORT: 3306
+      MYSQL_ROOT_PASSWORD: rootpass
+    ports:
+      - "8085:80"
+    networks:
+      - hena_network
+
+networks:
+  hena_network:
+    driver: bridge
+
+volumes:
+  hena_mysql_data:
