@@ -1,9 +1,6 @@
 package com.example.hena.user.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 
 @Entity
 public class User {
@@ -19,6 +16,7 @@ public class User {
     private String password;
     private String email;
     private String role;
+
 
     // Getters and Setters
     public Long getId() {
@@ -60,4 +58,21 @@ public class User {
     public void setRole(String role) {
         this.role = role;
     }
+
+    private Long createdByAdminId;
+    @Column(name = "created_by_admin_id")   // ✅ For logging which admin created the user
+
+
+//    createdByAdminId field (to track who created them)
+
+    public Long getCreatedByAdminId() {
+        return createdByAdminId;
+    }
+
+    public void setCreatedByAdminId(Long createdByAdminId) {
+        this.createdByAdminId = createdByAdminId;
+    }
+
+
+
 }
