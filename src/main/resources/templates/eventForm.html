@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head><title>Create Event</title></head>
+<body>
+<h2>Create Event</h2>
+<form th:action="@{/event/create}" method="post">
+    <label>Name: <input type="text" name="name"/></label><br/>
+    <label>Category: <input type="text" name="category"/></label><br/>
+    <label>Description: <input type="text" name="description"/></label><br/>
+    <label>Location: <input type="text" name="location"/></label><br/>
+    <label>DateTime (yyyy-MM-ddTHH:mm): <input type="datetime-local" name="eventDate"/></label><br/>
+    <button type="submit">Create</button>
+</form>
+</body>
+</html>

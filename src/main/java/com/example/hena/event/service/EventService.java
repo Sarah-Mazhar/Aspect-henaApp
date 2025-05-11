@@ -209,6 +209,10 @@ public class EventService {
     @Autowired
     private AdminLogRepository adminLogRepository;
 
+    private int maxAttendees;
+
+    private int currentAttendees = 0;
+
     // Create a new event
     public Event createEvent(Event event, User user) {
         event.setHost(user);
@@ -217,6 +221,10 @@ public class EventService {
         if ("ADMIN".equals(user.getRole())) {
             event.setCreatedByAdminId(user.getId()); // Set the admin who created the event
         }
+
+        // Ensure maxAttendees from the request is preserved
+        event.setMaxAttendees(event.getMaxAttendees());
+        event.setCurrentAttendees(0); // ✅ Set initial attendees to 0
 
         Event createdEvent = eventRepository.save(event);
 
@@ -320,6 +328,14 @@ public class EventService {
         Event event = eventRepository.findById(eventId).orElseThrow(() -> new RuntimeException("Event not found"));
         event.getRsvps().add(user);
         eventRepository.save(event);
+        if (event.getCurrentAttendees() >= event.getMaxAttendees()) {
+            throw new IllegalStateException("Event is full.");
+        }
+
+        event.getRsvps().add(user);
+        event.setCurrentAttendees(event.getCurrentAttendees() + 1);
+        eventRepository.save(event);
+
 
         // Log the RSVP action in event_log
         EventLog eventLog = new EventLog();

@@ -21,7 +21,11 @@ public class Event {
     private LocalDateTime eventDate;  // Ensure this is LocalDateTime
 
     private String category;  // The category as a String
-//
+    private int maxAttendees;
+
+    private int currentAttendees = 0;
+
+    //
 //    @ManyToOne
     //    private User host;
 // The user who hosts the event
@@ -113,4 +117,21 @@ public class Event {
     public void setCreatedByAdminId(Long createdByAdminId) {
         this.createdByAdminId = createdByAdminId;
     }
+
+    public int getMaxAttendees() {
+        return maxAttendees;
+    }
+
+    public void setMaxAttendees(int maxAttendees) {
+        this.maxAttendees = maxAttendees;
+    }
+
+    public int getCurrentAttendees() {
+        return currentAttendees;
+    }
+
+    public void setCurrentAttendees(int currentAttendees) {
+        this.currentAttendees = currentAttendees;
+    }
+
 }

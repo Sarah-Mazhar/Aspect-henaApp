@@ -17,12 +17,15 @@ public class SecurityConfig {
 @Autowired
 private CustomUserDetailsService customUserDetailsService;
 
+
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .csrf(csrf -> csrf.disable()) // Disable CSRF for testing and public POSTs
                 .userDetailsService(customUserDetailsService)
                 .authorizeHttpRequests(auth -> auth
+//                        .requestMatchers("/", "/user/register", "/user/register/**", "/event/form", "/event/create", "/css/**", "/js/**").permitAll()
                         .requestMatchers("/user/register").permitAll()
                         .requestMatchers("/admin/**").hasRole("ADMIN")
                         .requestMatchers("/host/**").hasRole("HOST")
@@ -34,6 +37,8 @@ private CustomUserDetailsService customUserDetailsService;
 
         return http.build();
     }
+
+
 
     @Bean
     public PasswordEncoder passwordEncoder() {
