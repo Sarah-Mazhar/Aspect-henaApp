@@ -34,17 +34,18 @@ public class AdminController {
     // Update user (Admin only)
     // ✅ Admin updates an existing user
     // Update user (Admin only)
-    @PutMapping("/updateUser/{id}")
-    public User updateUser(@PathVariable Long id, @RequestBody UpdateUserDTO userDTO, Principal principal) {
-        // Find the admin User from current login (via Spring Security)
-        User adminUser = userService.getUserByUsername(principal.getName());
+    // Update user (Admin only)
+    @PutMapping("/updateUser/{adminId}/{userId}")
+    public User updateUser(@PathVariable Long adminId, @PathVariable Long userId, @RequestBody UpdateUserDTO userDTO) {
+        // Find the admin by ID (via path variable)
+        User adminUser = userService.getUserById(adminId);
 
         // Find and update the user by ID
         User updatedUser = new User();
         updatedUser.setUsername(userDTO.getUsername());
         updatedUser.setEmail(userDTO.getEmail());
         updatedUser.setRole(userDTO.getRole());
-        User userAfterUpdate = userService.updateUser(id, updatedUser);
+        User userAfterUpdate = userService.updateUser(userId, updatedUser);
 
         // Log the action of the admin
         AdminLog log = new AdminLog();
@@ -57,22 +58,14 @@ public class AdminController {
         return userAfterUpdate;  // Return the updated user
     }
 
-//    @PutMapping("/updateUser/{id}")
-//    public User updateUser(@PathVariable Long id, @RequestBody UpdateUserDTO userDTO) {
-//        User user = new User();
-//        user.setUsername(userDTO.getUsername());
-//        user.setEmail(userDTO.getEmail());
-//        user.setRole(userDTO.getRole());
-//        return userService.updateUser(id, user);
-//    }
 
 
-//    to log actions by admin username
-// ✅ Admin creates a new user + logs it
-@PostMapping("/createUser")
-public User createUser(@RequestBody CreateUserDTO userDTO, Principal principal) {
-    // Find the admin User from current login (via Spring Security)
-    User adminUser = userService.getUserByUsername(principal.getName());
+    //    to log actions by admin username
+    // ✅ Admin creates a new user + logs it
+    @PostMapping("/createUser/{adminId}")
+    public User createUser(@PathVariable Long adminId, @RequestBody CreateUserDTO userDTO) {
+        // Find the admin by ID (via path variable)
+        User adminUser = userService.getUserById(adminId);
 
     // Save the new user
     User newUser = new User();

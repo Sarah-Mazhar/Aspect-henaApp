@@ -256,6 +256,12 @@ public class EventService {
         event.setDescription(eventDetails.getDescription());
         event.setEventDate(eventDetails.getEventDate());
         event.setLocation(eventDetails.getLocation());
+        event.setCategory(event.getCategory());
+
+        // Update maxAttendees if provided in the request
+        if (eventDetails.getMaxAttendees() > 0) {
+            event.setMaxAttendees(eventDetails.getMaxAttendees());
+        }
 
         if ("ADMIN".equals(user.getRole())) {
             event.setCreatedByAdminId(user.getId());

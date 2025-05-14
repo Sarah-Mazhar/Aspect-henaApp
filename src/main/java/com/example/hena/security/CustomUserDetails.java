@@ -12,6 +12,10 @@ public class CustomUserDetails implements UserDetails {
 //    even if the database has an admin user, Spring Security doesn't know how to validate that login.
 //so a custom UserDetailsService so Spring Security can authenticate users using the User entity from the database.
 
+//    This class wraps User entity from the database to implement the UserDetails interface,
+//    which Spring Security uses to work with authenticated users.
+//    It provides the necessary methods (like getAuthorities()) for Spring Security to understand the user's roles and privileges.
+
     private final User user;
 
     public CustomUserDetails(User user) {
