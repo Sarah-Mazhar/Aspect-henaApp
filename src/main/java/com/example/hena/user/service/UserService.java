@@ -3,10 +3,14 @@ package com.example.hena.user.service;
 import com.example.hena.user.entity.User;
 import com.example.hena.user.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Primary;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
+@Primary
 public class UserService {
 //    Contains the business logic for user creation and update.
 
@@ -42,4 +46,30 @@ public class UserService {
         return userRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("User not found with ID " + id));
     }
+
+    public User findByEmail(String email) {
+        return userRepository.findByEmail(email)
+                .orElse(null);  // or throw if you prefer
+    }
+
+    public boolean checkPassword(String rawPassword, String encodedPassword) {
+        return passwordEncoder.matches(rawPassword, encodedPassword);
+    }
+
+
+//    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+//        User user = userRepository.findByEmail(email)
+//                .orElseThrow(() -> new UsernameNotFoundException("User not found with email: " + email));
+//
+//        return org.springframework.security.core.userdetails.User
+//                .withUsername(user.getEmail())
+//                .password(user.getPassword())
+//                .authorities("ROLE_" + user.getRole())
+//                .build();
+//    }
+
+
+
+
+
 }

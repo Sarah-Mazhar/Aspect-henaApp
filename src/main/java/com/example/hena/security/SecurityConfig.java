@@ -76,4 +76,7 @@ public class SecurityConfig {
 
         return new InMemoryUserDetailsManager(admin, host, user);
     }
+//    @Bean
+//    public JwtAuthenticationFilter jwtAuthenticationFilter() {
+//        return new JwtAuthenticationFilter();}
 }
