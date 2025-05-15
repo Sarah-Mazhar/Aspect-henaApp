@@ -193,9 +193,20 @@ import com.example.hena.event.repository.EventLogRepository;
 import com.example.hena.user.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.example.hena.redis.service.Redis;
+import java.time.Duration;
+import java.util.Map;
+import java.util.HashMap;
+import java.util.List;
+import java.util.ArrayList;
+import java.util.Set;
+import java.util.HashSet;
+
+
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Service
 public class EventService {
@@ -212,6 +223,11 @@ public class EventService {
     private int maxAttendees;
 
     private int currentAttendees = 0;
+
+    @Autowired
+    private Redis redis;
+
+    private final ObjectMapper objectMapper = new ObjectMapper();
 
     // Create a new event
     public Event createEvent(Event event, User user) {
@@ -316,18 +332,81 @@ public class EventService {
 
     // Find events by host
     public List<Event> findEventsByHost(User host) {
-        return eventRepository.findByHost_Id(host.getId());
+        String key = "event:host:" + host.getId();
+
+        try {
+            String cachedJson = redis.get(key);
+            if (cachedJson != null) {
+                System.out.println("✅ [CACHE] Returning events by host from Redis");
+                return objectMapper.readValue(cachedJson, new TypeReference<List<Event>>() {});
+            }
+        } catch (Exception e) {
+            System.err.println("❌ Redis error (findEventsByHost): " + e.getMessage());
+        }
+
+        List<Event> events = eventRepository.findByHost_Id(host.getId());
+
+        try {
+            redis.set(key, objectMapper.writeValueAsString(events), Duration.ofMinutes(10));
+        } catch (Exception e) {
+            System.err.println("❌ Redis write error (findEventsByHost): " + e.getMessage());
+        }
+
+        return events;
     }
 
     // Find events created by admin
     public List<Event> findEventsByAdmin(Long adminId) {
-        return eventRepository.findByCreatedByAdminId(adminId);
+        String key = "event:admin:" + adminId;
+
+        try {
+            String cachedJson = redis.get(key);
+            if (cachedJson != null) {
+                System.out.println("✅ [CACHE] Returning events by admin from Redis");
+                return objectMapper.readValue(cachedJson, new TypeReference<List<Event>>() {});
+            }
+        } catch (Exception e) {
+            System.err.println("❌ Redis error (findEventsByAdmin): " + e.getMessage());
+        }
+
+        List<Event> events = eventRepository.findByCreatedByAdminId(adminId);
+
+        try {
+            redis.set(key, objectMapper.writeValueAsString(events), Duration.ofMinutes(10));
+        } catch (Exception e) {
+            System.err.println("❌ Redis write error (findEventsByAdmin): " + e.getMessage());
+        }
+
+        return events;
     }
 
     // Find event by ID
     public Event findEventById(Long id) {
-        return eventRepository.findById(id).orElseThrow(() -> new RuntimeException("Event not found"));
+        String key = "event:id:" + id;
+
+        try {
+            String cachedJson = redis.get(key);
+            if (cachedJson != null) {
+                System.out.println("✅ [CACHE] Returning Event from Redis");
+                return objectMapper.readValue(cachedJson, Event.class);
+            }
+        } catch (Exception e) {
+            System.err.println("❌ Redis read error: " + e.getMessage());
+        }
+
+        System.out.println("🔍 [DB] Fetching Event ID: " + id);
+        Event event = eventRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Event not found"));
+
+        try {
+            redis.set(key, objectMapper.writeValueAsString(event), Duration.ofMinutes(10));
+        } catch (Exception e) {
+            System.err.println("❌ Redis write error: " + e.getMessage());
+        }
+
+        return event;
     }
+
 
     // RSVP to an event
     public void rsvpToEvent(Long eventId, User user) {
@@ -385,12 +464,100 @@ public class EventService {
     }
 
     public String getEventNameById(Long eventId) {
-        // Fetch event by id from repository
+        String key = "event:name:" + eventId;
+
+        try {
+            String cachedName = redis.get(key);
+            if (cachedName != null) {
+                System.out.println("✅ [CACHE] Returning Event name from Redis");
+                return cachedName;
+            }
+        } catch (Exception e) {
+            System.err.println("❌ Redis read error: " + e.getMessage());
+        }
+
         Event event = eventRepository.findById(eventId)
                 .orElseThrow(() -> new RuntimeException("Event not found"));
 
-        return event.getName(); // or getEventName() based on your Event entity
+        String name = event.getName();
+
+        try {
+            redis.set(key, name, Duration.ofMinutes(10));
+        } catch (Exception e) {
+            System.err.println("❌ Redis write error: " + e.getMessage());
+        }
+
+        return name;
     }
 
+    public List<Map<String, Object>> getAllEventsWithAttendeeDetails() {
+        List<Event> events = eventRepository.findAll();
+        List<Map<String, Object>> result = new ArrayList<>();
+
+        for (Event event : events) {
+            Map<String, Object> eventMap = new HashMap<>();
+            eventMap.put("eventId", event.getId());
+            eventMap.put("eventName", event.getName());
+            eventMap.put("location", event.getLocation());
+            eventMap.put("eventDate", event.getEventDate());
+            eventMap.put("category", event.getCategory());
+            eventMap.put("maxAttendees", event.getMaxAttendees());
+            eventMap.put("currentAttendees", event.getCurrentAttendees());
+
+            // Only extract non-sensitive fields from each User
+            List<Map<String, Object>> attendeesList = new ArrayList<>();
+            for (User user : event.getRsvps()) {
+                Map<String, Object> userMap = new HashMap<>();
+                userMap.put("id", user.getId());
+                userMap.put("email", user.getEmail());
+                userMap.put("username", user.getUsername());
+                userMap.put("role", user.getRole());
+                attendeesList.add(userMap);
+            }
+
+            eventMap.put("attendees", attendeesList);
+            result.add(eventMap);
+        }
+
+        return result;
+    }
+
+
+    public List<Map<String, Object>> getHostEventsWithAttendees(Long hostId) {
+        List<Event> events = eventRepository.findByHost_Id(hostId);
+        List<Map<String, Object>> result = new ArrayList<>();
+
+        for (Event event : events) {
+            Map<String, Object> eventMap = new HashMap<>();
+            eventMap.put("eventId", event.getId());
+            eventMap.put("eventName", event.getName());
+            eventMap.put("location", event.getLocation());
+            eventMap.put("eventDate", event.getEventDate());
+            eventMap.put("category", event.getCategory());
+            eventMap.put("maxAttendees", event.getMaxAttendees());
+            eventMap.put("currentAttendees", event.getCurrentAttendees());
+
+            List<Map<String, Object>> attendeesList = new ArrayList<>();
+            for (User user : event.getRsvps()) {
+                Map<String, Object> userMap = new HashMap<>();
+                userMap.put("id", user.getId());
+                userMap.put("username", user.getUsername());
+                userMap.put("email", user.getEmail());
+                userMap.put("role", user.getRole());
+                attendeesList.add(userMap);
+            }
+
+            eventMap.put("attendees", attendeesList);
+            result.add(eventMap);
+        }
+
+        return result;
+    }
+
+
+
+
 }
+
+
 

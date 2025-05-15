@@ -3,6 +3,8 @@ package com.example.hena.user.controller;
 
 import com.example.hena.event.entity.Event;
 import com.example.hena.event.service.EventService;
+import com.example.hena.redis.annotations.DistributedLock;
+import com.example.hena.redis.annotations.RateLimit;
 import com.example.hena.user.dto.CreateUserDTO;
 import com.example.hena.user.dto.LoginDTO;
 import com.example.hena.user.dto.UpdateUserDTO;
@@ -55,6 +57,7 @@ public class UserController {
 //    }
 
     @PostMapping("/login")
+//    @RateLimit(limit = 1, duration = 10, keyPrefix = "login")
     public ResponseEntity<?> login(@RequestBody LoginDTO loginDTO) {
         User user = userService.findByEmail(loginDTO.getEmail());
         if (user == null
@@ -72,6 +75,7 @@ public class UserController {
 //    @PathVariable entirely and extract user identity from the token (
 //    which is mapped to the Principal automatically by Spring Security).
     @PutMapping("/update/{id}")
+    @RateLimit(limit = 1, duration = 10, keyPrefix = "login")
     public ResponseEntity<User> updateUser(@PathVariable("id") Long id, @RequestBody UpdateUserDTO userDTO) {
         // Create a new User object and set only username and email from DTO
         User userDetails = new User();
@@ -93,6 +97,7 @@ public class UserController {
     // Placeholder endpoint: RSVP to an event
     @PreAuthorize("hasRole('USER')")
     @PostMapping("/rsvp/{userId}/{eventId}")
+    @DistributedLock(keyPrefix = "rsvp", keyIdentifierExpression = "#eventId", leaseTime = 10)
     public String rsvpToEvent(@PathVariable("userId") Long userId,
                               @PathVariable("eventId") Long eventId,
                               Principal principal) {

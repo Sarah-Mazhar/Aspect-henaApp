@@ -2,6 +2,7 @@ package com.example.hena.event.controller;
 
 import com.example.hena.event.entity.Event;
 import com.example.hena.event.service.EventService;
+import com.example.hena.redis.annotations.RateLimit;
 import com.example.hena.user.entity.User;
 import com.example.hena.user.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import java.util.Map;
 
 import java.security.Principal;
 import java.util.List;
@@ -26,6 +28,7 @@ public class EventController {
     // Create a new event (only for Host or Admin)
     @PreAuthorize("hasRole('HOST') or hasRole('ADMIN')")
     @PostMapping("/create/{adminOrHostId}")
+    @RateLimit(limit = 1, duration = 10, keyPrefix = "createEvent")
     public Event createEvent(@PathVariable Long adminOrHostId, @RequestBody Event event, Principal principal) {
         User adminUser = userService.getUserById(adminOrHostId);  // Get user by ID (Host/Admin)
         event.setHost(adminUser);  // Host of the event
@@ -37,6 +40,7 @@ public class EventController {
     // Update an event (only for Host or Admin)
     @PreAuthorize("hasRole('HOST') or hasRole('ADMIN')")
     @PutMapping("/update/{adminOrHostId}/{id}")
+    @RateLimit(limit = 1, duration = 10, keyPrefix = "updateEvent")
     public Event updateEvent(@PathVariable Long adminOrHostId, @PathVariable Long id, @RequestBody Event event, Principal principal) {
         User adminUser =userService.getUserById(adminOrHostId);  // Get user by ID (Host/Admin)
         return eventService.updateEvent(id, event, adminUser);
@@ -103,6 +107,7 @@ public ResponseEntity<?> getAdminEvents(@PathVariable Long adminId, Principal pr
 }
 
 
+
     // View a specific event by ID
     @GetMapping("/{id}")
     public Event getEvent(@PathVariable Long id) {
@@ -124,10 +129,50 @@ public ResponseEntity<?> getAdminEvents(@PathVariable Long adminId, Principal pr
 
 
 
+
     // View events based on search parameters (date or category)
     @GetMapping("/search")
     public List<Event> searchEvents(@RequestParam(required = false) String date,
                                     @RequestParam(required = false) String category) {
         return eventService.searchEvents(date, category);
     }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @GetMapping("/admin/events-with-attendee-details/{adminId}")
+    public ResponseEntity<?> getAllEventsWithAttendeeDetails(@PathVariable Long adminId) {
+        User adminUser = userService.getUserById(adminId);
+
+        if (adminUser == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Admin not found");
+        }
+
+        if (!"ADMIN".equals(adminUser.getRole())) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Access denied: Only admins can perform this action.");
+        }
+
+        List<Map<String, Object>> events = eventService.getAllEventsWithAttendeeDetails();
+        return ResponseEntity.ok(events);
+    }
+
+//    @PreAuthorize("hasRole('HOST')")
+//    @GetMapping("/host/events-with-attendee-details/{hostId}")
+//    public ResponseEntity<?> getHostEventsWithAttendeeDetails(@PathVariable Long hostId) {
+//        User hostUser = userService.getUserById(hostId);
+//
+//        if (hostUser == null) {
+//            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Host not found");
+//        }
+//
+//        if (!"HOST".equals(hostUser.getRole())) {
+//            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Access denied: Only hosts can perform this action.");
+//        }
+//
+//        List<Map<String, Object>> events = eventService.getHostEventsWithAttendees(hostId);
+//        return ResponseEntity.ok(events);
+//    }
+
+
+
+
+
 }

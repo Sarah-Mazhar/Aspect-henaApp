@@ -8,6 +8,11 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.example.hena.redis.service.Redis;
+import java.time.Duration;
+
+
 
 @Service
 @Primary
@@ -20,12 +25,19 @@ public class UserService {
     @Autowired
     private PasswordEncoder passwordEncoder;  // ✅ Inject the PasswordEncoder
 
+    @Autowired
+    private Redis redis;
+
+    private final ObjectMapper objectMapper = new ObjectMapper();
+
+
     public User createUser(User user) {
         // ✅ Encode the raw password before saving
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         // You could add additional logic for validating roles, etc.
         return userRepository.save(user);
     }
+
 
     public User updateUser(Long userId, User userDetails) {
         User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
@@ -50,22 +62,86 @@ public class UserService {
         return userRepository.save(user);
     }
 
+
     public User getUserByUsername(String username) {
-        return userRepository.findByUsername(username)
+        String key = "user:username:" + username;
+        try {
+            String cached = redis.get(key);
+            if (cached != null) {
+                System.out.println("✅ [CACHE] Returning user by username from Redis");
+                return objectMapper.readValue(cached, User.class);
+            }
+        } catch (Exception e) {
+            System.err.println("❌ Redis error (getUserByUsername): " + e.getMessage());
+        }
+
+        User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new RuntimeException("User not found"));
+
+        try {
+            redis.set(key, objectMapper.writeValueAsString(user), Duration.ofMinutes(10));
+        } catch (Exception e) {
+            System.err.println("❌ Redis set error (getUserByUsername): " + e.getMessage());
+        }
+
+        return user;
     }
+
 
 
     // method to fetch user by ID
     public User getUserById(Long id) {
-        return userRepository.findById(id)
+        String key = "user:id:" + id;
+        try {
+            String cached = redis.get(key);
+            if (cached != null) {
+                System.out.println("✅ [CACHE] Returning user by ID from Redis");
+                return objectMapper.readValue(cached, User.class);
+            }
+        } catch (Exception e) {
+            System.err.println("❌ Redis error (getUserById): " + e.getMessage());
+        }
+
+        User user = userRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("User not found with ID " + id));
+
+        try {
+            redis.set(key, objectMapper.writeValueAsString(user), Duration.ofMinutes(10));
+        } catch (Exception e) {
+            System.err.println("❌ Redis set error (getUserById): " + e.getMessage());
+        }
+
+        return user;
     }
 
+
+
     public User findByEmail(String email) {
-        return userRepository.findByEmail(email)
-                .orElse(null);  // or throw if you prefer
+        String key = "user:email:" + email;
+        try {
+            String cached = redis.get(key);
+            if (cached != null) {
+                System.out.println("✅ [CACHE] Returning user by email from Redis");
+                return objectMapper.readValue(cached, User.class);
+            }
+        } catch (Exception e) {
+            System.err.println("❌ Redis error (findByEmail): " + e.getMessage());
+        }
+
+        User user = userRepository.findByEmail(email).orElse(null);
+
+        if (user != null) {
+            try {
+                redis.set(key, objectMapper.writeValueAsString(user), Duration.ofMinutes(10));
+            } catch (Exception e) {
+                System.err.println("❌ Redis set error (findByEmail): " + e.getMessage());
+            }
+        }
+
+        return user;
     }
+
+
 
     public boolean checkPassword(String rawPassword, String encodedPassword) {
         return passwordEncoder.matches(rawPassword, encodedPassword);
