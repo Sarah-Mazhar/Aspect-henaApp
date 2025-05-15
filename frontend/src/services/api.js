@@ -19,3 +19,20 @@ export const login = async ({ username, password, role }) => {
   const response = await axios.post(`${API_BASE}/user/login`, { username, password, role }, config);
   return response.data;
 };
+
+export const createEvent = async ({ eventData, role = "ADMIN", adminId }) => {
+  const staticUser = staticCreds[role];
+  const authHeader = btoa(`${staticUser.username}:${staticUser.password}`);
+  const config = {
+    headers: {
+      Authorization: `Basic ${authHeader}`,
+    },
+  };
+
+  const response = await axios.post(
+    `${API_BASE}/event/create/${adminId}`,
+    eventData,
+    config
+  );
+  return response.data;
+};
