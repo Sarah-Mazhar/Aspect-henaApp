@@ -18,7 +18,7 @@ import java.security.Principal;
 import java.time.LocalDateTime;
 
 @RestController
-@RequestMapping("/admin")
+@RequestMapping("/api/admin")
 public class AdminController {
 //    The Admin will have more elevated privileges (like managing users/approve events)
 //    while Host will only have privileges related to creating, managing, and deleting their own events.
