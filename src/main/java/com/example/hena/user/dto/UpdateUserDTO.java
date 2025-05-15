@@ -6,7 +6,7 @@ public class UpdateUserDTO {
     private String username;
     private String email;
     private String role; // 'user', 'host', or 'admin'
-private String password;  // add password for update
+    private String password;  // add password for update
 
     // Getters and Setters
     public String getUsername() {

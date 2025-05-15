@@ -1,0 +1,52 @@
+/* src/features/dashboard/Dashboard.css */
+
+/* Dashboard.css */
+.dashboard-wrapper {
+  min-height: 100vh;
+  background-color: #121212;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: "Segoe UI", sans-serif;
+}
+
+.dashboard-box {
+  background: rgba(255, 255, 255, 0.05);
+  padding: 3rem 2rem;
+  border-radius: 12px;
+  box-shadow: 0 8px 32px 0 rgba(0, 255, 170, 0.2);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  text-align: center;
+  width: 90%;
+  max-width: 500px;
+}
+
+.dashboard-box h1 {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+  color: #ffffff;
+}
+
+.dashboard-box p {
+  font-size: 1rem;
+  color: #ccc;
+}
+
+.logout-btn {
+  position: absolute;
+  top: 2rem;
+  right: 2rem;
+  padding: 0.5rem 1.2rem;
+  background: #ff4d4f;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.logout-btn:hover {
+  background: #ff7875;
+}

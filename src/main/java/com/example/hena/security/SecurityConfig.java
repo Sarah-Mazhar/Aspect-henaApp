@@ -14,6 +14,10 @@ import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.web.filter.CorsFilter;
+import java.util.Arrays;
 
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 @Configuration
@@ -30,14 +34,15 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
+                .cors(Customizer.withDefaults())                        // ✅ Enable CORS
                 .csrf(csrf -> csrf.disable()) // Disable CSRF for testing and public POSTs
 //                .userDetailsService(customUserDetailsService)
                 .authorizeHttpRequests(auth -> auth
 //                        .requestMatchers("/", "/user/register", "/user/register/**", "/event/form", "/event/create", "/css/**", "/js/**").permitAll()
-                        .requestMatchers("/user/register").permitAll()
-                        .requestMatchers("/admin/**").hasRole("ADMIN")
-                        .requestMatchers("/host/**").hasRole("HOST")
-                        .requestMatchers("/user/**").hasAnyRole("USER", "HOST", "ADMIN")
+                        .requestMatchers("/api/test", "/api/user/register", "/api/user/login").permitAll()
+                        .requestMatchers("/api/admin/**").hasRole("ADMIN")
+                        .requestMatchers("/api/host/**").hasRole("HOST")
+                        .requestMatchers("/api/user/**").hasAnyRole("USER", "HOST", "ADMIN")
                         .anyRequest().authenticated()
                 )
                 .formLogin(Customizer.withDefaults())  // enables default form login
@@ -46,7 +51,18 @@ public class SecurityConfig {
         return http.build();
     }
 
+    @Bean
+    public CorsFilter corsFilter() {
+        CorsConfiguration config = new CorsConfiguration();
+        config.setAllowCredentials(true);
+        config.setAllowedOrigins(Arrays.asList("http://localhost:5173")); // ✅ Allow Vite frontend
+        config.setAllowedHeaders(Arrays.asList("*"));
+        config.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
 
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", config);
+        return new CorsFilter(source);
+    }
 
     @Bean
     public PasswordEncoder passwordEncoder() {

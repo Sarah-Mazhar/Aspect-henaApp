@@ -21,9 +21,15 @@ public class UserService {
     private PasswordEncoder passwordEncoder;  // ✅ Inject the PasswordEncoder
 
     public User createUser(User user) {
-        // ✅ Encode the raw password before saving
+        if (userRepository.findByEmail(user.getEmail()).isPresent()) {
+            throw new RuntimeException("Email already in use");
+        }
+
+        if (userRepository.findByUsername(user.getUsername()).isPresent()) {
+            throw new RuntimeException("Username already taken");
+        }
+
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-        // You could add additional logic for validating roles, etc.
         return userRepository.save(user);
     }
 

@@ -1,0 +1,30 @@
+/* 🌍 Base styles */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+  width: 100%;
+  background-color: #1e1e1e;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+/* ✅ Center the page */
+.app-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+
+/* 💅 Remove unused Vite defaults */
+.logo,
+.card,
+.read-the-docs {
+  display: none;
+}

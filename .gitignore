@@ -34,3 +34,10 @@ build/
 
 # macOS Finder metadata
 .DS_Store
+
+commands.sh
+
+# Frontend
+/frontend/node_modules
+/frontend/dist
+frontend/frontend-structure

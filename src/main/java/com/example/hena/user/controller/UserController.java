@@ -14,12 +14,14 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import com.example.hena.security.JwtUtil;
+import java.util.HashMap;
+import java.util.Map;
 
 import java.security.Principal;
 
 
 @RestController
-@RequestMapping("/user")
+@RequestMapping("/api/user")
 public class UserController {
 //    A User role can search and RSVP to events, but won't have permissions to create or edit them.
 //    Defines REST endpoints for registration, update, RSVP, and event search.
@@ -56,15 +58,23 @@ public class UserController {
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginDTO loginDTO) {
-        User user = userService.findByEmail(loginDTO.getEmail());
+        User user = userService.getUserByUsername(loginDTO.getUsername());
+
         if (user == null
                 || !userService.checkPassword(loginDTO.getPassword(), user.getPassword())
-//                || (loginDTO.getUsername() != null && !loginDTO.getUsername().equals(user.getUsername()))
                 || (loginDTO.getRole() != null && !loginDTO.getRole().equals(user.getRole()))) {
             return ResponseEntity.status(401).body("Invalid login credentials");
         }
-        String token = JwtUtil.generateToken(user.getEmail());
-        return ResponseEntity.ok(token);
+
+        String token = JwtUtil.generateToken(user.getUsername());
+
+        // ✅ Return token + userId + role to frontend
+        Map<String, Object> response = new HashMap<>();
+        response.put("token", token);
+        response.put("userId", user.getId());
+        response.put("role", user.getRole());
+
+        return ResponseEntity.ok(response);
     }
 
 
