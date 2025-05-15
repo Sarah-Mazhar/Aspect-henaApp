@@ -30,9 +30,16 @@ export default function AdminDashboard() {
       >
         Logout
       </button>
+
       <div className="dashboard-box">
         <h1>Admin Dashboard ✅</h1>
         <p>You are successfully authenticated as a <strong>ADMIN</strong>.</p>
+
+        <div className="admin-actions">
+          <button onClick={() => navigate("/admin/create-event")}>🎉 Create Event</button>
+          <button onClick={() => navigate("/admin/events")}>📋 Show All Events</button>
+          <button onClick={() => navigate("/admin/create-user")}>👤 Create User</button>
+        </div>
       </div>
     </div>
   );
