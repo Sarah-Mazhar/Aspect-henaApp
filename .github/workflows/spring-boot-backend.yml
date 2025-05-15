@@ -1,6 +1,9 @@
-name: Push to Main
+name: Spring Boot Backend CI
 
 on:
+  pull_request:
+    branches:
+      - "main"
   push:
     branches:
       - "main"
@@ -38,5 +41,5 @@ jobs:
       - name: Wait for MySQL to be ready
         run: sleep 15
 
-      - name: Build with Maven
+      - name: Build Spring Boot Project with Maven
         run: ./mvnw clean install -DskipTests
