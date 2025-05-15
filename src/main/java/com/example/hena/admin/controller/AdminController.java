@@ -10,6 +10,7 @@ import com.example.hena.user.dto.UpdateUserDTO;
 import com.example.hena.user.entity.User;
 import com.example.hena.user.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import java.security.Principal;
 
@@ -35,6 +36,7 @@ public class AdminController {
     // ✅ Admin updates an existing user
     // Update user (Admin only)
     // Update user (Admin only)
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/updateUser/{adminId}/{userId}")
     public User updateUser(@PathVariable Long adminId, @PathVariable Long userId, @RequestBody UpdateUserDTO userDTO) {
         // Find the admin by ID (via path variable)
@@ -62,6 +64,7 @@ public class AdminController {
 
     //    to log actions by admin username
     // ✅ Admin creates a new user + logs it
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/createUser/{adminId}")
     public User createUser(@PathVariable Long adminId, @RequestBody CreateUserDTO userDTO) {
         // Find the admin by ID (via path variable)

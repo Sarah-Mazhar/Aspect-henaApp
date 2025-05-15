@@ -29,9 +29,24 @@ public class UserService {
 
     public User updateUser(Long userId, User userDetails) {
         User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
-        user.setUsername(userDetails.getUsername());
-        user.setEmail(userDetails.getEmail());
-        user.setRole(userDetails.getRole());
+        System.out.println("Updating user with id: " + userId);
+        System.out.println("New username: " + userDetails.getUsername());
+        System.out.println("New email: " + userDetails.getEmail());
+        System.out.println("New role: " + userDetails.getRole());
+
+
+        if (userDetails.getUsername() != null) {
+            user.setUsername(userDetails.getUsername());
+        }
+        if (userDetails.getEmail() != null) {
+            user.setEmail(userDetails.getEmail());
+        }
+        if (userDetails.getRole() != null) {
+            user.setRole(userDetails.getRole());
+        }
+//        user.setUsername(userDetails.getUsername());
+//        user.setEmail(userDetails.getEmail());
+//        user.setRole(userDetails.getRole());
         return userRepository.save(user);
     }
 
