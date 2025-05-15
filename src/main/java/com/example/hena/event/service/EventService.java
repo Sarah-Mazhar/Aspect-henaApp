@@ -383,5 +383,14 @@ public class EventService {
         }
         return eventRepository.findAll();
     }
+
+    public String getEventNameById(Long eventId) {
+        // Fetch event by id from repository
+        Event event = eventRepository.findById(eventId)
+                .orElseThrow(() -> new RuntimeException("Event not found"));
+
+        return event.getName(); // or getEventName() based on your Event entity
+    }
+
 }
 
