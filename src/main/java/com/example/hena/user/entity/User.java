@@ -1,5 +1,6 @@
 package com.example.hena.user.entity;
 
+
 import jakarta.persistence.*;
 
 @Entity
