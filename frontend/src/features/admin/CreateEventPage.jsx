@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { createEvent } from "../../services/api";
-import "../dashboard/Dashboard.css";
+import "./CreateEventPage.css";
 
 export default function CreateEventPage() {
   const navigate = useNavigate();
@@ -19,7 +19,6 @@ export default function CreateEventPage() {
     maxAttendees: "",
   });
 
-  // 🔐 Admin authentication check
   useEffect(() => {
     if (!token || role !== "ADMIN" || !adminId) {
       alert("Unauthorized access. Please log in as Admin.");
@@ -38,16 +37,12 @@ export default function CreateEventPage() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (
-      !eventData.name ||
-      !eventData.description ||
-      !eventData.date ||
-      !eventData.location ||
-      !eventData.category ||
-      !eventData.maxAttendees
-    ) {
-      alert("Please fill in all required fields.");
-      return;
+    const requiredFields = ["name", "description", "date", "location", "category", "maxAttendees"];
+    for (const field of requiredFields) {
+      if (!eventData[field]) {
+        alert("Please fill in all required fields.");
+        return;
+      }
     }
 
     try {
@@ -82,75 +77,68 @@ export default function CreateEventPage() {
   };
 
   return (
-    <div className="dashboard-wrapper">
-      <div className="dashboard-box">
-        <h2>Create New Event 🎉</h2>
-        <form className="event-form form-grid" onSubmit={handleSubmit}>
-          <input
-            type="text"
-            name="name"
-            placeholder="Event Name"
-            value={eventData.name}
-            onChange={handleChange}
-            required
-          />
-          <input
-            type="text"
-            name="description"
-            placeholder="Description"
-            value={eventData.description}
-            onChange={handleChange}
-            required
-          />
-          <input
-            type="date"
-            name="date"
-            value={eventData.date}
-            onChange={handleChange}
-            required
-          />
-          <input
-            type="time"
-            name="time"
-            value={eventData.time}
-            onChange={handleChange}
-          />
-          <input
-            type="text"
-            name="location"
-            placeholder="Location"
-            value={eventData.location}
-            onChange={handleChange}
-            required
-          />
-          <input
-            type="text"
-            name="category"
-            placeholder="Category"
-            value={eventData.category}
-            onChange={handleChange}
-            required
-          />
-          <input
-            type="number"
-            name="maxAttendees"
-            placeholder="Max Attendees"
-            value={eventData.maxAttendees}
-            onChange={handleChange}
-            required
-            min={1}
-          />
-          <button type="submit" className="create-event-btn">
-            ✅ Submit Event
-          </button>
-        </form>
-        <button
-          onClick={() => navigate("/admin-dashboard")}
-          style={{ marginTop: "1rem" }}
-        >
-          🔙 Back to Dashboard
-        </button>
-      </div>
+    <div className="create-event-container">
+      <h2>Create New Event 🎉</h2>
+      <form className="create-event-form" onSubmit={handleSubmit}>
+        <input
+          type="text"
+          name="name"
+          placeholder="Event Name"
+          value={eventData.name}
+          onChange={handleChange}
+          required
+        />
+        <input
+          type="text"
+          name="description"
+          placeholder="Description"
+          value={eventData.description}
+          onChange={handleChange}
+          required
+        />
+        <input
+          type="date"
+          name="date"
+          value={eventData.date}
+          onChange={handleChange}
+          required
+        />
+        <input
+          type="time"
+          name="time"
+          value={eventData.time}
+          onChange={handleChange}
+        />
+        <input
+          type="text"
+          name="location"
+          placeholder="Location"
+          value={eventData.location}
+          onChange={handleChange}
+          required
+        />
+        <input
+          type="text"
+          name="category"
+          placeholder="Category"
+          value={eventData.category}
+          onChange={handleChange}
+          required
+        />
+        <input
+          type="number"
+          name="maxAttendees"
+          placeholder="Max Attendees"
+          value={eventData.maxAttendees}
+          onChange={handleChange}
+          required
+          min={1}
+        />
+        <button type="submit">✅ Submit Event</button>
+      </form>
+      <button onClick={() => navigate("/admin-dashboard")} style={{ marginTop: "1rem" }}>
+        🔙 Back to Dashboard
+      </button>
     </div>
   );
 }

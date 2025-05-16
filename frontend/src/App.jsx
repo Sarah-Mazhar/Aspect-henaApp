@@ -6,7 +6,9 @@ import HostDashboard from "./features/dashboard/HostDashboard";
 import AdminDashboard from "./features/dashboard/AdminDashboard";
 import CreateEventPage from "./features/admin/CreateEventPage";
 import AllEventsPage from "./features/admin/AllEventsPage";
+import EditEventPage from "./features/admin/EditEventPage";
 import ProtectedRoute from "./components/ProtectedRoute";
+
 
 function App() {
   return (
@@ -57,6 +59,15 @@ function App() {
           </ProtectedRoute>
         }
       />
+      <Route
+        path="/admin/edit-event/:id"
+        element={
+          <ProtectedRoute roleRequired={["ADMIN"]}>
+            <EditEventPage />
+          </ProtectedRoute>
+        }
+      />
+
     </Routes>
   );
 }

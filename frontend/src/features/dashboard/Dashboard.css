@@ -6,7 +6,7 @@
 }
 
 .admin-actions button {
-  background: #00cc99;
+  background: #a855f7; /* violet-500 */
   color: white;
   padding: 0.9rem 1.5rem;
   font-size: 1rem;
@@ -17,5 +17,5 @@
 }
 
 .admin-actions button:hover {
-  background: #00b38f;
+  background: #9333ea; /* violet-600 */
 }

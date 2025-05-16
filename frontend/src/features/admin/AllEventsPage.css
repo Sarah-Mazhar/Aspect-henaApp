@@ -1,0 +1,115 @@
+/* 🌍 Global reset & base (optional if already declared globally) */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+  width: 100%;
+  background-color: #121212;
+  font-family: 'Segoe UI', sans-serif;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding-top: 3rem;
+}
+
+/* 📦 Main container */
+.all-events-wrapper {
+  background-color: #1c1c1c;
+  width: 100%;
+  max-width: 760px;
+  padding: 3rem 2rem;
+  border-radius: 20px;
+  box-shadow: 0 0 25px rgba(128, 90, 213, 0.08),
+              0 0 60px rgba(128, 90, 213, 0.05),
+              0 0 120px rgba(128, 90, 213, 0.02);
+  color: #fff;
+}
+
+/* 🕒 Loading text */
+.loading-text {
+  color: #fff;
+  font-size: 18px;
+  text-align: center;
+  margin-top: 2rem;
+}
+
+/* ❌ No event message */
+.no-events {
+  text-align: center;
+  font-size: 17px;
+  color: #bbb;
+  margin-top: 2rem;
+}
+
+/* 📋 Event list */
+.event-list {
+  list-style: none;
+  padding: 0;
+  margin-top: 2rem;
+}
+
+/* 📄 Event card */
+.event-card {
+  background-color: #2a2a2a;
+  border: 1px solid #3a3a3a;
+  border-radius: 10px;
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+  position: relative;
+  transition: transform 0.2s ease;
+}
+
+.event-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 0 10px rgba(128, 90, 213, 0.1);
+}
+
+.event-card h2 {
+  font-size: 22px;
+  font-weight: 600;
+  margin-bottom: 0.8rem;
+}
+
+.event-card p {
+  font-size: 15px;
+  margin: 6px 0;
+  color: #ddd;
+}
+
+.event-card strong {
+  color: #d8b4fe;
+}
+
+/* 🛠 Action icons */
+.event-actions {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  display: flex;
+  gap: 1.2rem;
+}
+
+/* ✏️ Icon styles */
+.icon {
+  cursor: pointer;
+  font-size: 18px;
+  transition: transform 0.2s ease;
+}
+
+.icon:hover {
+  transform: scale(1.1);
+}
+
+.edit-icon {
+  color: rgba(192, 132, 252, 0.9); /* light purple */
+}
+
+.delete-icon {
+  color: #ff4e4e;
+}

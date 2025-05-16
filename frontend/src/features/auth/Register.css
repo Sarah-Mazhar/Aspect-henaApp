@@ -24,9 +24,9 @@ body,
   max-width: 560px;
   padding: 3.5rem 3rem;
   border-radius: 20px;
-  box-shadow: 0 0 25px rgba(0, 255, 170, 0.08),
-              0 0 60px rgba(0, 255, 170, 0.05),
-              0 0 120px rgba(0, 255, 170, 0.02);
+  box-shadow: 0 0 25px rgba(192, 132, 252, 0.08),
+              0 0 60px rgba(192, 132, 252, 0.05),
+              0 0 120px rgba(192, 132, 252, 0.02);
   text-align: center;
   color: #fff;
 }
@@ -58,8 +58,8 @@ body,
 
 .signup-form input:focus,
 .signup-form select:focus {
-  border-color: #00ffd0;
-  box-shadow: 0 0 0 2px rgba(0, 255, 200, 0.3);
+  border-color: #c084fc;
+  box-shadow: 0 0 0 2px rgba(216, 180, 254, 0.3);
   outline: none;
 }
 
@@ -68,7 +68,7 @@ body,
   padding: 15px;
   font-size: 17px;
   font-weight: 600;
-  background: linear-gradient(135deg, #00ffc3, #00bfa6);
+  background: linear-gradient(135deg, #d8b4fe, #a78bfa);
   color: #000;
   border: none;
   border-radius: 10px;
@@ -77,7 +77,7 @@ body,
 }
 
 .signup-form button:hover {
-  background: linear-gradient(135deg, #00ffd5, #00c7b4);
+  background: linear-gradient(135deg, #e9d5ff, #c084fc);
   transform: translateY(-1px);
 }
 
@@ -90,8 +90,8 @@ body,
 }
 
 .message.success {
-  background-color: #1b472a;
-  color: #00ffb3;
+  background-color: #2e1b47;
+  color: #e9d5ff;
 }
 
 .message.error {
@@ -107,7 +107,7 @@ body,
 }
 
 .link {
-  color: #00ffd8;
+  color: #d8b4fe;
   cursor: pointer;
   font-weight: 500;
   margin-left: 5px;
@@ -115,5 +115,5 @@ body,
 }
 
 .link:hover {
-  color: #00bfa5;
+  color: #a78bfa;
 }
