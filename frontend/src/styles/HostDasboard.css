@@ -1,0 +1,88 @@
+
+/* HostDashboard.css - Purple Themed Styling */
+
+body {
+    background-color: #1e1b2e;
+    font-family: 'Segoe UI', sans-serif;
+    color: #f3f0ff;
+    margin: 0;
+    padding: 0;
+}
+
+.host-dashboard {
+    max-width: 800px;
+    margin: 2rem auto;
+    padding: 2rem;
+    background-color: #2c2540;
+    border-radius: 15px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.dashboard-title {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+    color: #c084fc;
+}
+
+.create-btn {
+    background-color: #7c3aed;
+    color: white;
+    padding: 0.7rem 1.2rem;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    font-weight: bold;
+    margin-bottom: 2rem;
+    transition: background-color 0.3s ease;
+}
+
+.create-btn:hover {
+    background-color: #6b21a8;
+}
+
+.event-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.event-card {
+    background-color: #3b3055;
+    padding: 1.2rem;
+    border-radius: 10px;
+    border-left: 5px solid #c084fc;
+    transition: transform 0.3s ease;
+}
+
+.event-card:hover {
+    transform: scale(1.02);
+}
+
+.event-actions {
+    margin-top: 1rem;
+    display: flex;
+    gap: 0.5rem;
+}
+
+.edit-btn, .delete-btn {
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 8px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: opacity 0.2s ease;
+}
+
+.edit-btn {
+    background-color: #8b5cf6;
+    color: white;
+}
+
+.delete-btn {
+    background-color: #ef4444;
+    color: white;
+}
+
+.edit-btn:hover, .delete-btn:hover {
+    opacity: 0.85;
+}

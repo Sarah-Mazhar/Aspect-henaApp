@@ -1,0 +1,38 @@
+/* CreateEvent.css */
+.create-event-container {
+    color: white;
+    padding: 2rem;
+    text-align: center;
+}
+
+.create-event-form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    margin-top: 1.5rem;
+}
+
+.create-event-form input {
+    padding: 0.6rem 1rem;
+    width: 300px;
+    background-color: #1a1a1a;
+    border: 1px solid #7c3aed;
+    color: white;
+    border-radius: 8px;
+}
+
+.create-event-form button {
+    background-color: #7c3aed;
+    border: none;
+    padding: 0.6rem 1.2rem;
+    color: white;
+    font-weight: bold;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.create-event-form button:hover {
+    background-color: #5b21b6;
+}

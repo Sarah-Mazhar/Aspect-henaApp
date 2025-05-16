@@ -1,6 +1,5 @@
 package com.example.hena.security;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.Customizer;
@@ -10,43 +9,32 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
+
 import java.util.Arrays;
 
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 @Configuration
 public class SecurityConfig {
-//    The role field ("USER", "HOST", or "ADMIN") is used in:
-//Spring Security config to control which URLs each role can access
-//    The role field is used to enforce who can access what (via SecurityConfig).
-
-//@Autowired
-//private CustomUserDetailsService customUserDetailsService;
-
-
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                .cors(Customizer.withDefaults())                        // ✅ Enable CORS
-                .csrf(csrf -> csrf.disable()) // Disable CSRF for testing and public POSTs
-//                .userDetailsService(customUserDetailsService)
+                .cors(Customizer.withDefaults())
+                .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
-//                        .requestMatchers("/", "/user/register", "/user/register/**", "/event/form", "/event/create", "/css/**", "/js/**").permitAll()
                         .requestMatchers("/api/test", "/api/user/register", "/api/user/login").permitAll()
                         .requestMatchers("/api/admin/**").hasRole("ADMIN")
                         .requestMatchers("/api/host/**").hasRole("HOST")
                         .requestMatchers("/api/user/**").hasAnyRole("USER", "HOST", "ADMIN")
                         .anyRequest().authenticated()
                 )
-                .formLogin(Customizer.withDefaults())  // enables default form login
-                .httpBasic(Customizer.withDefaults()); // enables default basic auth
+                .httpBasic(Customizer.withDefaults()); // Enable Basic Auth
 
         return http.build();
     }
@@ -55,7 +43,7 @@ public class SecurityConfig {
     public CorsFilter corsFilter() {
         CorsConfiguration config = new CorsConfiguration();
         config.setAllowCredentials(true);
-        config.setAllowedOrigins(Arrays.asList("http://localhost:5173")); // ✅ Allow Vite frontend
+        config.setAllowedOrigins(Arrays.asList("http://localhost:5173"));
         config.setAllowedHeaders(Arrays.asList("*"));
         config.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
 
@@ -69,12 +57,11 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder();
     }
 
-
     @Bean
     public UserDetailsService userDetailsService() {
         UserDetails admin = User
                 .withUsername("admin")
-                .password(passwordEncoder().encode("adminpass"))  // BCrypt encoding for the password
+                .password(passwordEncoder().encode("adminpass"))
                 .roles("ADMIN")
                 .build();
 
@@ -92,7 +79,4 @@ public class SecurityConfig {
 
         return new InMemoryUserDetailsManager(admin, host, user);
     }
-//    @Bean
-//    public JwtAuthenticationFilter jwtAuthenticationFilter() {
-//        return new JwtAuthenticationFilter();}
 }

@@ -48,14 +48,20 @@ public class EventController {
 
 
 
-
-    // Delete an event (only for Host or Admin)
-    @PreAuthorize("hasRole('HOST') or hasRole('ADMIN')")
     @DeleteMapping("/delete/{adminOrHostId}/{id}")
-    public void deleteEvent(@PathVariable Long adminOrHostId, @PathVariable Long id, Principal principal) {
-        User adminUser = userService.getUserById(adminOrHostId);
-        eventService.deleteEvent(id, adminUser);
+    @PreAuthorize("hasRole('HOST') or hasRole('ADMIN')")
+    public ResponseEntity<?> deleteEvent(@PathVariable Long adminOrHostId, @PathVariable Long id, Principal principal) {
+        try {
+            User adminUser = userService.getUserById(adminOrHostId);
+            eventService.deleteEvent(id, adminUser);
+            return ResponseEntity.ok("Event deleted successfully.");
+        } catch (Exception e) {
+            e.printStackTrace(); // log to console
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Failed to delete event: " + e.getMessage());
+        }
     }
+
 
 
     // View events for a specific host (Host and admin role only)

@@ -262,8 +262,18 @@ public class EventService {
             adminLogRepository.save(adminLog);
         }
 
+        // ❗️Invalidate Redis cache for the host so new event appears immediately
+        try {
+            String key = "event:host:" + user.getId();
+            redis.delete(key);
+            System.out.println("✅ Redis cache invalidated for host: " + key);
+        } catch (Exception e) {
+            System.err.println("❌ Redis delete error (createEvent): " + e.getMessage());
+        }
+
         return createdEvent;
     }
+
 
     // Update an existing event
     public Event updateEvent(Long id, Event eventDetails, User user) {
