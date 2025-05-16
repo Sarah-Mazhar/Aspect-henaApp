@@ -1,9 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import { createUser } from "../../services/api";
 import "./CreateUserPage.css";
-
-const API_BASE = "http://localhost:8080/api";
 
 export default function CreateUserPage() {
   const navigate = useNavigate();
@@ -36,63 +34,47 @@ export default function CreateUserPage() {
     }));
   };
 
-    const handleSubmit = async (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setMessage("");
     setLoading(true);
 
     try {
-        const staticCreds = {
-        ADMIN: { username: "admin", password: "adminpass" },
-        };
-        const authHeader = btoa(
-        `${staticCreds.ADMIN.username}:${staticCreds.ADMIN.password}`
-        );
+      const response = await createUser({ formData, adminId });
 
-        const response = await axios.post(
-        `${API_BASE}/admin/createUser/${adminId}`,
-        formData,
-        {
-            headers: {
-            Authorization: `Basic ${authHeader}`,
-            },
-        }
-        );
+      const createdUsername = response.username;
+      const createdRole = response.role;
 
-        const createdUsername = response.data.username;
-        const createdRole = response.data.role;
-
-        let roleMsg = "";
-        switch (createdRole) {
+      let roleMsg = "";
+      switch (createdRole) {
         case "ADMIN":
-            roleMsg = `🛡️ Admin '${createdUsername}' created with full privileges.`;
-            break;
+          roleMsg = `🛡️ Admin '${createdUsername}' created with full privileges.`;
+          break;
         case "HOST":
-            roleMsg = `🎙️ Host '${createdUsername}' can now manage events.`;
-            break;
+          roleMsg = `🎙️ Host '${createdUsername}' can now manage events.`;
+          break;
         default:
-            roleMsg = `👤 User '${createdUsername}' created successfully.`;
-            break;
-        }
+          roleMsg = `👤 User '${createdUsername}' created successfully.`;
+          break;
+      }
 
-        setMessage(`✅ ${roleMsg}`);
+      setMessage(`✅ ${roleMsg}`);
 
-        // Reset form
-        setFormData({
+      // Reset form
+      setFormData({
         username: "",
         email: "",
         password: "",
         role: "USER",
-        });
-
+      });
     } catch (error) {
-        const errMsg =
+      const errMsg =
         error?.response?.data?.message || "❌ Failed to create user.";
-        setMessage(errMsg);
+      setMessage(errMsg);
     } finally {
-        setLoading(false);
+      setLoading(false);
     }
-    };
+  };
 
   return (
     <div className="create-user-container">

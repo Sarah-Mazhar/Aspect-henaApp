@@ -36,3 +36,22 @@ export const createEvent = async ({ eventData, role = "ADMIN", adminId }) => {
   );
   return response.data;
 };
+
+export const createUser = async ({ formData, adminId }) => {
+  const staticUser = staticCreds["ADMIN"];
+  const authHeader = btoa(`${staticUser.username}:${staticUser.password}`);
+
+  const config = {
+    headers: {
+      Authorization: `Basic ${authHeader}`,
+    },
+  };
+
+  const response = await axios.post(
+    `${API_BASE}/admin/createUser/${adminId}`,
+    formData,
+    config
+  );
+
+  return response.data;
+};
