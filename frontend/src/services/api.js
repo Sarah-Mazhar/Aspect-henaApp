@@ -88,4 +88,13 @@ export const deleteEvent = async ({ eventId, hostId, role = "HOST" }) => {
   await axios.delete(`${API_BASE}/event/delete/${hostId}/${eventId}`, config);
 };
 
+export const getUpcomingEvents = async (token) => {
+  const response = await axios.get("http://localhost:8080/api/event/upcoming", {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  return response.data;
+};
+
 

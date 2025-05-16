@@ -555,6 +555,12 @@ public class EventService {
         return result;
     }
 
+    public List<Event> findUpcomingEvents() {
+        LocalDateTime now = LocalDateTime.now();
+        return eventRepository.findByEventDateAfter(now);
+    }
+
+
 
 
 
