@@ -88,13 +88,30 @@ export const deleteEvent = async ({ eventId, hostId, role = "HOST" }) => {
   await axios.delete(`${API_BASE}/event/delete/${hostId}/${eventId}`, config);
 };
 
-export const getUpcomingEvents = async (token) => {
+export const getUpcomingEvents = async () => {
+  const staticUser = staticCreds["USER"];
+  const authHeader = btoa(`${staticUser.username}:${staticUser.password}`);
+
   const response = await axios.get("http://localhost:8080/api/event/upcoming", {
     headers: {
-      Authorization: `Bearer ${token}`,
+      Authorization: `Basic ${authHeader}`,
     },
   });
+
   return response.data;
 };
 
+
+
+export const rsvpToEvent = async ({ userId, eventId }) => {
+  const staticUser = staticCreds["USER"];
+  const authHeader = btoa(`${staticUser.username}:${staticUser.password}`);
+  const config = {
+    headers: {
+      Authorization: `Basic ${authHeader}`,
+    },
+  };
+  const response = await axios.post(`${API_BASE}/user/rsvp/${userId}/${eventId}`, {}, config);
+  return response.data;
+};
 

@@ -1,12 +1,13 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
-import "./Dashboard.css"; // Make sure this file exists
+import { getUpcomingEvents, rsvpToEvent } from "../../services/api"; // ✅ updated import
+import "./Dashboard.css";
 
 export default function UserDashboard() {
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [rsvpSuccess, setRsvpSuccess] = useState("");
 
   const token = localStorage.getItem("token");
   const role = localStorage.getItem("role");
@@ -18,32 +19,32 @@ export default function UserDashboard() {
       alert("Invalid session or not a user. Redirecting...");
       navigate("/login");
     } else {
-      fetchUpcomingEvents();
+      fetchEvents();
     }
   }, []);
 
-const fetchUpcomingEvents = async () => {
-  try {
-    const username = "user";
-    const password = "userpass";
-    const authHeader = btoa(`${username}:${password}`);
+  const fetchEvents = async () => {
+    try {
+      const events = await getUpcomingEvents(); // ✅ uses API helper
+      setEvents(events);
+    } catch (err) {
+      console.error("❌ Failed to fetch events:", err);
+      setError("Failed to load events.");
+    } finally {
+      setLoading(false);
+    }
+  };
 
-    const response = await axios.get("http://localhost:8080/api/event/upcoming", {
-      headers: {
-        Authorization: `Basic ${authHeader}`,
-      },
-    });
-
-    console.log("✅ Events fetched:", response.data);
-    setEvents(response.data);
-  } catch (err) {
-    console.error("❌ Failed to fetch events:", err);
-    setError("Failed to load events.");
-  } finally {
-    setLoading(false);
-  }
-};
-
+  const handleRSVP = async (eventId, eventName) => {
+    try {
+      await rsvpToEvent({ userId, eventId }); // ✅ uses new RSVP API call
+      setRsvpSuccess(`Successfully RSVP’d to "${eventName}"`);
+      fetchEvents(); // refresh
+    } catch (err) {
+      console.error("❌ RSVP error:", err);
+      alert("Could not RSVP. The event may be full or an error occurred.");
+    }
+  };
 
   return (
     <div className="dashboard-wrapper">
@@ -62,6 +63,7 @@ const fetchUpcomingEvents = async () => {
         <p>You are successfully authenticated as a <strong>USER</strong>.</p>
 
         <h2>Upcoming Events 🎉</h2>
+        {rsvpSuccess && <p style={{ color: "green" }}>{rsvpSuccess}</p>}
 
         {loading ? (
           <p>Loading events...</p>
@@ -87,6 +89,15 @@ const fetchUpcomingEvents = async () => {
                 <p>
                   <strong>Category:</strong> {event.category || "Uncategorized"}
                 </p>
+                <p>
+                  <strong>Attendees:</strong> {event.currentAttendees} / {event.maxAttendees}
+                </p>
+                <button
+                  onClick={() => handleRSVP(event.id, event.name)}
+                  disabled={event.currentAttendees >= event.maxAttendees}
+                >
+                  {event.currentAttendees >= event.maxAttendees ? "Event Full" : "Attend"}
+                </button>
               </li>
             ))}
           </ul>
