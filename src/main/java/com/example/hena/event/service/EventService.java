@@ -331,29 +331,30 @@ public class EventService {
     }
 
     // Find events by host
-    public List<Event> findEventsByHost(User host) {
-        String key = "event:host:" + host.getId();
+    public List<Event> findEventsByHostId(Long hostId) {
+        String key = "event:host:" + hostId;
 
         try {
             String cachedJson = redis.get(key);
             if (cachedJson != null) {
-                System.out.println("✅ [CACHE] Returning events by host from Redis");
+                System.out.println("✅ [CACHE] Returning events by hostId from Redis");
                 return objectMapper.readValue(cachedJson, new TypeReference<List<Event>>() {});
             }
         } catch (Exception e) {
-            System.err.println("❌ Redis error (findEventsByHost): " + e.getMessage());
+            System.err.println("❌ Redis read error (hostId): " + e.getMessage());
         }
 
-        List<Event> events = eventRepository.findByHost_Id(host.getId());
+        List<Event> events = eventRepository.findByHost_Id(hostId);
 
         try {
             redis.set(key, objectMapper.writeValueAsString(events), Duration.ofMinutes(10));
         } catch (Exception e) {
-            System.err.println("❌ Redis write error (findEventsByHost): " + e.getMessage());
+            System.err.println("❌ Redis write error (hostId): " + e.getMessage());
         }
 
         return events;
     }
+
 
     // Find events created by admin
     public List<Event> findEventsByAdmin(Long adminId) {

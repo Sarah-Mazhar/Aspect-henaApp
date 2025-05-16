@@ -9,15 +9,19 @@ export default function HostDashboard() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    console.log("🔐 Token:", token);
-    console.log("🧑‍💼 Role:", role);
-    console.log("🆔 Host ID:", hostId);
-
     if (!token || role !== "HOST" || !hostId) {
       alert("Invalid session or not a host. Redirecting...");
       navigate("/login");
     }
   }, [token, role, hostId, navigate]);
+
+  const handleCreateEvent = () => {
+    navigate(`/host/create-event`);
+  };
+
+  const handleViewMyEvents = () => {
+    navigate(`/host/events/${hostId}`);
+  };
 
   return (
     <div className="dashboard-wrapper">
@@ -33,6 +37,8 @@ export default function HostDashboard() {
       <div className="dashboard-box">
         <h1>Host Dashboard ✅</h1>
         <p>You are successfully authenticated as a <strong>HOST</strong>.</p>
+        <button onClick={handleCreateEvent}>Create New Event</button>
+        <button onClick={handleViewMyEvents}>View My Events</button>
       </div>
     </div>
   );
