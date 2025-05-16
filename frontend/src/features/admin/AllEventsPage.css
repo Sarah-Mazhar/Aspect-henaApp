@@ -1,0 +1,103 @@
+/* Global dark background */
+html,
+body,
+#root {
+  height: 100%;
+  background-color: #0f0f0f;
+  font-family: 'Segoe UI', sans-serif;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Container with login-style glow */
+.all-events-container {
+  background-color: #1a1a1a;
+  padding: 3rem 2.5rem;
+  border-radius: 16px;
+  box-shadow: 0 0 20px rgba(0, 255, 170, 0.06),
+              0 0 60px rgba(0, 255, 170, 0.05),
+              0 0 100px rgba(0, 255, 170, 0.04);
+  max-width: 600px;
+  width: 100%;
+  color: #fff;
+  text-align: center;
+}
+
+/* Heading */
+.all-events-container h2 {
+  font-size: 24px;
+  margin-bottom: 2rem;
+}
+
+/* Event list */
+.events-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+/* Card styling */
+.event-card {
+  background-color: #242424;
+  border: 1px solid #333;
+  border-radius: 10px;
+  padding: 1.2rem;
+  margin-bottom: 1.5rem;
+  text-align: left;
+  position: relative;
+}
+
+.event-card h3 {
+  font-size: 20px;
+  margin-bottom: 0.5rem;
+}
+
+.event-card p {
+  margin: 6px 0;
+  font-size: 14px;
+  color: #ccc;
+}
+
+.event-card strong {
+  color: #00ffd5;
+}
+
+/* Icon layout */
+.event-icons {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  display: flex;
+  gap: 1rem;
+}
+
+.icon {
+  cursor: pointer;
+  font-size: 16px;
+  transition: transform 0.2s ease;
+}
+
+.icon:hover {
+  transform: scale(1.1);
+}
+
+.edit-icon {
+  color: #00ffd5;
+}
+
+.delete-icon {
+  color: #ff4e4e;
+}
+
+/* Fallback text */
+.no-events-text {
+  color: #aaa;
+  font-size: 15px;
+  margin-top: 1rem;
+}
+
+.loading-text {
+  color: #fff;
+  font-size: 16px;
+}

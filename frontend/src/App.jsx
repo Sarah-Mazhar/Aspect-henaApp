@@ -7,6 +7,7 @@ import AdminDashboard from "./features/dashboard/AdminDashboard";
 import CreateEventPage from "./features/admin/CreateEventPage";
 import AllEventsPage from "./features/admin/AllEventsPage";
 import ProtectedRoute from "./components/ProtectedRoute";
+import EditEventPage from "./features/admin/EditEventPage"; 
 import CreateUserPage from "./features/admin/CreateUserPage";
 
 function App() {
@@ -63,6 +64,14 @@ function App() {
         element={
           <ProtectedRoute roleRequired={["ADMIN"]}>
             <CreateUserPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/admin/edit-event/:id"
+        element={
+          <ProtectedRoute roleRequired={["ADMIN"]}>
+            <EditEventPage />
           </ProtectedRoute>
         }
       />
