@@ -1,0 +1,263 @@
+[33mcommit db1ffca34b8ad202c071a2115278d9f6deef6795[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m)[m
+Merge: 39d7cc2 79055bf
+Author: Judy Khaled <20P6630@eng.asu.edu.eg>
+Date:   Fri May 16 01:58:55 2025 +0300
+
+    Merge branch 'main' of https://github.com/Sarah-Mazhar/Aspect-henaApp
+
+[33mcommit 39d7cc2794f49141ce85a6e923558c334924fc4b[m[33m ([m[1;31morigin/feature/admin-dashboard[m[33m, [m[1;32mfeature/admin-dashboard[m[33m)[m
+Author: Judy Khaled <20P6630@eng.asu.edu.eg>
+Date:   Fri May 16 01:56:01 2025 +0300
+
+    Admin Dashboard edited - Frontend
+
+[33mcommit 79055bf0178b04d4b7ad646784861a863ed83a3a[m[33m ([m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m
+Merge: 5661f4d 7af3e24
+Author: Moamen Ahmed <moamenahmed800@gmail.com>
+Date:   Fri May 16 01:40:58 2025 +0300
+
+    Merge pull request #6 from Moamen/feature/terraform
+    
+    Feature/terraform
+
+[33mcommit 7af3e244341b96e82681546f6fdb351dd43ff9ad[m
+Author: Moamen Ahmed <moamenahmed800@gmail.com>
+Date:   Fri May 16 01:38:02 2025 +0300
+
+    ci: add GitHub Actions workflow for Spring Boot backend build and MySQL service
+
+[33mcommit 829f1937158a618cf4277e874e5a206f3004c4e8[m
+Author: Moamen Ahmed <moamenahmed800@gmail.com>
+Date:   Fri May 16 01:33:39 2025 +0300
+
+    Add Terraform infrastructure for hosting backend and frontend EC2 instances
+
+[33mcommit 5661f4d9438d5c9f3d45dad042f2c22793de47a6[m
+Merge: c687813 a904914
+Author: Moamen Ahmed <moamenahmed800@gmail.com>
+Date:   Thu May 15 18:36:48 2025 +0300
+
+    Merge pull request #5 from Moamen/feature/frontend-auth-integration
+    
+    🔧 Connect frontend with backend: implemented login/signup in React (V…
+
+[33mcommit c6878135a2e56fbfcbf1949bb5f987fef2b52a46[m
+Merge: c1562ca ed38ba8
+Author: Moamen Ahmed <moamenahmed800@gmail.com>
+Date:   Thu May 15 18:29:23 2025 +0300
+
+    Merge pull request #4 from Sarah-Mazhar/feature/redis
+    
+    Implemented Redis-based rate limiting, distributed locks, and caching…
+
+[33mcommit ed38ba84b0bb4ab912a0f76e3bff95c25efa5461[m[33m ([m[1;31morigin/feature/redis[m[33m, [m[1;32mfeature/redis[m[33m)[m
+Author: Judy Khaled <20P6630@eng.asu.edu.eg>
+Date:   Thu May 15 18:25:33 2025 +0300
+
+    Implemented Redis-based rate limiting, distributed locks, and caching. Added an admin endpoint to retrieve events along with attendee details.
+
+[33mcommit a904914fb278f12a60f6b384d98f67acdff06f1b[m[33m ([m[1;31morigin/feature/frontend-auth-integration[m[33m)[m
+Author: Moamen Ahmed <moamenahmed800@gmail.com>
+Date:   Thu May 15 18:18:58 2025 +0300
+
+    🔧 Connect frontend with backend: implemented login/signup in React (Vite), added /api/ mapping to controllers, updated Spring Security config
+
+[33mcommit c1562cae09987949b402262b2382bedbccf2bcca[m
+Merge: 4fd0b0c 1012188
+Author: Moamen Ahmed <moamenahmed800@gmail.com>
+Date:   Thu May 15 05:07:54 2025 +0300
+
+    Merge pull request #3 from Sarah-Mazhar/feature/jwt
+    
+    Enhance UserController with secure and role-based endpoints for user …
+
+[33mcommit 1012188d5c82e94acaf115f08cfbd2100e855434[m[33m ([m[1;31morigin/feature/jwt[m[33m)[m
+Author: Sarah-Mazhar <147240333+Sarah-Mazhar@users.noreply.github.com>
+Date:   Thu May 15 04:49:24 2025 +0300
+
+    Enhance UserController with secure and role-based endpoints for user and event management
+    
+    - POST /user/register
+      - Registers a new user with username, email, password, and role
+      - Password encoding to be implemented in service layer
+    
+    - POST /user/login
+      - Authenticates user credentials (email, password, role)
+      - Generates JWT token on successful authentication
+    
+    - PUT /user/update/{id}
+      - Updates personal user profile information (username, email) by user ID
+      - Role remains unchanged during update
+      - Secured to allow only updates on the current user’s profile
+    
+    - POST /user/rsvp/{userId}/{eventId}
+      - Allows a user with role USER to RSVP to a specific event by IDs
+      - Validates the user and event existence via service layer
+      - Delegates RSVP processing to EventService ensuring RSVP logic and capacity checks
+      - Returns confirmation message with the event’s name upon successful RSVP
+      - Secured with @PreAuthorize to restrict access to authenticated users with USER role
+    
+    - GET /user/search
+      - Placeholder endpoint for searching events by optional date and category parameters
+      - Prepared for future integration with EventService’s search functionality
+    
+    These updates improve security, clarity, and functionality of user-event interactions, ensuring only authorized users can RSVP to events while maintaining standard user management features.
+
+[33mcommit 4fd0b0cbccc57a2dab62948cfb6f6d40f44d797b[m
+Merge: 483845e 327f1ed
+Author: Moamen Ahmed <moamenahmed800@gmail.com>
+Date:   Thu May 15 01:36:15 2025 +0300
+
+    Merge pull request #2 from Sarah-Mazhar/feature/jwt
+    
+    Implement JWT-based login with token generation and validation
+
+[33mcommit 327f1ed9f5d2c67abf8859f34857ff5b1c4a125c[m
+Author: Sarah-Mazhar <147240333+Sarah-Mazhar@users.noreply.github.com>
+Date:   Thu May 15 01:26:47 2025 +0300
+
+    Implement JWT-based login with token generation and validation
+    
+    - Updated login endpoint to authenticate users and return JWT tokens
+    - Integrated JwtUtil for JWT creation, parsing, and validation
+    - Enhanced password encoding and verification logic during login
+    - Prepared groundwork for JWT authentication filter (to be implemented)
+    - Improved security by removing plain password handling in login responses
+
+[33mcommit 483845eb7453a33fd1fd86ac50682772feef3b7d[m
+Merge: f97187d 402d47a
+Author: Moamen Ahmed <moamenahmed800@gmail.com>
+Date:   Wed May 14 21:56:07 2025 +0300
+
+    Merge branch 'feature/notification'
+
+[33mcommit 402d47a74820fe45d3fb29dbd09be894cdca8197[m[33m ([m[1;31morigin/feature/notification[m[33m)[m
+Author: Moamen Ahmed <moamenahmed800@gmail.com>
+Date:   Wed May 14 21:38:36 2025 +0300
+
+    add JWT
+
+[33mcommit f97187d97e1dc49bc64a50a87bad425698617cc0[m
+Author: Sarah-Mazhar <147240333+Sarah-Mazhar@users.noreply.github.com>
+Date:   Wed May 14 21:05:36 2025 +0300
+
+    Enhance Events and Admin controllers with explicit user IDs and role-based access control
+    
+    - Added user/admin/host IDs in URL paths for create, update, delete actions to clearly identify action performers
+    - Implemented role checks to restrict access to event management endpoints based on user roles (ADMIN, HOST, USER)
+    - Added validation to ensure only users with appropriate roles can perform actions and view related data
+    - Improved logging of admin actions for better auditability
+    - Structured endpoint URLs to clarify which user is performing the action for better traceability
+    - Noted that static Basic Auth credentials are used in Postman: all users under USER role share the same username/password, similarly for ADMIN and HOST roles
+
+[33mcommit 80597ba71f80315af68e60e0b1322b286893d8d5[m
+Author: Moamen Ahmed <moamenahmed800@gmail.com>
+Date:   Mon May 12 22:40:50 2025 +0300
+
+    Update docker-compose.yml
+
+[33mcommit d54e58470d2667003d3820057210e5454c39be23[m
+Merge: cee90e8 8abcb5d
+Author: Omar_Ashraf <147910629+OmarAshraf166@users.noreply.github.com>
+Date:   Mon May 12 22:09:21 2025 +0300
+
+    Merge branch 'logging-test1'
+
+[33mcommit cee90e8c0cc4c93a386c8fb60d8ed311b735e0bd[m
+Merge: ddbfaab 4564f71
+Author: Moamen Ahmed <moamenahmed800@gmail.com>
+Date:   Mon May 12 21:43:19 2025 +0300
+
+    Merge pull request #1 from Sarah-Mazhar/feature/notification
+    
+    Add full notification system with RSVP, reminder, update, and cancell…
+
+[33mcommit 4564f7195fe55a131860ba9650637b6584994932[m
+Author: Moamen Ahmed <moamenahmed800@gmail.com>
+Date:   Mon May 12 02:26:53 2025 +0300
+
+    Add full notification system with RSVP, reminder, update, and cancellation APIs
+
+[33mcommit 8abcb5d5374ba992cc147af1b4ebb02fed60e430[m[33m ([m[1;31morigin/logging-test1[m[33m)[m
+Author: Omar_Ashraf <147910629+OmarAshraf166@users.noreply.github.com>
+Date:   Mon May 12 00:52:50 2025 +0300
+
+    Add LoggingAspect enhancement to log method arguments
+
+[33mcommit c17cdf3f920926bed5a18bc1e49eee77dedd53e7[m
+Author: Omar_Ashraf <147910629+OmarAshraf166@users.noreply.github.com>
+Date:   Sun May 11 23:12:09 2025 +0300
+
+    Add LoggingAspect and test trigger via AdminService
+
+[33mcommit ddbfaab6f635b6e2aa438accfd4b4d47550e0122[m
+Merge: c797700 0d9ce37
+Author: Sarah-Mazhar <147240333+Sarah-Mazhar@users.noreply.github.com>
+Date:   Sun May 11 21:39:47 2025 +0300
+
+    Merge remote-tracking branch 'refs/remotes/origin/main'
+
+[33mcommit c797700670ae370bc0e304c227a5f41afcb389d6[m
+Author: Sarah-Mazhar <147240333+Sarah-Mazhar@users.noreply.github.com>
+Date:   Sun May 11 21:29:42 2025 +0300
+
+    feat(event): add maxAttendees and currentAttendees tracking to events
+    
+    - Introduced maxAttendees and currentAttendees fields in the Event entity and database table
+    - Enforced RSVP capacity validation to prevent overbooking
+    - Automatically initialize currentAttendees to 0 on event creation
+    - Integrated with RSVP logic to increment attendees and handle full events
+    - Extended event creation flow to accept maxAttendees from request body
+
+[33mcommit 0d9ce37d91bb9b00268777662deeda703b0baf93[m
+Author: Moamen Ahmed <moamenahmed800@gmail.com>
+Date:   Sun May 11 19:18:18 2025 +0300
+
+    🔧 Add CI workflows for push to main and pull request to main
+
+[33mcommit 5980387e9194b42219fbd12465407c74a825bf4d[m
+Author: Sarah-Mazhar <147240333+Sarah-Mazhar@users.noreply.github.com>
+Date:   Sun May 11 03:26:08 2025 +0300
+
+    feat(event): complete full event lifecycle with admin and host logging
+    
+    - Implemented full CRUD operations for events accessible by both Admin and Host roles.
+    - Integrated event creation, update, delete, RSVP, and search functionalities.
+    - Added proper logging to event_log and dmin_log with conditional logging only if the user is an Admin.
+    - Ensured created_by_admin_id in the event table is populated only when action is performed by an Admin.
+    - Ensured dmin_id in event_log is only set when action is performed by an Admin.
+    - Modified RSVP response to dynamically include the event name.
+    - Added role-based handling to separate host-only actions from admin-involved tracking.
+    - Verified all actions through Postman and database logs.
+    
+    Closes #event-management-feature
+
+[33mcommit f54d43be154b4ba59f0b9b1027b6121834941e59[m
+Author: Sarah-Mazhar <147240333+Sarah-Mazhar@users.noreply.github.com>
+Date:   Thu May 8 23:49:33 2025 +0300
+
+    Implement Admin User Management and Logging
+    
+    - Created AdminController endpoints for managing users by Admins.
+    - Added functionality for Admin to create and update users.
+    - Implemented logging for Admin actions using AdminLog entity.
+    - Updated User entity to track the Admin who created the user (createdByAdminId).
+    - Admin actions like creating and updating users are now logged with Admin ID and timestamp.
+    - Integrated Spring Security to ensure Admin privileges for specific actions.
+    - Tested functionality for Admin role to create, update users, and log these actions appropriately.
+
+[33mcommit 9317ca838d14053498f3ab68ec593d3fe6e4df15[m
+Author: Sarah-Mazhar <147240333+Sarah-Mazhar@users.noreply.github.com>
+Date:   Mon May 5 03:20:10 2025 +0300
+
+    Set up user and admin modules with role-based access control and Docker integration
+    
+    - Created User and Admin entities with controllers, services, and DTOs
+    - Implemented Spring Security with custom UserDetailsService for DB-based authentication
+    - Configured role-based access: USER, HOST, ADMIN
+    - Enabled registration endpoint and secured others based on roles
+    - Added password encryption using BCrypt
+    - Set up Docker containers for MySQL and phpMyAdmin
+    - Connected Spring Boot app to the database via application.properties
+    - Verified database functionality with Postman and phpMyAdmin
+    - Organized project folders by feature for better clarity
