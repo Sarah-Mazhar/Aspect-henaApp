@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import { FaEdit, FaTrash } from "react-icons/fa";
 import "./AllEventsPage.css";
 
 const API_BASE = "http://localhost:8080/api";
@@ -72,17 +71,21 @@ export default function AllEventsPage() {
               <p><strong>Date:</strong> {new Date(event.eventDate).toLocaleString()}</p>
               <p><strong>Description:</strong> {event.description}</p>
 
-              <div className="event-icons">
-                <FaEdit
+              <div className="event-actions">
+                <button
                   onClick={() => handleEdit(event)}
-                  className="icon edit-icon"
+                  className="btn edit-btn"
                   title="Edit"
-                />
-                <FaTrash
+                >
+                  Edit
+                </button>
+                <button
                   onClick={() => handleDelete(event.id)}
-                  className="icon delete-icon"
+                  className="btn delete-btn"
                   title="Delete"
-                />
+                >
+                  Delete
+                </button>
               </div>
             </li>
           ))}

@@ -6,7 +6,7 @@ resource "aws_instance" "backend" {
   key_name             = var.key_name
   iam_instance_profile = var.profile_name
   user_data            = filebase64(("${path.module}/backend-script.sh"))
-  
+
   tags = {
     Name = "backend"
   }

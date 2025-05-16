@@ -5,4 +5,4 @@ variable "key_name" {}
 variable "iam_role_name" {}
 variable "profile_name" {}
 variable "sg_name" {}
-variable "backend_private_ip" {}
+variable "backend_public_ip" {}

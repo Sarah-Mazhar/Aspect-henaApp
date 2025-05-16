@@ -1,7 +1,7 @@
 import { useLocation, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import axios from "axios";
-import "./EditEventPage.css"; // Make sure this CSS is applied
+import "./EditEventPage.css";
 
 const API_BASE = "http://localhost:8080/api";
 
