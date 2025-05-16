@@ -4,19 +4,23 @@ import Login from "./features/auth/Login";
 import UserDashboard from "./features/dashboard/UserDashboard";
 import HostDashboard from "./features/dashboard/HostDashboard";
 import AdminDashboard from "./features/dashboard/AdminDashboard";
-import ProtectedRoute from "./components/ProtectedRoute"; // ✅ import this
+import CreateEventPage from "./features/admin/CreateEventPage";
+import AllEventsPage from "./features/admin/AllEventsPage";
+import ProtectedRoute from "./components/ProtectedRoute";
 
 function App() {
   return (
     <Routes>
+      {/* Public Routes */}
       <Route path="/" element={<Navigate to="/login" />} />
       <Route path="/signup" element={<Register />} />
       <Route path="/login" element={<Login />} />
 
+      {/* Protected Routes */}
       <Route
         path="/user-dashboard"
         element={
-          <ProtectedRoute roleRequired="USER">
+          <ProtectedRoute roleRequired={["USER"]}>
             <UserDashboard />
           </ProtectedRoute>
         }
@@ -24,7 +28,7 @@ function App() {
       <Route
         path="/host-dashboard"
         element={
-          <ProtectedRoute roleRequired="HOST">
+          <ProtectedRoute roleRequired={["HOST"]}>
             <HostDashboard />
           </ProtectedRoute>
         }
@@ -32,8 +36,24 @@ function App() {
       <Route
         path="/admin-dashboard"
         element={
-          <ProtectedRoute roleRequired="ADMIN">
+          <ProtectedRoute roleRequired={["ADMIN"]}>
             <AdminDashboard />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/admin/create-event"
+        element={
+          <ProtectedRoute roleRequired={["ADMIN"]}>
+            <CreateEventPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/admin/events"
+        element={
+          <ProtectedRoute roleRequired={["ADMIN"]}>
+            <AllEventsPage />
           </ProtectedRoute>
         }
       />

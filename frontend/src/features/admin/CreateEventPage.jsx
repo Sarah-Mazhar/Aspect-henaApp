@@ -1,20 +1,31 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { createEvent } from "../../services/api";
 import "../dashboard/Dashboard.css";
 
 export default function CreateEventPage() {
   const navigate = useNavigate();
+  const token = localStorage.getItem("token");
+  const role = localStorage.getItem("role");
   const adminId = localStorage.getItem("adminId");
 
   const [eventData, setEventData] = useState({
     name: "",
     description: "",
     date: "",
+    time: "",
     location: "",
     category: "",
     maxAttendees: "",
   });
+
+  // 🔐 Admin authentication check
+  useEffect(() => {
+    if (!token || role !== "ADMIN" || !adminId) {
+      alert("Unauthorized access. Please log in as Admin.");
+      navigate("/login");
+    }
+  }, [token, role, adminId, navigate]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -27,10 +38,22 @@ export default function CreateEventPage() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    if (
+      !eventData.name ||
+      !eventData.description ||
+      !eventData.date ||
+      !eventData.location ||
+      !eventData.category ||
+      !eventData.maxAttendees
+    ) {
+      alert("Please fill in all required fields.");
+      return;
+    }
+
     try {
       const payload = {
         ...eventData,
-        eventDate: eventData.date + "T00:00:00", // 🧠 Convert to LocalDateTime format
+        eventDate: `${eventData.date}T${eventData.time || "00:00"}:00`,
         createdByAdminId: Number(adminId),
         maxAttendees: Number(eventData.maxAttendees),
       };
@@ -42,6 +65,15 @@ export default function CreateEventPage() {
       });
 
       alert(`✅ Event "${result.name}" created successfully!`);
+      setEventData({
+        name: "",
+        description: "",
+        date: "",
+        time: "",
+        location: "",
+        category: "",
+        maxAttendees: "",
+      });
       navigate("/admin-dashboard");
     } catch (error) {
       console.error("❌ Error creating event:", error);
@@ -78,6 +110,12 @@ export default function CreateEventPage() {
             required
           />
           <input
+            type="time"
+            name="time"
+            value={eventData.time}
+            onChange={handleChange}
+          />
+          <input
             type="text"
             name="location"
             placeholder="Location"
@@ -106,7 +144,10 @@ export default function CreateEventPage() {
             ✅ Submit Event
           </button>
         </form>
-        <button onClick={() => navigate("/admin-dashboard")} style={{ marginTop: "1rem" }}>
+        <button
+          onClick={() => navigate("/admin-dashboard")}
+          style={{ marginTop: "1rem" }}
+        >
           🔙 Back to Dashboard
         </button>
       </div>
