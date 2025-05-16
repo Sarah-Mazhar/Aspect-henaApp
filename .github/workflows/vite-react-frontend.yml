@@ -31,10 +31,3 @@ jobs:
 
       - name: Build project
         run: npm run build
-
-      - name: Upload build artifacts
-        if: success()
-        uses: actions/upload-artifact@v4
-        with:
-          name: vite-frontend-dist
-          path: frontend/dist
