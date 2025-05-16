@@ -8,6 +8,8 @@ const staticCreds = {
   ADMIN: { username: "admin", password: "adminpass" },
 };
 
+
+
 export const login = async ({ username, password, role }) => {
   const staticUser = staticCreds[role];
   const authHeader = btoa(`${staticUser.username}:${staticUser.password}`);
@@ -55,3 +57,35 @@ export const createUser = async ({ formData, adminId }) => {
 
   return response.data;
 };
+
+export const getHostEvents = async (hostId) => {
+  const staticUser = staticCreds["HOST"]; // or dynamic if needed
+  const authHeader = btoa(`${staticUser.username}:${staticUser.password}`);
+  
+  const config = {
+    headers: {
+      Authorization: `Basic ${authHeader}`,
+    },
+  };
+
+  const response = await axios.get(
+    `${API_BASE}/event/host/${hostId}`,
+    config
+  );
+  return response.data;
+};
+
+export const deleteEvent = async ({ eventId, hostId, role = "HOST" }) => {
+  const staticUser = staticCreds[role];
+  const authHeader = btoa(`${staticUser.username}:${staticUser.password}`);
+
+  const config = {
+    headers: {
+      Authorization: `Basic ${authHeader}`,
+    },
+  };
+
+  await axios.delete(`${API_BASE}/event/delete/${hostId}/${eventId}`, config);
+};
+
+
