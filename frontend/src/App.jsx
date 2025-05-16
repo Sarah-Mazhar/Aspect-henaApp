@@ -9,9 +9,9 @@ import AllEventsPage from "./features/admin/AllEventsPage";
 import ProtectedRoute from "./components/ProtectedRoute";
 import EditEventPage from "./features/admin/EditEventPage"; 
 import CreateUserPage from "./features/admin/CreateUserPage";
-//import HostEventsPage from "./features/host/HostEventsPage";
-//import HostEditEventPage from "./features/host/HostEditEventPage";
-//  import HostCreateEventPage from "./features/host/HostCreateEventPage"; // ✅ NEW IMPORT
+import HostEventsPage from "./features/host/HostEventsPage";
+import HostEditEventPage from "./features/host/HostEditEventPage";
+import HostCreateEventPage from "./features/host/HostCreateEventPage";
 
 function App() {
   return (
@@ -80,7 +80,7 @@ function App() {
       />
 
     
-      {/* <Route
+      <Route
         path="/host/create-event"
         element={
           <ProtectedRoute roleRequired={["HOST"]}>
@@ -103,7 +103,7 @@ function App() {
             <HostEditEventPage />
           </ProtectedRoute>
         }
-      /> */}
+      />
     </Routes>
   );
 }
