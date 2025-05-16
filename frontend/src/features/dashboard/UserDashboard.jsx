@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { getUpcomingEvents, rsvpToEvent } from "../../services/api"; // ✅ updated import
+import { getUpcomingEvents, rsvpToEvent, cancelRSVP } from "../../services/api";
 import "./Dashboard.css";
 
 export default function UserDashboard() {
@@ -25,7 +25,7 @@ export default function UserDashboard() {
 
   const fetchEvents = async () => {
     try {
-      const events = await getUpcomingEvents(); // ✅ uses API helper
+      const events = await getUpcomingEvents();
       setEvents(events);
     } catch (err) {
       console.error("❌ Failed to fetch events:", err);
@@ -35,71 +35,80 @@ export default function UserDashboard() {
     }
   };
 
-  const handleRSVP = async (eventId, eventName) => {
+  const handleToggleRSVP = async (event) => {
+    const userIdNum = Number(userId);
+    const isUserRSVPed = event.rsvps?.some((u) => Number(u.id) === userIdNum);
+
     try {
-      await rsvpToEvent({ userId, eventId }); // ✅ uses new RSVP API call
-      setRsvpSuccess(`Successfully RSVP’d to "${eventName}"`);
-      fetchEvents(); // refresh
+      if (isUserRSVPed) {
+        await cancelRSVP({ userId: userIdNum, eventId: event.id });
+        setRsvpSuccess(`Canceled RSVP for "${event.name}"`);
+      } else {
+        await rsvpToEvent({ userId: userIdNum, eventId: event.id });
+        setRsvpSuccess(`Successfully RSVP’d to "${event.name}"`);
+      }
+
+      fetchEvents(); // Always refresh from server to sync exact state
     } catch (err) {
-      console.error("❌ RSVP error:", err);
-      alert("Could not RSVP. The event may be full or an error occurred.");
+      console.error("❌ RSVP toggle error:", err);
+      alert("Could not process RSVP. Try again.");
+    } finally {
+      setTimeout(() => setRsvpSuccess(""), 3000); // Auto-clear after 3s
     }
   };
 
   return (
-    <div className="dashboard-wrapper">
-      <button
-        className="logout-btn"
-        onClick={() => {
-          localStorage.clear();
-          navigate("/login");
-        }}
-      >
-        Logout
-      </button>
+    <div className="user-dashboard-container">
+      <nav className="navbar">
+        <h2>User Dashboard</h2>
+        <div className="nav-buttons">
+          <button onClick={() => navigate("/profile")}>Profile</button>
+          <button
+            onClick={() => {
+              localStorage.clear();
+              navigate("/login");
+            }}
+          >
+            Logout
+          </button>
+        </div>
+      </nav>
 
       <div className="dashboard-box">
-        <h1>User Dashboard ✅</h1>
-        <p>You are successfully authenticated as a <strong>USER</strong>.</p>
-
         <h2>Upcoming Events 🎉</h2>
-        {rsvpSuccess && <p style={{ color: "green" }}>{rsvpSuccess}</p>}
+        {rsvpSuccess && <p className="success-msg">{rsvpSuccess}</p>}
 
         {loading ? (
           <p>Loading events...</p>
         ) : error ? (
-          <p style={{ color: "red" }}>{error}</p>
+          <p className="error-msg">{error}</p>
         ) : events.length === 0 ? (
           <p>No upcoming events found.</p>
         ) : (
           <ul className="event-list">
-            {events.map((event) => (
-              <li key={event.id} className="event-item">
-                <h3>{event.name}</h3>
-                <p>{event.description}</p>
-                <p>
-                  <strong>Date:</strong>{" "}
-                  {event.eventDate
-                    ? new Date(event.eventDate).toLocaleString()
-                    : "TBA"}
-                </p>
-                <p>
-                  <strong>Location:</strong> {event.location || "Unknown"}
-                </p>
-                <p>
-                  <strong>Category:</strong> {event.category || "Uncategorized"}
-                </p>
-                <p>
-                  <strong>Attendees:</strong> {event.currentAttendees} / {event.maxAttendees}
-                </p>
-                <button
-                  onClick={() => handleRSVP(event.id, event.name)}
-                  disabled={event.currentAttendees >= event.maxAttendees}
-                >
-                  {event.currentAttendees >= event.maxAttendees ? "Event Full" : "Attend"}
-                </button>
-              </li>
-            ))}
+            {events.map((event) => {
+              const userIdNum = Number(userId);
+              const isUserRSVPed = event.rsvps?.some((u) => Number(u.id) === userIdNum);
+              const isFull = event.currentAttendees >= event.maxAttendees;
+              const canAttend = isUserRSVPed || !isFull;
+
+              return (
+                <li key={event.id} className="event-item">
+                  <h3>{event.name}</h3>
+                  <p>{event.description}</p>
+                  <p><strong>Date:</strong> {event.eventDate ? new Date(event.eventDate).toLocaleString() : "TBA"}</p>
+                  <p><strong>Location:</strong> {event.location || "Unknown"}</p>
+                  <p><strong>Category:</strong> {event.category || "Uncategorized"}</p>
+                  <p><strong>Attendees:</strong> {event.currentAttendees} / {event.maxAttendees}</p>
+                  <button
+                    onClick={() => handleToggleRSVP(event)}
+                    disabled={!canAttend}
+                  >
+                    {isUserRSVPed ? "Cancel" : isFull ? "Event Full" : "Attend"}
+                  </button>
+                </li>
+              );
+            })}
           </ul>
         )}
       </div>

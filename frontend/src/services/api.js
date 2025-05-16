@@ -115,3 +115,21 @@ export const rsvpToEvent = async ({ userId, eventId }) => {
   return response.data;
 };
 
+
+export const cancelRSVP = async ({ userId, eventId }) => {
+  const staticUser = staticCreds["USER"];
+  const authHeader = btoa(`${staticUser.username}:${staticUser.password}`);
+
+  const config = {
+    headers: {
+      Authorization: `Basic ${authHeader}`,
+    }
+    // ❌ Do NOT include `data` here
+  };
+
+  const response = await axios.delete(
+    `${API_BASE}/user/rsvp/${userId}/${eventId}`, 
+    config
+  );
+  return response.data;
+};

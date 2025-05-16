@@ -560,6 +560,27 @@ public class EventService {
         return eventRepository.findByEventDateAfter(now);
     }
 
+    public void cancelRSVP(Long eventId, User user) {
+        Event event = findEventById(eventId);
+
+        // Remove by matching ID instead of the whole user object (to avoid equals/hashCode issues)
+        boolean removed = event.getRsvps().removeIf(u -> u.getId().equals(user.getId()));
+        if (!removed) {
+            throw new IllegalStateException("User is not RSVP'd to this event.");
+        }
+
+        // Safely decrement current attendees
+        int current = event.getCurrentAttendees();
+        event.setCurrentAttendees(Math.max(0, current - 1));
+
+        eventRepository.save(event);
+
+
+    }
+
+
+
+
 
 
 
