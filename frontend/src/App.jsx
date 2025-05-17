@@ -12,11 +12,9 @@ import CreateUserPage from "./features/admin/CreateUserPage";
 import HostEventsPage from "./features/host/HostEventsPage";
 import HostEditEventPage from "./features/host/HostEditEventPage";
 import HostCreateEventPage from "./features/host/HostCreateEventPage";
-import UserProfilePage from "./features/user/UserProfilePage"; 
 import AdminProfilePage from "./features/admin/adminProfilePage"; 
 import HostProfilePage from "./features/host/HostProfilePage";
-
-
+import UserProfilePage from "./features/user/UserProfilePage"; 
 
 function App() {
   return (
