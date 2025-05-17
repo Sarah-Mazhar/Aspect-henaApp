@@ -1,7 +1,7 @@
 #!/bin/bash
 
-# Step 0: Use Terraform-injected backend private IP
-backend_private_ip="${backend_private_ip}"
+# Step 0: Use Terraform-injected backend public IP
+backend_public_ip="${backend_public_ip}"
 
 # Step 1: Update package lists and install required tools
 echo "Updating package list..."
@@ -10,22 +10,67 @@ sudo apt-get update -y || { echo "Failed to update package list"; exit 1; }
 echo "Installing required tools (curl, unzip, git, npm, apache2)..."
 sudo apt-get install -y curl unzip git npm apache2 || { echo "Failed to install required tools"; exit 1; }
 
+# Install AWS CLI if not already installed
+if ! command -v aws &> /dev/null; then
+    echo "AWS CLI not found. Installing AWS CLI..."
+    curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip" || { echo "Failed to download AWS CLI"; exit 1; }
+    unzip awscliv2.zip || { echo "Failed to unzip AWS CLI package"; exit 1; }
+    sudo ./aws/install || { echo "Failed to install AWS CLI"; exit 1; }
+    echo "AWS CLI installed successfully."
+else
+    echo "AWS CLI is already installed."
+fi
+
 # Step 2: Clone the Aspect-henaApp repository
 echo "Cloning the Aspect-henaApp repository..."
 cd /home/ubuntu || { echo "Failed to navigate to home directory"; exit 1; }
 git clone https://github.com/Sarah-Mazhar/Aspect-henaApp.git || { echo "Failed to clone repository"; exit 1; }
 cd Aspect-henaApp || { echo "Failed to enter Aspect-henaApp directory"; exit 1; }
 
-# Step 3: Replace localhost with backend private IP
-echo "Replacing 'localhost' with backend IP: $backend_private_ip"
-find ./frontend -type f -exec sed -i "s/localhost/$backend_private_ip/g" {} +
+# Step 3: Replace localhost with backend public IP
+echo "Replacing 'localhost' with backend IP: $backend_public_ip"
+find ./frontend -type f -exec sed -i "s/localhost/$backend_public_ip/g" {} +
+
+# Step 3.5: Configure Apache to reverse-proxy /api to Spring Boot backend
+echo "Installing Apache and enabling reverse proxy modules..."
+sudo apt install -y apache2 || { echo "❌ Failed to install Apache"; exit 1; }
+sudo a2enmod proxy proxy_http rewrite || { echo "❌ Failed to enable proxy modules"; exit 1; }
+
+echo "Configuring Apache to reverse-proxy /api to Spring Boot backend..."
+APACHE_CONF_PATH="/etc/apache2/sites-available/000-default.conf"
+
+sudo tee "$APACHE_CONF_PATH" > /dev/null <<EOF
+<VirtualHost *:80>
+    ServerAdmin webmaster@localhost
+    DocumentRoot /var/www/html
+
+    ProxyPreserveHost On
+    ProxyPass /api/ http://$backend_public_ip:8080/api/
+    ProxyPassReverse /api/ http://$backend_public_ip:8080/api/
+
+    <Directory /var/www/html>
+        Options Indexes FollowSymLinks
+        AllowOverride All
+        Require all granted
+    </Directory>
+
+    ErrorLog $${APACHE_LOG_DIR}/error.log
+    CustomLog $${APACHE_LOG_DIR}/access.log combined
+</VirtualHost>
+EOF
+
+echo "Restarting Apache..."
+sudo systemctl restart apache2 || { echo "❌ Apache restart failed"; exit 1; }
+sudo systemctl enable apache2
+
+echo "✅ Apache is now configured to proxy /api to Spring Boot"
 
 # Step 4: Install frontend dependencies and build
 cd frontend || { echo "Failed to enter frontend directory"; exit 1; }
 
 echo "Installing frontend Node.js dependencies..."
 npm install || { echo "Failed to install Node.js dependencies"; exit 1; }
-
+npm install react-icons
 echo "Building the React frontend..."
 npm run build || { echo "Failed to build frontend"; exit 1; }
 
@@ -56,6 +101,6 @@ echo "------------------------------------------------------------"
 echo "🎯 Frontend deployment complete!"
 echo ""
 echo "✅ Aspect-henaApp frontend built and served via Apache"
-echo "✅ Connected to backend at: http://$backend_private_ip:8080"
+echo "✅ Connected to backend at: http://$backend_public_ip:8080"
 echo "🌐 Access your frontend at: http://$frontend_public_ip"
 echo "------------------------------------------------------------"

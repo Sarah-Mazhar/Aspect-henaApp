@@ -11,15 +11,15 @@ module "backend" {
 }
 
 module "frontend" {
-  source        = "./modules/frontend"
-  instance_type = var.instance_type
-  image_id      = var.image_id
-  key_name      = var.key_name
-  iam_role_name = aws_iam_role.ec2_role.name
-  profile_name  = aws_iam_instance_profile.ec2_role.name
-  sg_name       = aws_security_group.sg.name
-  backend_private_ip  = module.backend.backend_public_ip
-  depends_on    = [module.backend]
+  source            = "./modules/frontend"
+  instance_type     = var.instance_type
+  image_id          = var.image_id
+  key_name          = var.key_name
+  iam_role_name     = aws_iam_role.ec2_role.name
+  profile_name      = aws_iam_instance_profile.ec2_role.name
+  sg_name           = aws_security_group.sg.name
+  backend_public_ip = module.backend.backend_public_ip
+  depends_on        = [module.backend]
 }
 
 

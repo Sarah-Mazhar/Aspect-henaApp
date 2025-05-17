@@ -1,6 +1,8 @@
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import Navbar from "../../components/Navbar";
 import "./Dashboard.css";
+import "./AdminDashboard.css";
 
 export default function AdminDashboard() {
   const token = localStorage.getItem("token");
@@ -21,18 +23,10 @@ export default function AdminDashboard() {
 
   return (
     <div className="dashboard-wrapper">
-      <button
-        className="logout-btn"
-        onClick={() => {
-          localStorage.clear();
-          navigate("/login");
-        }}
-      >
-        Logout
-      </button>
+      <Navbar role={role} />
 
-      <div className="dashboard-box">
-        <h1>Admin Dashboard ✅</h1>
+      <div className="admin-dashboard-box">
+        <h1>Admin Dashboard</h1>
         <p>You are successfully authenticated as a <strong>ADMIN</strong>.</p>
 
         <div className="admin-actions">

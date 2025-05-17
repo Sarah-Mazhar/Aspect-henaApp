@@ -1,13 +1,14 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { createEvent } from "../../services/api";
-import "./CreateEventPage.css"; // Make sure this file exists and is updated as below
+import "../admin/CreateEventPage.css";
 
-export default function CreateEventPage() {
+
+export default function HostCreateEventPage() {
   const navigate = useNavigate();
   const token = localStorage.getItem("token");
   const role = localStorage.getItem("role");
-  const adminId = localStorage.getItem("adminId");
+  const hostId = localStorage.getItem("hostId");
 
   const [eventData, setEventData] = useState({
     name: "",
@@ -20,11 +21,11 @@ export default function CreateEventPage() {
   });
 
   useEffect(() => {
-    if (!token || role !== "ADMIN" || !adminId) {
-      alert("Unauthorized access. Please log in as Admin.");
+    if (!token || role !== "HOST" || !hostId) {
+      alert("Unauthorized access. Please log in as Host.");
       navigate("/login");
     }
-  }, [token, role, adminId, navigate]);
+  }, [token, role, hostId, navigate]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -49,14 +50,14 @@ export default function CreateEventPage() {
       const payload = {
         ...eventData,
         eventDate: `${eventData.date}T${eventData.time || "00:00"}:00`,
-        createdByAdminId: Number(adminId),
+        createdByHostId: Number(hostId),
         maxAttendees: Number(eventData.maxAttendees),
       };
 
       const result = await createEvent({
         eventData: payload,
-        role: "ADMIN",
-        adminId,
+        role: "HOST",
+        adminId: hostId, // using same parameter name for endpoint consistency
       });
 
       alert(`✅ Event "${result.name}" created successfully!`);
@@ -69,7 +70,7 @@ export default function CreateEventPage() {
         category: "",
         maxAttendees: "",
       });
-      navigate("/admin-dashboard");
+      navigate("/host-dashboard");
     } catch (error) {
       console.error("❌ Error creating event:", error);
       alert("Failed to create event.");
@@ -137,7 +138,7 @@ export default function CreateEventPage() {
         <button type="submit">✅ Submit Event</button>
         <button
           type="button"
-          onClick={() => navigate("/admin-dashboard")}
+          onClick={() => navigate("/host-dashboard")}
           style={{ marginTop: "1rem", backgroundColor: "#444", color: "#fff" }}
         >
           🔙 Cancel
