@@ -1,8 +1,7 @@
-// src/components/Navbar.jsx
 import { useNavigate } from "react-router-dom";
 import "./Navbar.css";
 
-export default function Navbar({ userId }) {
+export default function Navbar({ userId, role = "USER" }) {
   const navigate = useNavigate();
 
   const handleLogout = () => {
@@ -10,11 +9,19 @@ export default function Navbar({ userId }) {
     navigate("/login");
   };
 
+  const handleProfileClick = () => {
+    if (role === "ADMIN") {
+      navigate(`/admin/profile/${userId}`);
+    } else {
+      navigate(`/profile/${userId}`);
+    }
+  };
+
   return (
     <nav className="navbar">
-      <h2>User Dashboard</h2>
+      <h2>{role === "ADMIN" ? "Admin Dashboard" : "User Dashboard"}</h2>
       <div className="nav-buttons">
-        <button onClick={() => navigate(`/profile/${userId}`)}>Profile</button>
+        <button onClick={handleProfileClick}>Profile</button>
         <button onClick={handleLogout}>Logout</button>
       </div>
     </nav>
