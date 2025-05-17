@@ -109,10 +109,14 @@ public class UserController {
     public String rsvpToEvent(@PathVariable("userId") Long userId,
                               @PathVariable("eventId") Long eventId,
                               Principal principal) {
-        User user = userService.getUserById(userId);  // Get user by their ID
-        // Fetch the event by ID so we can access its name
+        // Keep original behavior
+        User user = userService.getUserById(userId);
         Event event = eventService.findEventById(eventId);
-        eventService.rsvpToEvent(eventId, user);
+
+        // Instead of calling eventService directly, delegate logic to UserService
+        userService.rsvpToEvent(eventId, userId);
+
+        // Still return message with event name
         return "responded successfully to attend: " + event.getName();
     }
 
