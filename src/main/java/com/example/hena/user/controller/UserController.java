@@ -173,7 +173,7 @@ public class UserController {
         return "Searched for events on date: " + date + ", category: " + category;
     }
 
-    @PreAuthorize("hasRole('USER')")
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN', 'HOST')")
     @GetMapping("/{id}")
     public ResponseEntity<?> getUserById(@PathVariable Long id) {
         User user = userService.getUserById(id);
@@ -182,4 +182,5 @@ public class UserController {
         }
         return ResponseEntity.ok(user);
     }
+
 }
