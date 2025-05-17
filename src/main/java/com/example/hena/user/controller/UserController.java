@@ -18,6 +18,9 @@ import org.springframework.web.bind.annotation.*;
 import com.example.hena.security.JwtUtil;
 import java.util.HashMap;
 import java.util.Map;
+import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 
 import java.security.Principal;
 
@@ -117,6 +120,26 @@ public class UserController {
         eventService.rsvpToEvent(eventId, user);
         return "responded successfully to attend: "  + event.getName();
     }
+
+    @PreAuthorize("hasRole('USER')")
+    @RequestMapping(
+            value = "/rsvp/{userId}/{eventId}",
+            method = RequestMethod.DELETE,
+            consumes = MediaType.ALL_VALUE // Handles empty body from Axios
+    )
+    @DistributedLock(keyPrefix = "rsvp-cancel", keyIdentifierExpression = "#eventId", leaseTime = 10)
+    public String cancelRSVP(@PathVariable("userId") Long userId,
+                             @PathVariable("eventId") Long eventId,
+                             Principal principal) {
+        User user = userService.getUserById(userId);
+        Event event = eventService.findEventById(eventId);
+
+        eventService.cancelRSVP(eventId, user);
+
+        return "Successfully cancelled RSVP for: " + event.getName();
+    }
+
+
 //    @PostMapping("/rsvp/{eventId}")
 //    public ResponseEntity<String> rsvpToEvent(@PathVariable Long eventId, Principal principal) {
 //        // Get logged-in user's email from security context

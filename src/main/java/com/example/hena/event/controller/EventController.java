@@ -132,6 +132,13 @@
             return ResponseEntity.ok(events);
         }
 
+        @GetMapping("/upcoming")
+        public List<Event> getUpcomingEvents() {
+            return eventService.findUpcomingEvents();
+        }
+
+
+
         // 🔒 Optional: Enable this when host wants to view attendee details
     //    @PreAuthorize("hasRole('HOST')")
     //    @GetMapping("/host/events-with-attendee-details/{hostId}")
