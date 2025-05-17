@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { getUserProfile } from "../../services/api";
 import axios from "axios";
+import Navbar from "../../components/Navbar";
+import "./UserProfile.css"
 
 
 export default function UserProfilePage() {
@@ -61,11 +63,13 @@ export default function UserProfilePage() {
 
   return (
     <div className="user-profile-container">
+        <Navbar userId={userId} />
       <h2>User Profile</h2>
       {error && <p className="error-msg">{error}</p>}
       {success && <p className="success-msg">{success}</p>}
 
       <div className="profile-form">
+
         <label>
           Username:
           <input

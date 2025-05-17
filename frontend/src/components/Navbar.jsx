@@ -1,8 +1,8 @@
-import { FaSignOutAlt, FaUserEdit } from "react-icons/fa";
+// src/components/Navbar.jsx
 import { useNavigate } from "react-router-dom";
 import "./Navbar.css";
 
-export default function Navbar({ role }) {
+export default function Navbar({ userId }) {
   const navigate = useNavigate();
 
   const handleLogout = () => {
@@ -10,24 +10,13 @@ export default function Navbar({ role }) {
     navigate("/login");
   };
 
-  const handleUpdateProfile = () => {
-    navigate("/admin/profile");
-  };
-
   return (
-    <div className="navbar">
-      <div className="navbar-left">
-        🎯 <strong>{role} Panel</strong>
+    <nav className="navbar">
+      <h2>User Dashboard</h2>
+      <div className="nav-buttons">
+        <button onClick={() => navigate(`/profile/${userId}`)}>Profile</button>
+        <button onClick={handleLogout}>Logout</button>
       </div>
-
-      <div className="navbar-right">
-        <div className="icon-wrapper" title="Profile">
-          <FaUserEdit className="nav-icon" onClick={handleUpdateProfile} />
-        </div>
-        <div className="icon-wrapper" title="Logout">
-          <FaSignOutAlt className="nav-icon" onClick={handleLogout} />
-        </div>
-      </div>
-    </div>
+    </nav>
   );
 }

@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { getUpcomingEvents, rsvpToEvent, cancelRSVP } from "../../services/api";
 import "./Dashboard.css";
+import Navbar from "../../components/Navbar";
 
 export default function UserDashboard() {
   const [events, setEvents] = useState([]);
@@ -48,32 +49,18 @@ export default function UserDashboard() {
         setRsvpSuccess(`Successfully RSVP’d to "${event.name}"`);
       }
 
-      fetchEvents(); // Always refresh from server to sync exact state
+      fetchEvents();
     } catch (err) {
       console.error("❌ RSVP toggle error:", err);
       alert("Could not process RSVP. Try again.");
     } finally {
-      setTimeout(() => setRsvpSuccess(""), 3000); // Auto-clear after 3s
+      setTimeout(() => setRsvpSuccess(""), 3000);
     }
   };
 
   return (
     <div className="user-dashboard-container">
-      <nav className="navbar">
-        <h2>User Dashboard</h2>
-        <div className="nav-buttons">
-          <button onClick={() => navigate(`/profile/${userId}`)}>Profile</button>
-
-          <button
-            onClick={() => {
-              localStorage.clear();
-              navigate("/login");
-            }}
-          >
-            Logout
-          </button>
-        </div>
-      </nav>
+      <Navbar userId={userId} />
 
       <div className="dashboard-box">
         <h2>Upcoming Events 🎉</h2>
