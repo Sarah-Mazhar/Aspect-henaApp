@@ -1,0 +1,53 @@
+.notification-bell {
+  position: relative;
+  margin-right: 1rem;
+}
+
+.notification-bell button {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  position: relative;
+}
+
+.notification-bell .notif-count {
+  background: red;
+  color: white;
+  font-size: 0.75rem;
+  padding: 2px 6px;
+  border-radius: 50%;
+  position: absolute;
+  top: -8px;
+  right: -10px;
+}
+
+.notification-bell .dropdown {
+  position: absolute;
+  right: 0;
+  top: 130%;
+  background: #fff;
+  border: 1px solid #ccc;
+  width: 300px;
+  max-height: 400px;
+  overflow-y: auto;
+  z-index: 1000;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  padding: 0.5rem;
+}
+
+.notification-bell .dropdown ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.notification-bell .dropdown li {
+  padding: 0.5rem 0;
+  border-bottom: 1px solid #eee;
+}
+
+.notification-bell .dropdown .empty {
+  color: #777;
+  text-align: center;
+}

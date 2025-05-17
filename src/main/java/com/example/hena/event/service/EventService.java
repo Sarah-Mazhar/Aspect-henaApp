@@ -238,6 +238,7 @@ public class EventService {
             event.setCreatedByAdminId(user.getId()); // Set the admin who created the event
         }
 
+
         // Ensure maxAttendees from the request is preserved
         event.setMaxAttendees(event.getMaxAttendees());
         event.setCurrentAttendees(0); // ✅ Set initial attendees to 0
@@ -263,6 +264,10 @@ public class EventService {
         }
 
         return createdEvent;
+    }
+
+    public Event saveEvent(Event event) {
+        return eventRepository.save(event);
     }
 
     // Update an existing event

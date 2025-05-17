@@ -35,3 +35,33 @@
 .nav-buttons button:hover {
   background-color: #e6006d;
 }
+.notification-popup {
+  position: fixed;
+  top: 70px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #ff4d88;
+  color: white;
+  padding: 1rem 2rem;
+  border-radius: 12px;
+  font-size: 1.2rem; /* Increase font size */
+  font-weight: 500;
+  max-width: 90%; /* Allows wide display but keeps margin */
+  width: 600px; /* Set a wider width */
+  text-align: center;
+  z-index: 1000;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  animation: slideDownFade 0.3s ease;
+}
+
+/* Optional smooth entrance */
+@keyframes slideDownFade {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+}

@@ -14,7 +14,7 @@ public class NotificationService {
 
     private final NotificationRepository notificationRepository;
 
-    // Inject the NotificationRepository
+    // Inject the NotificationRepository via constructor
     public NotificationService(NotificationRepository repository) {
         this.notificationRepository = repository;
     }
@@ -54,6 +54,17 @@ public class NotificationService {
         }
     }
 
+    // Notify a USER that they have successfully RSVP'd
+    public void notifyUserRSVP(Event event, User user) {
+        if ("user".equalsIgnoreCase(user.getRole())) {
+            String content = "🌟 Successfully Registered For '" + event.getName() +
+                    "'! 📅 Mark your calendar for " + event.getEventDate().toLocalDate() +
+                    " at " + event.getEventDate().toLocalTime() +
+                    " — SAVE THE DATE! 🎉";
+            create(user.getId(), event.getId(), "RSVP_CONFIRMATION", content);
+        }
+    }
+
     // Notify the host and admin when a user RSVPs to the event
     public void notifyHostRSVP(Event event, User attendee) {
         User host = event.getHost();
@@ -84,7 +95,7 @@ public class NotificationService {
     public void notifyEventCancellation(Event event, List<User> rsvps) {
         for (User u : rsvps) {
             if ("user".equalsIgnoreCase(u.getRole())) {
-                String content = "The event '" + event.getName() + "' has been canceled.";
+                String content = "🚫 The event '" + event.getName() + "' has been canceled.";
                 create(u.getId(), event.getId(), "CANCELLATION", content);
             }
         }
