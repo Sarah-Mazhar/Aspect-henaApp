@@ -50,19 +50,9 @@ public class UserController {
         return userService.createUser(user);
     }
 
-//    // Login endpoint to generate JWT token
-//    @PostMapping("/login")
-//    public ResponseEntity<?> login(@RequestBody LoginDTO loginDTO) {
-//        User user = userService.findByEmail(loginDTO.getEmail());
-//        if (user == null || !userService.checkPassword(loginDTO.getPassword(), user.getPassword())) {
-//            return ResponseEntity.status(401).body("Invalid email or password");
-//        }
-//        String token = JwtUtil.generateToken(user.getEmail());
-//        return ResponseEntity.ok(token);
-//    }
 
     @PostMapping("/login")
-//    @RateLimit(limit = 1, duration = 10, keyPrefix = "login")
+//  @RateLimit(limit = 1, duration = 10, keyPrefix = "login")
     public ResponseEntity<?> login(@RequestBody LoginDTO loginDTO) {
         User user = userService.getUserByUsername(loginDTO.getUsername());
 
@@ -74,7 +64,7 @@ public class UserController {
 
         String token = JwtUtil.generateToken(user.getUsername());
 
-        // ✅ Return token + userId + role to frontend
+        // Return token + userId + role to frontend
         Map<String, Object> response = new HashMap<>();
         response.put("token", token);
         response.put("userId", user.getId());
@@ -139,42 +129,17 @@ public class UserController {
     }
 
 
-//    @PostMapping("/rsvp/{eventId}")
-//    public ResponseEntity<String> rsvpToEvent(@PathVariable Long eventId, Principal principal) {
-//        // Get logged-in user's email from security context
-//        String loggedInUserEmail = principal.getName();
-//
-//        // Fetch user entity by email
-//        User user = userService.findByEmail(loggedInUserEmail);
-//        if (user == null) {
-//            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User not authenticated");
-//        }
-//
-//        try {
-//            // Call EventService's RSVP method with user entity
-//            eventService.rsvpToEvent(eventId, user);
-//
-//            // Fetch event name for response message
-//            String eventName = eventService.getEventNameById(eventId);
-//
-//            String response = "User '" + user.getUsername() + "' RSVP'd to event '" + eventName + "'";
-//            return ResponseEntity.ok(response);
-//        } catch (IllegalStateException e) {
-//            // Handle case where event is full
-//            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
-//        } catch (RuntimeException e) {
-//            // Handle event not found or other errors
-//            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
-//        }
-//    }
-
-
     // Placeholder endpoint: Search for events
     @GetMapping("/search")
     public String searchEvents(@RequestParam(required = false) String date,
                                @RequestParam(required = false) String category) {
         // You will integrate with EventService for real search logic
         return "Searched for events on date: " + date + ", category: " + category;
+    }
+
+    @GetMapping("/test-log")
+    public String testLog() {
+        return userService.testLoggingAspect("Omar");
     }
 
     @PreAuthorize("hasAnyRole('USER', 'ADMIN', 'HOST')")

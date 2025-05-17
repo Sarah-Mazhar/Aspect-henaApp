@@ -1,34 +1,10 @@
-/*package com.example.hena.aspect;
-
-import org.aspectj.lang.JoinPoint;
-import org.aspectj.lang.annotation.*;
-import org.springframework.stereotype.Component;
-
-@Aspect
-@Component
-public class LoggingAspect {
-
-    @Before("execution(* com.example.hena.*.service.*.*(..))")
-    public void logBefore(JoinPoint joinPoint) {
-        System.out.println("[BEFORE] " + joinPoint.getSignature().toShortString());
-    }
-
-    @AfterReturning(pointcut = "execution(* com.example.hena.*.service.*.*(..))", returning = "result")
-    public void logAfterReturning(JoinPoint joinPoint, Object result) {
-        System.out.println("[AFTER RETURNING] " + joinPoint.getSignature().toShortString() + " | Result: " + result);
-    }
-
-    @AfterThrowing(pointcut = "execution(* com.example.hena.*.service.*.*(..))", throwing = "ex")
-    public void logAfterThrowing(JoinPoint joinPoint, Throwable ex) {
-        System.out.println("[EXCEPTION] " + joinPoint.getSignature().toShortString() + " | Error: " + ex.getMessage());
-    }
-}
-*/
 package com.example.hena.aspect;
 
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.*;
 import org.springframework.stereotype.Component;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Arrays;
 import java.util.stream.Collectors;
@@ -37,31 +13,27 @@ import java.util.stream.Collectors;
 @Component
 public class LoggingAspect {
 
-    // Log BEFORE method execution with arguments
-    @Before("execution(* com.example.hena.*.service.*.*(..))")
+    private static final Logger logger = LoggerFactory.getLogger(LoggingAspect.class);
+
+    // Log BEFORE any service method execution
+    @Before("execution(* com.example.hena..service..*(..))")
     public void logBefore(JoinPoint joinPoint) {
         String methodName = joinPoint.getSignature().toShortString();
         String args = Arrays.stream(joinPoint.getArgs())
-                .map(arg -> {
-                    // Mask passwords
-                    if (arg instanceof String && ((String) arg).toLowerCase().contains("pass")) {
-                        return "***";
-                    }
-                    return arg != null ? arg.toString() : "null";
-                })
+                .map(arg -> (arg != null && arg.toString().toLowerCase().contains("pass")) ? "***" : String.valueOf(arg))
                 .collect(Collectors.joining(", "));
-        System.out.println("[BEFORE] " + methodName + " | Args: [" + args + "]");
+        logger.info("[BEFORE] {} | Args: [{}]", methodName, args);
     }
 
-    // Log AFTER successful return
-    @AfterReturning(pointcut = "execution(* com.example.hena.*.service.*.*(..))", returning = "result")
+    // Log AFTER successful method return
+    @AfterReturning(pointcut = "execution(* com.example.hena..service..*(..))", returning = "result")
     public void logAfterReturning(JoinPoint joinPoint, Object result) {
-        System.out.println("[AFTER RETURNING] " + joinPoint.getSignature().toShortString() + " | Result: " + result);
+        logger.info("[AFTER RETURNING] {} | Result: {}", joinPoint.getSignature().toShortString(), result);
     }
 
-    // Log EXCEPTION
-    @AfterThrowing(pointcut = "execution(* com.example.hena.*.service.*.*(..))", throwing = "ex")
+    // Log if any exception occurs
+    @AfterThrowing(pointcut = "execution(* com.example.hena..service..*(..))", throwing = "ex")
     public void logAfterThrowing(JoinPoint joinPoint, Throwable ex) {
-        System.out.println("[EXCEPTION] " + joinPoint.getSignature().toShortString() + " | Error: " + ex.getMessage());
+        logger.error("[EXCEPTION] {} | Error: {}", joinPoint.getSignature().toShortString(), ex.getMessage());
     }
 }
