@@ -577,6 +577,9 @@ public class EventService {
 
 
     }
+    public List<Event> findEventsByRsvpUserId(Long userId) {
+        return eventRepository.findEventsByRsvpUserId(userId);
+    }
 
 
 
