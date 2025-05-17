@@ -62,7 +62,8 @@ export default function UserDashboard() {
       <nav className="navbar">
         <h2>User Dashboard</h2>
         <div className="nav-buttons">
-          <button onClick={() => navigate("/profile")}>Profile</button>
+          <button onClick={() => navigate(`/profile/${userId}`)}>Profile</button>
+
           <button
             onClick={() => {
               localStorage.clear();

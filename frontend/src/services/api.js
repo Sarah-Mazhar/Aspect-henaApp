@@ -133,3 +133,20 @@ export const cancelRSVP = async ({ userId, eventId }) => {
   );
   return response.data;
 };
+export const getUserProfile = async (userId) => {
+  const staticUser = {
+    username: "user",
+    password: "userpass",
+  };
+
+  const authHeader = btoa(`${staticUser.username}:${staticUser.password}`);
+  const config = {
+    headers: {
+      Authorization: `Basic ${authHeader}`,
+    },
+  };
+
+  const response = await axios.get(`${API_BASE}/user/${userId}`, config);
+  return response.data;
+};
+

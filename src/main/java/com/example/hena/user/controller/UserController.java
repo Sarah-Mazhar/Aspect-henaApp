@@ -17,6 +17,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import com.example.hena.security.JwtUtil;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -36,7 +37,6 @@ public class UserController {
 
     @Autowired
     private EventService eventService;  // Inject EventService
-
 
 
     // Register a new user
@@ -102,11 +102,6 @@ public class UserController {
     }
 
 
-
-
-
-
-
     // Placeholder endpoint: RSVP to an event
     @PreAuthorize("hasRole('USER')")
     @PostMapping("/rsvp/{userId}/{eventId}")
@@ -114,11 +109,11 @@ public class UserController {
     public String rsvpToEvent(@PathVariable("userId") Long userId,
                               @PathVariable("eventId") Long eventId,
                               Principal principal) {
-        User user =  userService.getUserById(userId);  // Get user by their ID
+        User user = userService.getUserById(userId);  // Get user by their ID
         // Fetch the event by ID so we can access its name
         Event event = eventService.findEventById(eventId);
         eventService.rsvpToEvent(eventId, user);
-        return "responded successfully to attend: "  + event.getName();
+        return "responded successfully to attend: " + event.getName();
     }
 
     @PreAuthorize("hasRole('USER')")
@@ -176,5 +171,15 @@ public class UserController {
                                @RequestParam(required = false) String category) {
         // You will integrate with EventService for real search logic
         return "Searched for events on date: " + date + ", category: " + category;
+    }
+
+    @PreAuthorize("hasRole('USER')")
+    @GetMapping("/{id}")
+    public ResponseEntity<?> getUserById(@PathVariable Long id) {
+        User user = userService.getUserById(id);
+        if (user == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found");
+        }
+        return ResponseEntity.ok(user);
     }
 }
