@@ -9,13 +9,16 @@ export default function Navbar({ userId, role = "USER" }) {
     navigate("/login");
   };
 
-  const handleProfileClick = () => {
-    if (role === "ADMIN") {
-      navigate(`/admin/profile/${userId}`);
-    } else {
-      navigate(`/profile/${userId}`);
-    }
-  };
+const handleProfileClick = () => {
+  if (role === "ADMIN") {
+    navigate(`/admin/profile/${userId}`);
+  } else if (role === "HOST") {
+    navigate(`/host/profile/${userId}`);
+  } else {
+    navigate(`/profile/${userId}`);
+  }
+};
+
 
   return (
     <nav className="navbar">
