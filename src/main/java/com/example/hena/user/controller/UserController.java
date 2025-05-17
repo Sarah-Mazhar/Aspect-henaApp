@@ -154,4 +154,9 @@ public class UserController {
         // You will integrate with EventService for real search logic
         return "Searched for events on date: " + date + ", category: " + category;
     }
+    @GetMapping("/test-log")
+    public String testLog() {
+        return userService.testLoggingAspect("Omar");
+    }
+
 }
