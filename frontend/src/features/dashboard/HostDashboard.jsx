@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import "./Dashboard.css";
+import Navbar from "../../components/Navbar";
+import "./HostDashboard.css";
 
 export default function HostDashboard() {
   const token = localStorage.getItem("token");
@@ -23,23 +24,26 @@ export default function HostDashboard() {
     navigate(`/host/events/${hostId}`);
   };
 
-  return (
-    <div className="dashboard-wrapper">
-      <button
-        className="logout-btn"
-        onClick={() => {
-          localStorage.clear();
-          navigate("/login");
-        }}
-      >
-        Logout
-      </button>
-      <div className="dashboard-box">
-        <h1>Host Dashboard ✅</h1>
-        <p>You are successfully authenticated as a <strong>HOST</strong>.</p>
-        <button onClick={handleCreateEvent}>Create New Event</button>
-        <button onClick={handleViewMyEvents}>View My Events</button>
-      </div>
+return (
+  <div className="host-dashboard">
+    <Navbar role="HOST" userId={hostId} />
+
+    <button
+      className="logout-btn"
+      onClick={() => {
+        localStorage.clear();
+        navigate("/login");
+      }}
+    >
+      Logout
+    </button>
+    <div className="dashboard-box">
+      <h1>Host Dashboard ✅</h1>
+      <p>You are successfully authenticated as a <strong>HOST</strong>.</p>
+      <button onClick={handleCreateEvent}>Create New Event</button>
+      <button onClick={handleViewMyEvents}>View My Events</button>
     </div>
-  );
+  </div>
+);
+
 }

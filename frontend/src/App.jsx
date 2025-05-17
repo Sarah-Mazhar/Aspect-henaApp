@@ -14,6 +14,9 @@ import HostEditEventPage from "./features/host/HostEditEventPage";
 import HostCreateEventPage from "./features/host/HostCreateEventPage";
 import UserProfilePage from "./features/user/UserProfilePage"; 
 import AdminProfilePage from "./features/admin/adminProfilePage"; 
+import HostProfilePage from "./features/host/HostProfilePage";
+
+
 
 function App() {
   return (
@@ -119,6 +122,14 @@ function App() {
         element={
           <ProtectedRoute roleRequired={["ADMIN"]}>
             <AdminProfilePage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/host/profile/:userId"
+        element={
+          <ProtectedRoute roleRequired={["HOST"]}>
+            <HostProfilePage />
           </ProtectedRoute>
         }
       />
