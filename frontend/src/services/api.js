@@ -59,7 +59,7 @@ export const createUser = async ({ formData, adminId }) => {
 };
 
 export const getHostEvents = async (hostId) => {
-  const staticUser = staticCreds["HOST"]; // or dynamic if needed
+  const staticUser = staticCreds["HOST"];
   const authHeader = btoa(`${staticUser.username}:${staticUser.password}`);
   
   const config = {
@@ -92,7 +92,7 @@ export const getUpcomingEvents = async () => {
   const staticUser = staticCreds["USER"];
   const authHeader = btoa(`${staticUser.username}:${staticUser.password}`);
 
-  const response = await axios.get("http://localhost:8080/api/event/upcoming", {
+  const response = await axios.get(`${API_BASE}/event/upcoming`, {
     headers: {
       Authorization: `Basic ${authHeader}`,
     },
@@ -174,7 +174,7 @@ export const getAdminProfile = async (adminId) => {
     },
   };
 
-  const response = await axios.get(`http://localhost:8080/api/user/${adminId}`, config);
+  const response = await axios.get(`${API_BASE}/user/${adminId}`, config);
   return response.data;
 };
 
@@ -190,7 +190,7 @@ export const updateAdminProfile = async (adminId, updatedData) => {
   };
 
   const response = await axios.put(
-    `http://localhost:8080/api/user/update/${adminId}`,
+    `${API_BASE}/user/update/${adminId}`,
     updatedData,
     config
   );
@@ -208,7 +208,7 @@ export const createEventByAdmin = async (adminId, eventData) => {
   };
 
   const response = await axios.post(
-    `http://localhost:8080/api/event/create/${adminId}`,
+    `${API_BASE}/event/create/${adminId}`,
     eventData,
     config
   );
@@ -228,7 +228,7 @@ export const updateEventByAdmin = async ({ hostId, eventId, updatedData }) => {
   };
 
   const response = await axios.put(
-    `http://localhost:8080/api/event/update/${hostId}/${eventId}`,
+    `${API_BASE}/event/update/${hostId}/${eventId}`,
     updatedData,
     config
   );
