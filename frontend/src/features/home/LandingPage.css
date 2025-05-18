@@ -1,0 +1,146 @@
+* {
+  box-sizing: border-box;
+}
+
+body, html, #root {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  width: 100%;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: #020026;
+  overflow: hidden;
+}
+
+.landing-wrapper {
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+  flex-direction: column;
+  color: white;
+  background: #020026;
+}
+
+/* Gradient text */
+.gradient-text {
+  background: linear-gradient(to right, #ff00ff, #ff0077, #ff0000);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Navbar */
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 3rem 6rem;
+  font-size: 1.5rem;
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+  z-index: 1;
+}
+
+.nav-left {
+  display: flex;
+  align-items: center;
+}
+
+.nav-logo {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 2rem;
+  font-weight: bold;
+  letter-spacing: 1px;
+}
+
+.nav-right button {
+  margin-left: 1rem;
+  background: transparent;
+  color: white;
+  border: 1px solid white;
+  padding: 0.75rem 1.5rem;
+  border-radius: 25px;
+  cursor: pointer;
+  font-size: 1.25rem;
+}
+
+/* Main Content */
+.landing-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 0 1rem;
+  margin-top: 2rem;
+}
+
+.main-title {
+  font-size: 8rem;
+  font-weight: bold;
+  line-height: 1.1;
+  margin: 0;
+  text-align: center;
+}
+
+.changing-word {
+  display: block;
+  font-weight: bold;
+  background: linear-gradient(to right, #ff00ff, #ff0077, #ff0000);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-size: 7rem;
+  margin-top: 1rem;
+}
+
+p {
+  font-size: 2rem;
+  margin-top: 2rem;
+  max-width: 800px;
+}
+
+/* Get Started Button */
+.get-started {
+  margin-top: 2.5rem;
+  padding: 1.25rem 3rem;
+  background: white;
+  color: #001f3f;
+  font-size: 1.5rem;
+  border: none;
+  border-radius: 30px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.get-started:hover {
+  background-color: #ccc;
+}
+
+/* All icons fading in at once and staying */
+.fade-all-icons {
+  margin-top: 6rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 4rem;
+  flex-wrap: wrap;
+}
+
+.feature-static {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-size: 1.5rem;
+  font-weight: bold;
+  text-align: center;
+  color: white;
+}
+
+.feature-static .feature-icon {
+  font-size: 4rem;
+  margin-bottom: 1rem;
+  color: #ff80ab;
+}
