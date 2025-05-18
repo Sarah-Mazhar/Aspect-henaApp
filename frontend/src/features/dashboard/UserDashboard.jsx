@@ -28,7 +28,6 @@ export default function UserDashboard() {
       const events = await getUpcomingEvents();
       setEvents(events);
     } catch (err) {
-      console.error("❌ Failed to fetch events:", err);
       setError("Failed to load events.");
     } finally {
       setLoading(false);
@@ -50,7 +49,6 @@ export default function UserDashboard() {
 
       fetchEvents();
     } catch (err) {
-      console.error("❌ RSVP toggle error:", err);
       alert("Could not process RSVP. Try again.");
     } finally {
       setTimeout(() => setRsvpSuccess(""), 3000);
@@ -62,17 +60,19 @@ export default function UserDashboard() {
       <Navbar userId={userId} />
 
       <div className="dashboard-box">
-        <h2>Upcoming Events 🎉</h2>
-        {rsvpSuccess && <p className="success-msg">{rsvpSuccess}</p>}
+        <h2 className="dashboard-title">
+          <span className="highlight">Upcoming</span> <span className="normal">Events</span>
+        </h2>
+        {rsvpSuccess && <p className="success-msgg">{rsvpSuccess}</p>}
 
         {loading ? (
-          <p>Loading events...</p>
+          <p className="status-msgg">Loading events...</p>
         ) : error ? (
-          <p className="error-msg">{error}</p>
+          <p className="status-msgg">{error}</p>
         ) : events.length === 0 ? (
-          <p>No upcoming events found.</p>
+          <p className="status-msgg">No upcoming events found.</p>
         ) : (
-          <ul className="event-list">
+          <div className="event-grid">
             {events.map((event) => {
               const userIdNum = Number(userId);
               const isUserRSVPed = event.rsvps?.some((u) => Number(u.id) === userIdNum);
@@ -80,7 +80,7 @@ export default function UserDashboard() {
               const canAttend = isUserRSVPed || !isFull;
 
               return (
-                <li key={event.id} className="event-item">
+                <div key={event.id} className="event-card">
                   <h3>{event.name}</h3>
                   <p>{event.description}</p>
                   <p><strong>Date:</strong> {event.eventDate ? new Date(event.eventDate).toLocaleString() : "TBA"}</p>
@@ -93,10 +93,10 @@ export default function UserDashboard() {
                   >
                     {isUserRSVPed ? "Cancel" : isFull ? "Event Full" : "Attend"}
                   </button>
-                </li>
+                </div>
               );
             })}
-          </ul>
+          </div>
         )}
       </div>
     </div>
