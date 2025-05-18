@@ -11,8 +11,7 @@ export default function HostDashboard() {
 
   useEffect(() => {
     if (!token || role !== "HOST" || !hostId) {
-      alert("Invalid session or not a host. Redirecting...");
-      navigate("/login");
+      navigate("/login", { replace: true });
     }
   }, [token, role, hostId, navigate]);
 

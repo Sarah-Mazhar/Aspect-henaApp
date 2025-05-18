@@ -1,8 +1,8 @@
 import { useEffect } from "react";
+import { FaCalendarPlus, FaCalendarAlt, FaUserPlus } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import Navbar from "../../components/Navbar";
 import "./AdminDashboard.css";
-import { FaCalendarPlus, FaCalendarAlt, FaUserPlus } from "react-icons/fa";
 
 export default function AdminDashboard() {
   const token = localStorage.getItem("token");
@@ -12,8 +12,7 @@ export default function AdminDashboard() {
 
   useEffect(() => {
     if (!token || role !== "ADMIN" || !adminId) {
-      alert("Invalid session or not an admin. Redirecting...");
-      navigate("/login");
+      navigate("/login", { replace: true });
     }
   }, [token, role, adminId, navigate]);
 

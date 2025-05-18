@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { getUpcomingEvents, rsvpToEvent, cancelRSVP } from "../../services/api";
-import "./Dashboard.css";
+import "./UserDashboard.css";
 import Navbar from "../../components/Navbar";
 
 export default function UserDashboard() {
@@ -17,8 +17,7 @@ export default function UserDashboard() {
 
   useEffect(() => {
     if (!token || role !== "USER" || !userId) {
-      alert("Invalid session or not a user. Redirecting...");
-      navigate("/login");
+      navigate("/login", { replace: true });
     } else {
       fetchEvents();
     }
