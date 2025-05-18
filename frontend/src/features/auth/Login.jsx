@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { login } from "../../services/api";
@@ -8,13 +8,26 @@ export default function Login() {
   const [form, setForm] = useState({
     username: "",
     password: "",
-    role: "", // role starts empty
+    role: "",
   });
 
   const navigate = useNavigate();
 
+  // Clear auth info when visiting login page
+  useEffect(() => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("role");
+    localStorage.removeItem("userId");
+    localStorage.removeItem("adminId");
+    localStorage.removeItem("hostId");
+  }, []);
+
   const handleChange = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+    setForm((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
   };
 
   const handleSubmit = async (e) => {
@@ -29,8 +42,10 @@ export default function Login() {
       localStorage.setItem("token", result.token);
       localStorage.setItem("role", result.role);
       localStorage.setItem("userId", result.userId);
+
       if (result.role === "ADMIN") localStorage.setItem("adminId", result.userId);
       if (result.role === "HOST") localStorage.setItem("hostId", result.userId);
+
       navigate(`/${result.role.toLowerCase()}-dashboard`);
     } catch (error) {
       alert("Login failed: " + (error.response?.data || error.message));
@@ -67,11 +82,12 @@ export default function Login() {
         >
           <div className="login-container">
             <h2 className="login-title login-purple">Log in</h2>
-            <p className="login-subtitle">Welcome Back!</p>
+
             <form className="login-form" onSubmit={handleSubmit}>
               <input
                 name="username"
                 placeholder="USERNAME"
+                value={form.username}
                 onChange={handleChange}
                 required
               />
@@ -79,6 +95,7 @@ export default function Login() {
                 name="password"
                 type="password"
                 placeholder="PASSWORD"
+                value={form.password}
                 onChange={handleChange}
                 required
               />
@@ -95,6 +112,7 @@ export default function Login() {
               </select>
               <button type="submit">Log In</button>
             </form>
+
             <p className="login-small-link">
               Don't have an account?{" "}
               <span className="link" onClick={() => navigate("/signup")}>
