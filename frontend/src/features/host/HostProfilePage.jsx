@@ -1,9 +1,11 @@
 import { useEffect, useState } from "react";
 import Navbar from "../../components/Navbar";
 import axios from "axios";
-
+import { useNavigate } from "react-router-dom";
+import "./hostProfilePage.css";
 
 export default function HostProfilePage() {
+  const navigate = useNavigate();
   const id = localStorage.getItem("hostId");
   const [host, setHost] = useState(null);
   const [form, setForm] = useState({ username: "", email: "" });
@@ -23,9 +25,7 @@ export default function HostProfilePage() {
       try {
         const staticAuth = btoa("host:hostpass");
         const res = await axios.get(`http://localhost:8080/api/user/${id}`, {
-          headers: {
-            Authorization: `Basic ${staticAuth}`,
-          },
+          headers: { Authorization: `Basic ${staticAuth}` },
         });
         setHost(res.data);
         setForm({ username: res.data.username, email: res.data.email });
@@ -50,9 +50,11 @@ export default function HostProfilePage() {
       });
       setHost((prev) => ({ ...prev, ...form }));
       setSuccess("✅ Profile updated successfully.");
+      setError("");
       setEditing(false);
     } catch (err) {
       setError("❌ Update failed.");
+      setSuccess("");
     }
   };
 
@@ -60,51 +62,39 @@ export default function HostProfilePage() {
   if (!host) return <p className="error-msg">{error || "No host data found."}</p>;
 
   return (
-    <div className="user-profile-container">
+    <div className="host-profile-wrapper">
       <Navbar role="HOST" />
-      <h2>Host Profile</h2>
       {error && <p className="error-msg">{error}</p>}
       {success && <p className="success-msg">{success}</p>}
 
-      <div className="profile-form">
-        <label>
-          Username:
-          <input
-            type="text"
-            value={form.username}
-            disabled={!editing}
-            onChange={(e) =>
-              setForm((prev) => ({ ...prev, username: e.target.value }))
-            }
-          />
-        </label>
+      <div className="host-profile-card">
+        <h2 className="host-profile-title">
+          <span className="pink-text">Profile</span> <span className="white-text">Details</span>
+        </h2>
 
-        <label>
-          Email:
-          <input
-            type="email"
-            value={form.email}
-            disabled={!editing}
-            onChange={(e) =>
-              setForm((prev) => ({ ...prev, email: e.target.value }))
-            }
-          />
-        </label>
+        <input
+          type="text"
+          value={form.username}
+          disabled={!editing}
+          onChange={(e) => setForm((prev) => ({ ...prev, username: e.target.value }))}
+        />
+        <input
+          type="email"
+          value={form.email}
+          disabled={!editing}
+          onChange={(e) => setForm((prev) => ({ ...prev, email: e.target.value }))}
+        />
+        <input type="text" value={host.role} disabled />
 
-        <label>
-          Role:
-          <input type="text" value={host.role} disabled />
-        </label>
-
-        <div className="profile-buttons">
+        <div className="host-profile-actions">
           {editing ? (
-            <>
-              <button onClick={handleUpdate}>Save</button>
-              <button onClick={() => setEditing(false)}>Cancel</button>
-            </>
+            <button onClick={handleUpdate}>Save</button>
           ) : (
             <button onClick={() => setEditing(true)}>Edit</button>
           )}
+          <button className="host-cancel-btn" onClick={() => navigate("/host-dashboard")}>
+            Cancel
+          </button>
         </div>
       </div>
     </div>

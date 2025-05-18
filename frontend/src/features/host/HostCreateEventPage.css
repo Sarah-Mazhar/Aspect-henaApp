@@ -1,0 +1,121 @@
+/* === Reset === */
+* {
+  box-sizing: border-box;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  background: #020026;
+  color: white;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* === Wrapper === */
+.host-create-event-wrapper {
+  background-image: url("/back.png");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  width: 100vw;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 100px;
+}
+
+/* === Title === */
+.host-create-title {
+  font-size: 2.6rem;
+  font-weight: bold;
+  margin-bottom: 2rem;
+  text-align: center;
+  margin-top: 15px;
+}
+
+.pink-text {
+  color: #d50268;
+}
+
+.white-text {
+  color: white;
+}
+
+/* === Form === */
+.host-create-event-form {
+  width: 90%;
+  max-width: 600px;
+  min-width: 350px;
+  background-color: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 24px;
+  padding: 2rem 1.5rem;
+  box-shadow: 0 0 50px rgba(255, 0, 128, 0.18);
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+/* === Inputs === */
+.host-create-event-form input {
+  padding: 14px;
+  border-radius: 50px;
+  border: 1px solid #3a3a3a;
+  background-color: #12112a;
+  color: white;
+  font-size: 0.95rem;
+  transition: 0.3s ease;
+}
+
+.host-create-event-form input:focus {
+  border-color: #ff00cc;
+  box-shadow: 0 0 0 2px rgba(255, 0, 204, 0.3);
+  outline: none;
+}
+
+/* === Buttons === */
+.host-event-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  justify-content: center;
+  margin-top: 1.5rem;
+}
+
+.host-event-buttons button {
+  padding: 14px 24px;
+  border-radius: 50px;
+  font-weight: bold;
+  font-size: 1rem;
+  background: #d50268;
+  color: white;
+  border: none;
+  cursor: pointer;
+  transition: 0.3s ease;
+  box-shadow: 0 0 12px rgba(213, 2, 104, 0.4);
+}
+
+.host-event-buttons button:hover {
+  transform: scale(1.05);
+  background: #b90059;
+}
+
+/* === Responsive === */
+@media (max-width: 480px) {
+  .host-create-event-form {
+    padding: 2rem 1.5rem;
+    min-width: unset;
+  }
+
+  .host-create-title {
+    font-size: 2rem;
+  }
+
+  .host-event-buttons button {
+    font-size: 0.9rem;
+    padding: 12px 20px;
+  }
+}
