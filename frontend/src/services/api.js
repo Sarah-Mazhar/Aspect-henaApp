@@ -149,4 +149,18 @@ export const getUserProfile = async (userId) => {
   const response = await axios.get(`${API_BASE}/user/${userId}`, config);
   return response.data;
 };
+// ✅ Add to your existing api.js
+export const getAllEventsForAdmin = async () => {
+  const staticUser = staticCreds["ADMIN"];
+  const authHeader = btoa(`${staticUser.username}:${staticUser.password}`);
+
+  const config = {
+    headers: {
+      Authorization: `Basic ${authHeader}`,
+    },
+  };
+
+  const response = await axios.get(`${API_BASE}/event/all`, config);
+  return response.data;
+};
 

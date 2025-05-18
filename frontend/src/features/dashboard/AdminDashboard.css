@@ -1,101 +1,122 @@
-/* === BASE STYLES === */
-body {
-  margin: 0;
-  font-family: 'Poppins', 'Segoe UI', sans-serif;
-  background: linear-gradient(to bottom right, #0d0f1b, #191b2f);
-  color: white;
+/* === BACKGROUND === */
+.admin-bg {
+  background-image: url("/back.png");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  width: 100vw;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
 }
 
-/* === TEXT GRADIENT === */
-.gradient-text {
-  background: linear-gradient(to right, #8000ff, #c100ff, #ff0033);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+/* === TITLE === */
+.custom-title {
+  font-size: 2.8rem;
+  font-weight: 800;
+  color: #d50268;
+  text-align: center;
+  margin-bottom: 3rem;
 }
 
 /* === WRAPPER === */
 .dashboard-wrapper {
-  padding-top: 80px;
-  min-height: 100vh;
-  width: 100%;
+  flex: 1;
   display: flex;
   flex-direction: column;
+  justify-content: center;
   align-items: center;
+  padding: 2rem;
   box-sizing: border-box;
+  margin-top: -40px; /* Move upward slightly */
 }
 
-/* === DASHBOARD TITLE === */
-.dashboard-heading {
-  font-size: 2.4rem;
-  margin: 2rem 0 3rem;
-  font-weight: 700;
-}
-
-/* === CENTERED GRID === */
+/* === GRID === */
 .card-grid.centered-grid {
   display: flex;
   justify-content: center;
   align-items: center;
   flex-wrap: wrap;
-  gap: 2rem;
+  gap: 2.5rem;
   width: 100%;
   max-width: 1200px;
-  padding: 0 2rem;
 }
 
-/* === GLASS CARD === */
+/* === CARD === */
 .glass-card {
-  background: rgba(255, 255, 255, 0.05);
+  background: #0e0f2c;
   border: 1px solid rgba(255, 255, 255, 0.08);
   backdrop-filter: blur(12px);
   border-radius: 16px;
-  padding: 2.5rem 2rem;
+  padding: 3rem 2rem;
   box-shadow: 0 0 25px rgba(255, 0, 128, 0.15);
   text-align: center;
-  width: 280px;
-  transition: transform 0.3s ease;
-}
-
-.glass-card:hover {
-  transform: translateY(-5px);
-}
-
-.glass-card.no-header h2 {
-  display: none;
-}
-
-/* === BUTTON === */
-.glass-card button {
-  background: linear-gradient(to right, #8000ff, #c100ff, #ff0033);
-  color: white;
-  border: none;
-  padding: 1.2rem 2rem;
-  font-size: 1.15rem;
-  font-weight: bold;
-  border-radius: 50px;
-  width: 100%;
+  width: 320px;
+  height: 180px;
   transition: all 0.3s ease;
-  box-shadow: 0 0 16px rgba(255, 0, 128, 0.3);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.glass-card button:hover {
-  transform: scale(1.04);
-  box-shadow: 0 0 24px rgba(255, 0, 128, 0.4);
+/* === HOVER GRADIENT === */
+.glass-card:hover {
+  background: linear-gradient(135deg, #ff0057, #ff1f7a, #ff4f00, #ff0099);
+  background-size: 200% 200%;
+  animation: gradientShift 2s ease infinite;
+  transform: scale(1.05);
+  box-shadow: 0 0 30px rgba(255, 0, 128, 0.4);
+}
+
+@keyframes gradientShift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* === CARD CONTENT === */
+.card-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.card-icon {
+  font-size: 2.4rem;
+  color: #d50268;
+  margin-bottom: 0.8rem;
+  transition: color 0.3s ease;
+}
+
+.glass-card:hover .card-icon {
+  color: white;
+}
+
+.glass-card span {
+  font-size: 1.4rem;
+  font-weight: bold;
+  color: white;
 }
 
 /* === RESPONSIVE === */
-@media (max-width: 480px) {
-  .dashboard-heading {
-    font-size: 1.8rem;
+@media (max-width: 768px) {
+  .custom-title {
+    font-size: 2rem;
   }
 
   .glass-card {
-    width: 100%;
-    max-width: 90%;
+    width: 90%;
+    height: 160px;
   }
 
-  .glass-card button {
-    font-size: 1rem;
-    padding: 1rem 1.4rem;
+  .glass-card span {
+    font-size: 1.2rem;
+  }
+
+  .card-icon {
+    font-size: 2rem;
   }
 }

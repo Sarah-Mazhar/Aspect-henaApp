@@ -265,6 +265,11 @@ public class EventService {
 
         return createdEvent;
     }
+    // ✅ Return all events (for admin)
+    public List<Event> getAllEvents() {
+        return eventRepository.findAll();
+    }
+
 
     public Event saveEvent(Event event) {
         return eventRepository.save(event);

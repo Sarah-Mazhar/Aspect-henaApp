@@ -1,10 +1,9 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
 import Navbar from "../../components/Navbar";
+import { getAllEventsForAdmin } from "../../services/api";
+import axios from "axios";
 import "./AllEventsPage.css";
-
-const API_BASE = "http://localhost:8080/api";
 
 export default function AllEventsPage() {
   const [events, setEvents] = useState([]);
@@ -25,12 +24,9 @@ export default function AllEventsPage() {
   }, []);
 
   const fetchEvents = async () => {
-    const authHeader = btoa("admin:adminpass");
     try {
-      const res = await axios.get(`${API_BASE}/event/admin/${adminId}`, {
-        headers: { Authorization: `Basic ${authHeader}` },
-      });
-      setEvents(res.data);
+      const data = await getAllEventsForAdmin();
+      setEvents(data);
     } catch (err) {
       console.error("Error fetching events:", err);
       alert("Failed to load events.");
@@ -42,9 +38,9 @@ export default function AllEventsPage() {
   const handleDelete = async (eventId) => {
     if (!window.confirm("Are you sure you want to delete this event?")) return;
 
-    const authHeader = btoa("admin:adminpass");
     try {
-      await axios.delete(`${API_BASE}/event/delete/${adminId}/${eventId}`, {
+      const authHeader = btoa("admin:adminpass");
+      await axios.delete(`http://localhost:8080/api/event/delete/${adminId}/${eventId}`, {
         headers: { Authorization: `Basic ${authHeader}` },
       });
       setEvents((prev) => prev.filter((e) => e.id !== eventId));

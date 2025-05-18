@@ -71,6 +71,15 @@
             eventService.deleteEvent(id, user);
         }
 
+        // ✅ Admin can view all events (regardless of creator)
+        @PreAuthorize("hasRole('ADMIN')")
+        @GetMapping("/all")
+        public ResponseEntity<?> getAllEventsForAdmin() {
+            List<Event> events = eventService.getAllEvents();
+            return ResponseEntity.ok(events);
+        }
+
+
         // ✅ View all events created by a specific admin
         @PreAuthorize("hasRole('ADMIN')")
         @GetMapping("/admin/{adminId}")
