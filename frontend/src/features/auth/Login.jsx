@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { FaSignInAlt } from "react-icons/fa";
 import { login } from "../../services/api";
 import "./Login.css";
 
@@ -8,7 +7,6 @@ export default function Login() {
   const [form, setForm] = useState({
     username: "",
     password: "",
-    role: "USER",
   });
 
   const navigate = useNavigate();
@@ -20,72 +18,55 @@ export default function Login() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const result = await login(form);
-      console.log("Login result:", result);
-
+      const result = await login({ ...form, role: "USER" });
       localStorage.setItem("token", result.token);
       localStorage.setItem("role", result.role);
       localStorage.setItem("userId", result.userId);
-
-      if (result.role === "ADMIN") {
-        localStorage.setItem("adminId", result.userId);
-      } else {
-        localStorage.removeItem("adminId");
-      }
-
-      if (result.role === "HOST") {
-        localStorage.setItem("hostId", result.userId);
-      } else {
-        localStorage.removeItem("hostId");
-      }
-
       navigate(`/${result.role.toLowerCase()}-dashboard`);
     } catch (error) {
-      console.error("Login error:", error);
-      if (error.response && error.response.data) {
-        alert("Login failed: " + error.response.data);
-      } else {
-        alert("Login failed: " + error.message);
-      }
+      alert("Login failed: " + (error.response?.data || error.message));
     }
   };
 
   return (
-    <div className="landing-wrapper">
+    <div className="login-page">
       <nav className="navbar">
         <div className="nav-logo gradient-text">HENA</div>
       </nav>
 
-      <div className="login-container">
-        <FaSignInAlt className="login-icon" />
-        <h2 className="login-title gradient-text">Login</h2>
-        <form className="login-form" onSubmit={handleSubmit}>
-          <input
-            name="username"
-            placeholder="Username"
-            onChange={handleChange}
-            required
-          />
-          <input
-            name="password"
-            type="password"
-            placeholder="Password"
-            onChange={handleChange}
-            required
-          />
-          <select name="role" value={form.role} onChange={handleChange}>
-            <option value="USER">User</option>
-            <option value="HOST">Host</option>
-            <option value="ADMIN">Admin</option>
-          </select>
-          <button type="submit">Login</button>
-        </form>
+      <div className="login-body">
+        <div className="login-image" />
+        <div className="login-content">
+          <div className="login-container">
+            <h2 className="login-title login-purple">Log in</h2>
+            <p className="login-subtitle">
+              Welcome Back !
+            </p>
 
-        <div className="text-link">
-          Don’t have an account?
-          <span className="link" onClick={() => navigate("/signup")}>
-            Sign up
-          </span>
+            <form className="login-form" onSubmit={handleSubmit}>
+              <input
+                name="username"
+                placeholder="USERNAME"
+                onChange={handleChange}
+                required
+              />
+              <input
+                name="password"
+                type="password"
+                placeholder="PASSWORD"
+                onChange={handleChange}
+                required
+              />
+              <button type="submit">Log In</button>
+            </form>
+
+            <p className="login-small-link">
+              Don't have an account?{" "}
+              <span className="link" onClick={() => navigate("/signup")}>
+                Sign Up
+              </span>
+            </p>
+          </div>
         </div>
       </div>
     </div>
