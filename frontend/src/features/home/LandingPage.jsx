@@ -38,7 +38,11 @@ const LandingPage = () => {
       </nav>
 
       <div className="landing-container">
+        {/* Logo from public folder */}
+        <img src="/logo.png" alt="Logo" className="landing-logo" />
+
         <div className="main-title">Event Management</div>
+
         <AnimatePresence mode="wait">
           <motion.div
             key={words[index]}
@@ -51,6 +55,7 @@ const LandingPage = () => {
             {words[index]}
           </motion.div>
         </AnimatePresence>
+
         <p>
           Deliver exceptional events with ease. Our powerful platform streamlines
           planning, maximizes engagement, and ensures unforgettable experiences—every time.
@@ -60,12 +65,11 @@ const LandingPage = () => {
           Get Started
         </button>
 
-        {/* All icons fading in together and staying static */}
         <motion.div
           className="fade-all-icons"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ duration: 1.5 }}
+          transition={{ duration: 3 }}
         >
           {featureItems.map((item, index) => (
             <div className="feature-static" key={index}>
