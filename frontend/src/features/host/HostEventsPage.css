@@ -1,0 +1,145 @@
+/* === RESET === */
+* {
+  box-sizing: border-box;
+}
+
+html, body, #root {
+  margin: 0;
+  padding: 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: #020026;
+  color: white;
+}
+
+/* === WRAPPER === */
+.host-events-wrapper {
+  background-image: url("/back.png");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  width: 100vw;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 100px;
+}
+
+/* === TITLE === */
+.host-events-title {
+  font-size: 3.5rem;
+  font-weight: bold;
+  margin-bottom: 2.5rem;
+  text-align: center;
+}
+
+.host-highlight {
+  color: #d50268;
+}
+
+.host-normal {
+  color: white;
+}
+
+/* === GRID === */
+.host-events-grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 2rem;
+  padding: 0 2rem 4rem;
+  width: 100%;
+  max-width: 1200px;
+}
+
+/* === CARD === */
+.host-event-card {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(12px);
+  border-radius: 16px;
+  padding: 2.5rem 1.5rem 2.2rem;
+  width: 320px;
+  min-height: 260px;
+  box-shadow: 0 0 25px rgba(255, 0, 128, 0.15);
+  position: relative;
+  transition: transform 0.3s ease;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.host-event-card:hover {
+  transform: translateY(-5px);
+}
+
+/* === ICONS === */
+.host-event-card-header {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  display: flex;
+  gap: 0.6rem;
+}
+
+.host-icon-btn {
+  color: #ffffffcc;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+.host-icon-btn:hover {
+  color: #ffffff;
+}
+
+.host-delete:hover {
+  color: #ff3c3c;
+}
+
+/* === NAME === */
+.host-event-name {
+  font-size: 1.3rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+  color: #fff;
+}
+
+/* === DETAILS === */
+.host-event-info {
+  font-size: 0.95rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.host-event-info p {
+  margin: 0;
+  color: #e0e0e0;
+}
+
+.host-event-info strong {
+  color: #d50268;
+}
+
+/* === LOADING TEXT === */
+.host-loading-text {
+  margin-top: 5rem;
+  font-size: 1.2rem;
+  color: #bbb;
+}
+
+/* === RESPONSIVE === */
+@media (max-width: 768px) {
+  .host-event-card {
+    width: 90%;
+  }
+
+  .host-events-title {
+    font-size: 2rem;
+  }
+}

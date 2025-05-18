@@ -1,6 +1,9 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { getHostEvents, deleteEvent } from "../../services/api";
+import { FaEdit, FaTrash } from "react-icons/fa";
+import Navbar from "../../components/Navbar";
+import "./HostEventsPage.css";
 
 export default function HostEventsPage() {
   const hostId = localStorage.getItem("hostId");
@@ -26,9 +29,10 @@ export default function HostEventsPage() {
     else setError("Host ID not found.");
   }, [hostId]);
 
-  const handleEdit = (eventId) => {
-    navigate(`/host/edit-event/${eventId}`);
-  };
+  const handleEdit = (event) => {
+  navigate(`/host/edit-event/${event.id}`, { state: { event } });
+};
+
 
   const handleDelete = async (eventId) => {
     if (!window.confirm("Are you sure you want to delete this event?")) return;
@@ -44,27 +48,35 @@ export default function HostEventsPage() {
   };
 
   return (
-    <div>
-      <h2>Events Created by You (Host)</h2>
+    <div className="host-events-wrapper">
+      <Navbar role="HOST" />
+      <h2 className="host-events-title">
+        <span className="host-highlight">Your</span> <span className="host-normal">Events</span>
+      </h2>
 
       {loading ? (
-        <p>Loading events...</p>
+        <p className="host-loading-text">Loading events...</p>
       ) : error ? (
-        <p style={{ color: "red" }}>{error}</p>
+        <p className="host-loading-text" style={{ color: "red" }}>{error}</p>
       ) : events.length === 0 ? (
-        <p>No events found.</p>
+        <p className="host-loading-text">No events found.</p>
       ) : (
-        <ul>
+        <div className="host-events-grid">
           {events.map((event) => (
-            <li key={event.id}>
-              <strong>{event.name}</strong> –{" "}
-              {new Date(event.eventDate).toLocaleString()} at {event.location}
-              <br />
-              <button onClick={() => handleEdit(event.id)}>✏️ Edit</button>{" "}
-              <button onClick={() => handleDelete(event.id)}>🗑️ Delete</button>
-            </li>
+            <div className="host-event-card" key={event.id}>
+              <div className="host-event-card-header">
+                <FaEdit className="host-icon-btn" onClick={() => handleEdit(event)} />
+                <FaTrash className="host-icon-btn host-delete" onClick={() => handleDelete(event.id)} />
+              </div>
+              <div className="host-event-name">{event.name}</div>
+              <div className="host-event-info">
+                <p><strong>Category:</strong> {event.category}</p>
+                <p><strong>Date:</strong> {new Date(event.eventDate).toLocaleString()}</p>
+                <p><strong>Description:</strong> {event.description}</p>
+              </div>
+            </div>
           ))}
-        </ul>
+        </div>
       )}
     </div>
   );

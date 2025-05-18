@@ -1,15 +1,18 @@
 import { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams, useLocation } from "react-router-dom";
 import axios from "axios";
+import "./HostEditEventPage.css";
 
 export default function HostEditEventPage() {
   const { eventId } = useParams();
   const hostId = localStorage.getItem("hostId");
-  const [eventData, setEventData] = useState(null);
   const navigate = useNavigate();
+  const { state } = useLocation();
+  const { event } = state || {};
+  const [eventData, setEventData] = useState(null);
 
   const staticAuthHeader = {
-    Authorization: "Basic " + btoa("host:hostpass"), // ✅ Basic Auth
+    Authorization: "Basic " + btoa("host:hostpass"),
   };
 
   useEffect(() => {
@@ -39,7 +42,6 @@ export default function HostEditEventPage() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     try {
       const payload = {
         ...eventData,
@@ -60,12 +62,15 @@ export default function HostEditEventPage() {
     }
   };
 
-  if (!eventData) return <p>Loading event data...</p>;
+  if (!eventData) return <p className="host-loading-text">Loading event data...</p>;
 
   return (
-    <div className="edit-event-form">
-      <h2>Edit Event ✏️</h2>
-      <form onSubmit={handleSubmit}>
+    <div className="host-edit-wrapper">
+      <form className="host-edit-form-box host-edit-form" onSubmit={handleSubmit}>
+        <h2 className="host-edit-title">
+          <span className="pink-text">Edit</span> <span className="white-text">Event</span>
+        </h2>
+
         <input type="text" name="name" value={eventData.name} onChange={handleChange} required />
         <input type="text" name="description" value={eventData.description} onChange={handleChange} required />
         <input type="date" name="date" value={eventData.date} onChange={handleChange} required />
@@ -80,8 +85,11 @@ export default function HostEditEventPage() {
           required
           min={1}
         />
-        <button type="submit">💾 Save Changes</button>
-        <button type="button" onClick={() => navigate(`/host/events/${hostId}`)}>❌ Cancel</button>
+
+        <div className="host-edit-buttons">
+          <button type="submit">Save Changes</button>
+          <button type="button" onClick={() => navigate(`/host/events/${hostId}`)}>Cancel</button>
+        </div>
       </form>
     </div>
   );
