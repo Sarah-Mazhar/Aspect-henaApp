@@ -1,12 +1,13 @@
 import { useEffect, useState } from "react";
 import Navbar from "../../components/Navbar";
-import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { getHostProfile, updateHostProfile } from "../../services/api";
 import "./HostProfilePage.css";
 
 export default function HostProfilePage() {
   const navigate = useNavigate();
-  const id = localStorage.getItem("hostId");
+  const hostId = localStorage.getItem("hostId");
+
   const [host, setHost] = useState(null);
   const [form, setForm] = useState({ username: "", email: "" });
   const [editing, setEditing] = useState(false);
@@ -15,45 +16,36 @@ export default function HostProfilePage() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (!id) {
-      setError("❌ Missing host ID.");
+    if (!hostId) {
+      setError("Missing host ID.");
       setLoading(false);
       return;
     }
 
-    const fetchHost = async () => {
+    const fetchData = async () => {
       try {
-        const staticAuth = btoa("host:hostpass");
-        const res = await axios.get(`http://localhost:8080/api/user/${id}`, {
-          headers: { Authorization: `Basic ${staticAuth}` },
-        });
-        setHost(res.data);
-        setForm({ username: res.data.username, email: res.data.email });
+        const data = await getHostProfile(hostId);
+        setHost(data);
+        setForm({ username: data.username, email: data.email });
       } catch (err) {
-        setError("❌ Failed to load host profile.");
+        setError("Failed to load host profile.");
       } finally {
         setLoading(false);
       }
     };
 
-    fetchHost();
-  }, [id]);
+    fetchData();
+  }, [hostId]);
 
   const handleUpdate = async () => {
-    const staticAuth = btoa("host:hostpass");
     try {
-      await axios.put(`http://localhost:8080/api/user/update/${id}`, form, {
-        headers: {
-          Authorization: `Basic ${staticAuth}`,
-          "Content-Type": "application/json",
-        },
-      });
+      await updateHostProfile(hostId, form);
       setHost((prev) => ({ ...prev, ...form }));
-      setSuccess("✅ Profile updated successfully.");
+      setSuccess("Profile updated successfully.");
       setError("");
       setEditing(false);
     } catch (err) {
-      setError("❌ Update failed.");
+      setError("Update failed.");
       setSuccess("");
     }
   };

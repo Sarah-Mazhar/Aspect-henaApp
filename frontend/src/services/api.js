@@ -124,7 +124,6 @@ export const cancelRSVP = async ({ userId, eventId }) => {
     headers: {
       Authorization: `Basic ${authHeader}`,
     }
-    // ❌ Do NOT include `data` here
   };
 
   const response = await axios.delete(
@@ -251,5 +250,75 @@ export const fetchUserNotifications = async (userId) => {
   };
 
   const response = await axios.get(`${API_BASE}/notifications/user/${userId}`, config);
+  return response.data;
+};
+
+export const getEventById = async (eventId) => {
+  const staticUser = { username: "host", password: "hostpass" };
+  const authHeader = btoa(`${staticUser.username}:${staticUser.password}`);
+
+  const config = {
+    headers: {
+      Authorization: `Basic ${authHeader}`,
+    },
+  };
+
+  const response = await axios.get(
+    `${API_BASE}/event/${eventId}`,
+    config
+  );
+  return response.data;
+};
+
+
+export const updateEventByHost = async (hostId, eventId, updatedData) => {
+  const staticUser = { username: "host", password: "hostpass" };
+  const authHeader = btoa(`${staticUser.username}:${staticUser.password}`);
+
+  const config = {
+    headers: {
+      Authorization: `Basic ${authHeader}`,
+    },
+  };
+
+  const response = await axios.put(
+    `${API_BASE}/event/update/${hostId}/${eventId}`,
+    updatedData,
+    config
+  );
+  return response.data;
+};
+
+export const getHostProfile = async (hostId) => {
+  const staticUser = { username: "host", password: "hostpass" };
+  const authHeader = btoa(`${staticUser.username}:${staticUser.password}`);
+
+  const config = {
+    headers: {
+      Authorization: `Basic ${authHeader}`,
+    },
+  };
+
+  const response = await axios.get(`${API_BASE}/user/${hostId}`, config);
+  return response.data;
+};
+
+
+export const updateHostProfile = async (hostId, updatedData) => {
+  const staticUser = { username: "host", password: "hostpass" };
+  const authHeader = btoa(`${staticUser.username}:${staticUser.password}`);
+
+  const config = {
+    headers: {
+      Authorization: `Basic ${authHeader}`,
+      "Content-Type": "application/json",
+    },
+  };
+
+  const response = await axios.put(
+    `${API_BASE}/user/update/${hostId}`,
+    updatedData,
+    config
+  );
   return response.data;
 };
