@@ -132,6 +132,7 @@ export const cancelRSVP = async ({ userId, eventId }) => {
   );
   return response.data;
 };
+
 export const getUserProfile = async (userId) => {
   const staticUser = {
     username: "user",
@@ -148,7 +149,7 @@ export const getUserProfile = async (userId) => {
   const response = await axios.get(`${API_BASE}/user/${userId}`, config);
   return response.data;
 };
-// ✅ Add to your existing api.js
+
 export const getAllEventsForAdmin = async () => {
   const staticUser = staticCreds["ADMIN"];
   const authHeader = btoa(`${staticUser.username}:${staticUser.password}`);
@@ -320,5 +321,21 @@ export const updateHostProfile = async (hostId, updatedData) => {
     updatedData,
     config
   );
+  return response.data;
+};
+
+
+export const updateUserById = async (userId, payload) => {
+  const staticUser = { username: "user", password: "userpass" };
+  const authHeader = btoa(`${staticUser.username}:${staticUser.password}`);
+
+  const config = {
+    headers: {
+      Authorization: `Basic ${authHeader}`,
+      "Content-Type": "application/json",
+    },
+  };
+
+  const response = await axios.put(`${API_BASE}/user/update/${userId}`, payload, config);
   return response.data;
 };
