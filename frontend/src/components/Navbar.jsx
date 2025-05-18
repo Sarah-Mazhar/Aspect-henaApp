@@ -1,30 +1,61 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { FaUserCircle, FaSignOutAlt } from "react-icons/fa";
+import { fetchUserNotifications } from "../services/api";
 import "./Navbar.css";
 
 export default function Navbar() {
   const navigate = useNavigate();
   const location = useLocation();
+
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [role, setRole] = useState(null);
+  const [popupNotif, setPopupNotif] = useState(null);
+  const lastSeenRef = useRef(Date.now());
 
   useEffect(() => {
     const token = localStorage.getItem("token");
     const userRole = localStorage.getItem("role");
+
     setIsLoggedIn(!!token);
     setRole(userRole);
   }, [location]);
 
-const goToProfile = () => {
-  const userId = localStorage.getItem("userId");
+  useEffect(() => {
+    if (!isLoggedIn) return;
 
-  if (role === "USER") navigate(`/profile/${userId}`);
-  else if (role === "HOST") navigate(`/host/profile/${userId}`);
-  else if (role === "ADMIN") navigate(`/admin/profile/${userId}`);
-};
+    const interval = setInterval(fetchNewNotification, 1500);
+    return () => clearInterval(interval);
+  }, [isLoggedIn]);
 
+  const fetchNewNotification = async () => {
+    const userId = localStorage.getItem("userId");
+    if (!userId) return;
 
+    try {
+      const notifications = await fetchUserNotifications(userId);
+
+      const newNotif = notifications.find(
+        (n) => new Date(n.timestamp).getTime() > lastSeenRef.current
+      );
+
+      if (newNotif) {
+        lastSeenRef.current = new Date(newNotif.timestamp).getTime();
+        setPopupNotif(newNotif);
+        setTimeout(() => setPopupNotif(null), 4000);
+      }
+    } catch (err) {
+      console.error("❌ Failed to fetch notifications:", err);
+    }
+  };
+
+  const goToProfile = () => {
+    const userId = localStorage.getItem("userId");
+
+    if (role === "USER") navigate(`/profile/${userId}`);
+    else if (role === "HOST") navigate(`/host/profile/${userId}`);
+    else if (role === "ADMIN") navigate(`/admin/profile/${userId}`);
+  };
 
   const logout = () => {
     localStorage.clear();
@@ -47,8 +78,22 @@ const goToProfile = () => {
 
       {!isLanding && !isLoginOrSignup && isLoggedIn && (
         <div className="nav-icons">
-          <FaUserCircle className="nav-icon profile-icon" onClick={goToProfile} />
-          <FaSignOutAlt className="nav-icon logout-icon" onClick={logout} />
+          <FaUserCircle
+            className="nav-icon profile-icon"
+            onClick={goToProfile}
+            title="Profile"
+          />
+          <FaSignOutAlt
+            className="nav-icon logout-icon"
+            onClick={logout}
+            title="Logout"
+          />
+        </div>
+      )}
+
+      {popupNotif && (
+        <div className="notification-popup">
+          <strong>{popupNotif.type}:</strong> {popupNotif.content}
         </div>
       )}
     </nav>
