@@ -1,9 +1,11 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import Navbar from "../../components/Navbar";
 import axios from "axios";
 import "./adminProfilePage.css";
 
 export default function AdminProfilePage() {
+  const navigate = useNavigate();
   const id = localStorage.getItem("adminId");
   const [admin, setAdmin] = useState(null);
   const [form, setForm] = useState({ username: "", email: "" });
@@ -68,50 +70,47 @@ export default function AdminProfilePage() {
   return (
     <div className="profile-wrapper">
       <Navbar role="ADMIN" />
-      <h2 className="profile-title">Admin Profile</h2>
 
       {error && <p className="error-msg">{error}</p>}
       {success && <p className="success-msg">{success}</p>}
 
       <div className="profile-card">
-        <label>
-          Username:
-          <input
-            type="text"
-            value={form.username}
-            disabled={!editing}
-            onChange={(e) =>
-              setForm((prev) => ({ ...prev, username: e.target.value }))
-            }
-          />
-        </label>
+        <h2 className="profile-title">
+  <span className="pink-text">Profile</span> <span className="white-text">Details</span>
+</h2>
 
-        <label>
-          Email:
-          <input
-            type="email"
-            value={form.email}
-            disabled={!editing}
-            onChange={(e) =>
-              setForm((prev) => ({ ...prev, email: e.target.value }))
-            }
-          />
-        </label>
 
-        <label>
-          Role:
-          <input type="text" value={admin.role} disabled />
-        </label>
+        <input
+          type="text"
+          value={form.username}
+          disabled={!editing}
+          onChange={(e) =>
+            setForm((prev) => ({ ...prev, username: e.target.value }))
+          }
+        />
+
+        <input
+          type="email"
+          value={form.email}
+          disabled={!editing}
+          onChange={(e) =>
+            setForm((prev) => ({ ...prev, email: e.target.value }))
+          }
+        />
+
+        <input type="text" value={admin.role} disabled />
 
         <div className="profile-actions">
           {editing ? (
-            <>
-              <button onClick={handleUpdate}>💾 Save</button>
-              <button onClick={() => setEditing(false)}>❌ Cancel</button>
-            </>
+            <button onClick={handleUpdate}>Save</button>
           ) : (
-            <button onClick={() => setEditing(true)}>✏️ Edit</button>
+            <button className="full-width-btn" onClick={() => setEditing(true)}>
+              Edit
+            </button>
           )}
+          <button className="cancel-btn" onClick={() => navigate("/admin-dashboard")}>
+            Cancel
+          </button>
         </div>
       </div>
     </div>

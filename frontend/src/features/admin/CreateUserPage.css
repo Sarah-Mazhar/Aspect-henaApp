@@ -14,36 +14,39 @@ html, body, #root {
   overflow-x: hidden;
 }
 
-/* === Wrapper === */
+/* === Wrapper with Background and Centering === */
 .create-user-wrapper {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding-top: 80px;
+  background-image: url("/back.png");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  width: 100vw;
   min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-top: 100px;
 }
 
-/* === Glass Card === */
+/* === Card === */
 .create-user-card {
-  background-color: rgba(255, 255, 255, 0.03);
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background-color: #12112a;
   border-radius: 24px;
   padding: 3rem 2rem;
   max-width: 500px;
   width: 90%;
   text-align: center;
   box-shadow: 0 0 50px rgba(255, 0, 128, 0.18);
+  border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 /* === Title === */
 .create-user-title {
-  font-size: 2rem;
+  font-size: 2.2rem;
   font-weight: bold;
   margin-bottom: 2rem;
-  background: linear-gradient(to right, #ff00ff, #ff0077, #ff0000);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+  color: #d50268;
 }
 
 /* === Form === */
@@ -56,7 +59,7 @@ html, body, #root {
 .create-user-form input,
 .create-user-form select {
   padding: 14px;
-  border-radius: 12px;
+  border-radius: 50px;
   border: 1px solid #3a3a3a;
   background-color: #12112a;
   color: white;
@@ -70,10 +73,10 @@ html, body, #root {
 /* === Submit Button === */
 .create-user-form button {
   padding: 14px;
-  border-radius: 30px;
+  border-radius: 50px;
   font-weight: bold;
   font-size: 1rem;
-  background: linear-gradient(to right, #ff00ff, #ff0077, #ff0000);
+  background: #d50268;
   color: white;
   border: none;
   cursor: pointer;
@@ -83,12 +86,12 @@ html, body, #root {
 
 .create-user-form button:hover {
   transform: scale(1.05);
-  background: linear-gradient(to right, #ff33ff, #ff3399, #ff3333);
+  background: #bc006c;
 }
 
-/* === Message === */
+/* === Feedback === */
 .feedback-msg {
-  margin-top: 1rem;
+  margin-top: 1.5rem;
   font-size: 0.95rem;
   font-weight: 500;
   color: #00ffb3;
@@ -98,19 +101,26 @@ html, body, #root {
 }
 
 /* === Cancel Button === */
-.cancel-btn {
-  margin-top: 1.5rem;
-  background: none;
+.cancel-btn-create {
+  margin-top: 1.2rem;
+  background: #d50268;
   border: none;
-  color: #ff00cc;
+  color: white;
   font-size: 1rem;
+  padding: 14px;
+  border-radius: 50px;
+  font-weight: bold;
   cursor: pointer;
-  text-decoration: underline;
+  transition: all 0.3s ease;
+  width: 100%;
 }
 
-.cancel-btn:hover {
-  color: #ff3399;
+.cancel-btn-create:hover {
+  background: #bc006c;
+  transform: scale(1.05);
 }
+
+
 
 /* === Responsive === */
 @media (max-width: 480px) {

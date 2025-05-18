@@ -1,4 +1,4 @@
-/* === Reset & Global === */
+/* === RESET & BASE === */
 * {
   box-sizing: border-box;
 }
@@ -13,145 +13,141 @@ html, body, #root {
   color: white;
 }
 
-/* === Wrapper === */
+/* === WRAPPER === */
 .all-events-wrapper {
+  background-image: url("/back.png");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  width: 100vw;
+  min-height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding-top: 80px;
-  min-height: 100vh;
+  padding-top: 100px; /* Ensures content starts below navbar */
+  
 }
 
-/* === Container Box === */
-.all-events-container {
-  background-color: rgba(255, 255, 255, 0.03);
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 24px;
-  padding: 3rem 2rem;
-  max-width: 700px;
-  width: 90%;
-  box-shadow: 0 0 50px rgba(255, 0, 128, 0.18);
+
+/* === GRID === */
+.events-grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 2rem;
+  padding: 0 2rem 4rem;
+  width: 100%;
+  max-width: 1200px;
+}
+
+.event-card-box {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(12px);
+  border-radius: 16px;
+  padding: 2.5rem 1.5rem 2.2rem;
+  width: 320px;
+  min-height: 260px;
+  box-shadow: 0 0 25px rgba(255, 0, 128, 0.15);
+  color: white;
+  position: relative;
+  transition: transform 0.3s ease;
+
+  /* ✅ New Flex Centering */
+  display: flex;
+  flex-direction: column;
+  justify-content: center; /* vertically center */
+  align-items: center;     /* horizontally center */
   text-align: center;
 }
 
-/* === Title === */
-.events-title {
-  font-size: 2rem;
-  font-weight: bold;
-  background: linear-gradient(to right, #ff00ff, #ff0077, #ff0000);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  margin-bottom: 2rem;
+
+.event-card-box:hover {
+  transform: translateY(-5px);
 }
 
-/* === No Events Message === */
-.no-events-text,
-.loading-text {
-  color: #aaa;
-  font-size: 0.95rem;
-  margin-top: 1rem;
+/* === ICONS === */
+.event-card-header {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  display: flex;
+  gap: 0.6rem;
 }
 
-/* === Events List === */
-.events-list {
-  list-style: none;
-  padding: 0;
-  margin: 0;
+.icon-btn {
+  color: #ffffffcc;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: color 0.3s ease;
 }
 
-/* === Individual Event Card === */
-.event-card {
-  background-color: #12112a;
-  border: 1px solid #3a3a3a;
-  border-radius: 16px;
-  padding: 1.5rem;
-  margin-bottom: 1.5rem;
-  text-align: left;
-  color: #e0e0e0;
-  transition: 0.3s ease;
-  box-shadow: 0 0 20px rgba(255, 0, 128, 0.08);
-}
-
-.event-card h3 {
-  margin: 0 0 0.5rem;
-  font-size: 1.2rem;
+.icon-btn:hover {
   color: #ffffff;
 }
 
-.event-card p {
-  font-size: 0.95rem;
-  margin: 6px 0;
-  color: #ccc;
+.icon-btn.delete:hover {
+  color: #ff3c3c;
 }
 
-.event-card strong {
-  color: #ff00cc;
-}
-
-/* === Action Buttons === */
-.event-actions {
-  display: flex;
-  justify-content: flex-end;
-  gap: 1rem;
-  margin-top: 1rem;
-}
-
-.event-actions .btn {
-  padding: 10px 18px;
-  border-radius: 30px;
+/* === NAME === */
+.event-name {
+  text-align: center;
+  font-size: 1.3rem;
   font-weight: bold;
+  margin: 0 0 1rem;
+  color: #fff;
+}
+
+/* === DETAILS === */
+.event-info {
   font-size: 0.95rem;
-  border: none;
-  cursor: pointer;
-  transition: all 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
 }
 
-/* Edit Button */
-.edit-btn {
-  background: linear-gradient(to right, #8000ff, #ff0077);
+.event-info p {
+  margin: 0;
+  color: #e0e0e0;
+}
+
+.event-info strong {
+  color: #d50268;
+}
+
+
+/* === LOADING TEXT === */
+.loading-text {
+  margin-top: 5rem;
+  color: #bbb;
+  font-size: 1.2rem;
+}
+
+/* === CUSTOM BROWSE EVENTS TITLE === */
+.browse-events-title {
+  font-size: 3.5rem;
+  font-weight: bold;
+  margin-bottom: 2.5rem;
+  text-align: center;
+}
+
+.browse-text {
+  color: #d50268;
+}
+
+.events-text {
   color: white;
-  box-shadow: 0 0 10px rgba(128, 0, 255, 0.2);
 }
 
-.edit-btn:hover {
-  transform: scale(1.05);
-  background: linear-gradient(to right, #9e00ff, #ff3399);
-}
-
-/* Delete Button */
-.delete-btn {
-  background: #471b1b;
-  color: #ff4e4e;
-  box-shadow: 0 0 10px rgba(255, 0, 0, 0.15);
-}
-
-.delete-btn:hover {
-  transform: scale(1.05);
-  background: #5a1212;
-}
-
-/* === Responsive === */
-@media (max-width: 480px) {
-  .all-events-container {
-    padding: 2rem 1.2rem;
+/* === RESPONSIVE === */
+@media (max-width: 768px) {
+  .event-card-box {
+    width: 90%;
   }
 
   .events-title {
-    font-size: 1.5rem;
-  }
-
-  .event-card {
-    padding: 1rem;
-  }
-
-  .event-actions {
-    flex-direction: column;
-    align-items: stretch;
-  }
-
-  .event-actions .btn {
-    width: 100%;
-    text-align: center;
+    font-size: 1.8rem;
   }
 }

@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import Navbar from "../../components/Navbar";
 import { getAllEventsForAdmin } from "../../services/api";
 import axios from "axios";
+import { FaEdit, FaTrash } from "react-icons/fa";
 import "./AllEventsPage.css";
 
 export default function AllEventsPage() {
@@ -59,32 +60,26 @@ export default function AllEventsPage() {
   return (
     <div className="all-events-wrapper">
       <Navbar role="ADMIN" />
-      <div className="all-events-container">
-        <h2 className="events-title">📋 All Events Created by Admin</h2>
+      <h2 className="browse-events-title">
+  <span className="browse-text">Browse</span> <span className="events-text">Events</span>
+</h2>
 
-        {events.length === 0 ? (
-          <p className="no-events-text">No events found.</p>
-        ) : (
-          <ul className="events-list">
-            {events.map((event) => (
-              <li className="event-card" key={event.id}>
-                <h3>{event.name}</h3>
-                <p><strong>Category:</strong> {event.category}</p>
-                <p><strong>Date:</strong> {new Date(event.eventDate).toLocaleString()}</p>
-                <p><strong>Description:</strong> {event.description}</p>
 
-                <div className="event-actions">
-                  <button className="btn edit-btn" onClick={() => handleEdit(event)}>
-                    ✏️ Edit
-                  </button>
-                  <button className="btn delete-btn" onClick={() => handleDelete(event.id)}>
-                    🗑️ Delete
-                  </button>
-                </div>
-              </li>
-            ))}
-          </ul>
-        )}
+      <div className="events-grid">
+        {events.map((event) => (
+          <div className="event-card-box" key={event.id}>
+            <div className="event-card-header">
+              <FaEdit className="icon-btn" onClick={() => handleEdit(event)} />
+              <FaTrash className="icon-btn delete" onClick={() => handleDelete(event.id)} />
+            </div>
+            <div className="event-name">{event.name}</div>
+            <div className="event-info">
+              <p><strong>Category:</strong> {event.category}</p>
+              <p><strong>Date:</strong> {new Date(event.eventDate).toLocaleString()}</p>
+              <p><strong>Description:</strong> {event.description}</p>
+            </div>
+          </div>
+        ))}
       </div>
     </div>
   );

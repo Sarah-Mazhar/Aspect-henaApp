@@ -26,7 +26,7 @@ export default function EditEventPage() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const authHeader = btoa(`admin:adminpass`);
+    const authHeader = btoa("admin:adminpass");
     try {
       await axios.put(
         `${API_BASE}/event/update/${event.host.id}/${event.id}`,
@@ -44,47 +44,51 @@ export default function EditEventPage() {
   };
 
   return (
-    <div className="edit-event-container">
-      <h2>🛠️ Edit Event</h2>
-      <form className="edit-event-form" onSubmit={handleSubmit}>
-        <input
-          name="name"
-          value={form.name}
-          onChange={handleChange}
-          placeholder="Event Name"
-          required
-        />
-        <input
-          name="category"
-          value={form.category}
-          onChange={handleChange}
-          placeholder="Category"
-          required
-        />
-        <input
-          name="eventDate"
-          type="datetime-local"
-          value={form.eventDate}
-          onChange={handleChange}
-          required
-        />
-        <textarea
-          name="description"
-          value={form.description}
-          onChange={handleChange}
-          placeholder="Description"
-          rows={3}
-          required
-        />
-        <button type="submit">✅ Update Event</button>
-        <button
-          type="button"
-          onClick={() => navigate("/admin/events")}
-          style={{ marginTop: "1rem", backgroundColor: "#444", color: "#fff" }}
-        >
-          🔙 Cancel
-        </button>
-      </form>
+    <div className="edit-event-wrapper">
+      <div className="edit-event-container">
+        <h2 className="edit-event-title">
+          <span className="pink-text">Edit</span> <span className="white-text">Event</span>
+        </h2>
+        <form className="edit-event-form" onSubmit={handleSubmit}>
+          <input
+            name="name"
+            value={form.name}
+            onChange={handleChange}
+            placeholder="Event Name"
+            required
+          />
+          <input
+            name="category"
+            value={form.category}
+            onChange={handleChange}
+            placeholder="Category"
+            required
+          />
+          <input
+            name="eventDate"
+            type="datetime-local"
+            value={form.eventDate}
+            onChange={handleChange}
+            required
+          />
+          <textarea
+            name="description"
+            value={form.description}
+            onChange={handleChange}
+            placeholder="Description"
+            rows={3}
+            required
+          />
+          <button type="submit">Update Event</button>
+          <button
+            type="button"
+            onClick={() => navigate("/admin/events")}
+            className="cancel-btnn"
+          >
+            Cancel
+          </button>
+        </form>
+      </div>
     </div>
   );
 }

@@ -81,21 +81,25 @@ export default function CreateEventPage() {
     <div className="create-event-wrapper">
       <Navbar role="ADMIN" />
 
-      <h2 className="create-event-title">Create New Event 🎉</h2>
-      <form className="create-event-form" onSubmit={handleSubmit}>
-        <input type="text" name="name" placeholder="Event Name" value={eventData.name} onChange={handleChange} required />
-        <input type="text" name="description" placeholder="Description" value={eventData.description} onChange={handleChange} required />
-        <input type="date" name="date" value={eventData.date} onChange={handleChange} required />
-        <input type="time" name="time" value={eventData.time} onChange={handleChange} />
-        <input type="text" name="location" placeholder="Location" value={eventData.location} onChange={handleChange} required />
-        <input type="text" name="category" placeholder="Category" value={eventData.category} onChange={handleChange} required />
-        <input type="number" name="maxAttendees" placeholder="Max Attendees" min={1} value={eventData.maxAttendees} onChange={handleChange} required />
+  
+  <form className="create-event-form" onSubmit={handleSubmit}>
+  <h2 className="custom-create-title">
+    <span className="pink-text">New</span> <span className="white-text">Event</span>
+  </h2>
 
-        <div className="event-buttons">
-          <button type="submit">Submit Event</button>
-          <button type="button" onClick={() => navigate("/admin-dashboard")}>Cancel</button>
-        </div>
-      </form>
+  <input type="text" name="name" placeholder="Event Name" value={eventData.name} onChange={handleChange} required />
+  <input type="text" name="description" placeholder="Description" value={eventData.description} onChange={handleChange} required />
+  <input type="date" name="date" value={eventData.date} onChange={handleChange} required />
+  <input type="time" name="time" value={eventData.time} onChange={handleChange} />
+  <input type="text" name="location" placeholder="Location" value={eventData.location} onChange={handleChange} required />
+  <input type="text" name="category" placeholder="Category" value={eventData.category} onChange={handleChange} required />
+  <input type="number" name="maxAttendees" placeholder="Max Attendees" min={1} value={eventData.maxAttendees} onChange={handleChange} required />
+
+  <div className="event-buttons">
+    <button type="submit">Submit Event</button>
+    <button type="button" onClick={() => navigate("/admin-dashboard")}>Cancel</button>
+  </div>
+</form>
     </div>
   );
 }
