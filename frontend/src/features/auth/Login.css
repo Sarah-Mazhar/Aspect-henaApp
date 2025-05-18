@@ -189,3 +189,23 @@ html, body, #root {
     max-width: 100%;
   }
 }
+
+/* Style for the role dropdown */
+.login-form select {
+  width: 90%;
+  max-width: 600px;
+  padding: 22px;
+  border-radius: 50px;
+  background-color: #2c2c2c;
+  border: none;
+  font-size: 1rem;
+  color: white;
+  appearance: none;
+}
+
+.login-form select:focus {
+  outline: none;
+  border: 2px solid #d50268;
+  background-color: #2c2c2c;
+}
+
