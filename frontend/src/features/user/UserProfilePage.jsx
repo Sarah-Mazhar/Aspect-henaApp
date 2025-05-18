@@ -1,12 +1,13 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import Navbar from "../../components/Navbar";
-import axios from "axios";
+import { getUserProfile, updateUserById } from "../../services/api";
 import "./UserProfile.css";
 
 export default function UserProfilePage() {
   const { userId } = useParams();
   const navigate = useNavigate();
+
   const [user, setUser] = useState(null);
   const [form, setForm] = useState({ username: "", email: "" });
   const [editing, setEditing] = useState(false);
@@ -17,41 +18,29 @@ export default function UserProfilePage() {
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const response = await axios.get(`http://localhost:8080/api/user/${userId}`, {
-          headers: {
-            Authorization: "Basic " + btoa("user:userpass"),
-          },
-        });
-        setUser(response.data);
-        setForm({ username: response.data.username, email: response.data.email });
+        const data = await getUserProfile(userId);
+        setUser(data);
+        setForm({ username: data.username, email: data.email });
       } catch (err) {
-        setError("❌ Failed to load profile.");
+        setError("Failed to load profile.");
       } finally {
         setLoading(false);
       }
     };
+
     fetchUser();
   }, [userId]);
 
   const handleUpdate = async () => {
     try {
-      await axios.put(
-        `http://localhost:8080/api/user/update/${userId}`,
-        form,
-        {
-          headers: {
-            Authorization: "Basic " + btoa("user:userpass"),
-            "Content-Type": "application/json",
-          },
-        }
-      );
+      await updateUserById(userId, form);
       setUser((prev) => ({ ...prev, ...form }));
-      setSuccess("✅ Profile updated successfully.");
+      setSuccess("Profile updated successfully.");
       setEditing(false);
       setError("");
     } catch {
       setSuccess("");
-      setError("❌ Update failed.");
+      setError("Update failed.");
     }
   };
 
