@@ -1,7 +1,5 @@
 import { Routes, Route, Navigate, useLocation } from "react-router-dom";
 import { AnimatePresence } from "framer-motion";
-import { ToastContainer } from "react-toastify";
-import 'react-toastify/dist/ReactToastify.css';
 
 import Register from "./features/auth/Register";
 import Login from "./features/auth/Login";
