@@ -7,7 +7,9 @@ import "./AllEventsPage.css";
 
 export default function AllEventsPage() {
   const [events, setEvents] = useState([]);
+  const [filteredEvents, setFilteredEvents] = useState([]); // ✅ added
   const [loading, setLoading] = useState(true);
+  const [searchQuery, setSearchQuery] = useState("");
   const navigate = useNavigate();
 
   const token = localStorage.getItem("token");
@@ -27,6 +29,7 @@ export default function AllEventsPage() {
     try {
       const data = await getAllEventsForAdmin();
       setEvents(data);
+      setFilteredEvents(data); // ✅ initial filtered list = all
     } catch (err) {
       console.error("Error fetching events:", err);
       alert("Failed to load events.");
@@ -40,7 +43,9 @@ export default function AllEventsPage() {
 
     try {
       await deleteEvent({ eventId, hostId: adminId, role: "ADMIN" });
-      setEvents((prev) => prev.filter((e) => e.id !== eventId));
+      const updated = events.filter((e) => e.id !== eventId);
+      setEvents(updated);
+      setFilteredEvents(updated); // ✅ update filtered list as well
     } catch (err) {
       console.error("Error deleting event:", err);
       alert("Failed to delete event.");
@@ -49,6 +54,15 @@ export default function AllEventsPage() {
 
   const handleEdit = (event) => {
     navigate(`/admin/edit-event/${event.id}`, { state: { event } });
+  };
+
+  const handleSearchChange = (e) => {
+    const query = e.target.value.toLowerCase();
+    setSearchQuery(query);
+    const matches = events.filter((event) =>
+      event.name?.toLowerCase().includes(query)
+    );
+    setFilteredEvents(matches);
   };
 
   if (loading) return <p className="loading-text">Loading events...</p>;
@@ -61,8 +75,16 @@ export default function AllEventsPage() {
         <span className="events-text">Events</span>
       </h2>
 
+      <input
+        type="text"
+        placeholder="Search Events..."
+        value={searchQuery}
+        onChange={handleSearchChange}
+        className="event-search-input"
+      />
+
       <div className="events-grid">
-        {events.map((event) => (
+        {filteredEvents.map((event) => (
           <div className="event-card-box" key={event.id}>
             <div className="event-card-header">
               <FaEdit className="icon-btn" onClick={() => handleEdit(event)} />
