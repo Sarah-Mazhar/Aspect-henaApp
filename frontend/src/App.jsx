@@ -15,12 +15,14 @@ import HostCreateEventPage from "./features/host/HostCreateEventPage";
 import AdminProfilePage from "./features/admin/adminProfilePage"; 
 import HostProfilePage from "./features/host/HostProfilePage";
 import UserProfilePage from "./features/user/UserProfilePage"; 
+import LandingPage from './features/home/LandingPage';
 
 function App() {
   return (
     <Routes>
       {/* Public Routes */}
-      <Route path="/" element={<Navigate to="/login" />} />
+      <Route path="/" element={<LandingPage />} />
+      {/* <Route path="/" element={<Navigate to="/login" />} /> */}
       <Route path="/signup" element={<Register />} />
       <Route path="/login" element={<Login />} />
 
