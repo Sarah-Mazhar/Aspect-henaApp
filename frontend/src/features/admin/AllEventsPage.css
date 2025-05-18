@@ -151,3 +151,19 @@ html, body, #root {
     font-size: 1.8rem;
   }
 }
+
+.event-search-input {
+  margin-bottom: 2rem;
+  padding: 0.8rem 1.2rem;
+  width: 90%;
+  max-width: 400px;
+  border-radius: 20px;
+  border: none;
+  font-size: 1rem;
+  outline: none;
+  background: rgba(255, 255, 255, 0.07);
+  color: white;
+  box-shadow: 0 0 12px rgba(255, 0, 128, 0.15);
+  backdrop-filter: blur(10px);
+  text-align: center;
+}

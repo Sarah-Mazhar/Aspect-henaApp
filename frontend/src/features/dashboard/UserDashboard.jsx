@@ -6,6 +6,8 @@ import Navbar from "../../components/Navbar";
 
 export default function UserDashboard() {
   const [events, setEvents] = useState([]);
+  const [filteredEvents, setFilteredEvents] = useState([]);
+  const [searchQuery, setSearchQuery] = useState("");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [rsvpSuccess, setRsvpSuccess] = useState("");
@@ -25,8 +27,9 @@ export default function UserDashboard() {
 
   const fetchEvents = async () => {
     try {
-      const events = await getUpcomingEvents();
-      setEvents(events);
+      const data = await getUpcomingEvents();
+      setEvents(data);
+      setFilteredEvents(data);
     } catch (err) {
       setError("Failed to load events.");
     } finally {
@@ -46,7 +49,6 @@ export default function UserDashboard() {
         await rsvpToEvent({ userId: userIdNum, eventId: event.id });
         setRsvpSuccess(`Successfully RSVP’d to "${event.name}"`);
       }
-
       fetchEvents();
     } catch (err) {
       alert("Could not process RSVP. Try again.");
@@ -55,25 +57,45 @@ export default function UserDashboard() {
     }
   };
 
+  const handleSearchChange = (e) => {
+    const query = e.target.value.toLowerCase();
+    setSearchQuery(query);
+
+    const filtered = events.filter((event) =>
+      event.name?.toLowerCase().includes(query)
+    );
+    setFilteredEvents(filtered);
+  };
+
   return (
     <div className="user-dashboard-container">
       <Navbar userId={userId} />
 
       <div className="dashboard-box">
         <h2 className="dashboard-title">
-          <span className="highlight">Upcoming</span> <span className="normal">Events</span>
+          <span className="highlight">Upcoming</span>{" "}
+          <span className="normal">Events</span>
         </h2>
+
+        <input
+          type="text"
+          placeholder="Search Events..."
+          value={searchQuery}
+          onChange={handleSearchChange}
+          className="event-search-input"
+        />
+
         {rsvpSuccess && <p className="success-msgg">{rsvpSuccess}</p>}
 
         {loading ? (
           <p className="status-msgg">Loading events...</p>
         ) : error ? (
           <p className="status-msgg">{error}</p>
-        ) : events.length === 0 ? (
-          <p className="status-msgg">No upcoming events found.</p>
+        ) : filteredEvents.length === 0 ? (
+          <p className="status-msgg">No matching events found.</p>
         ) : (
           <div className="event-grid">
-            {events.map((event) => {
+            {filteredEvents.map((event) => {
               const userIdNum = Number(userId);
               const isUserRSVPed = event.rsvps?.some((u) => Number(u.id) === userIdNum);
               const isFull = event.currentAttendees >= event.maxAttendees;
@@ -83,7 +105,12 @@ export default function UserDashboard() {
                 <div key={event.id} className="event-card">
                   <h3>{event.name}</h3>
                   <p>{event.description}</p>
-                  <p><strong>Date:</strong> {event.eventDate ? new Date(event.eventDate).toLocaleString() : "TBA"}</p>
+                  <p>
+                    <strong>Date:</strong>{" "}
+                    {event.eventDate
+                      ? new Date(event.eventDate).toLocaleString()
+                      : "TBA"}
+                  </p>
                   <p><strong>Location:</strong> {event.location || "Unknown"}</p>
                   <p><strong>Category:</strong> {event.category || "Uncategorized"}</p>
                   <p><strong>Attendees:</strong> {event.currentAttendees} / {event.maxAttendees}</p>
