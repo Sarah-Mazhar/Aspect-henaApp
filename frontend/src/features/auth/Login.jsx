@@ -82,6 +82,7 @@ export default function Login() {
         >
           <div className="login-container">
             <h2 className="login-title login-purple">Log in</h2>
+            <p className="login-subtitle">Welcome Back!</p>
 
             <form className="login-form" onSubmit={handleSubmit}>
               <input
