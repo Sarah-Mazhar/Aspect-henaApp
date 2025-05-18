@@ -10,7 +10,7 @@ html, body, #root {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   background: #020026;
   color: white;
-  overflow: hidden;
+  overflow-x: hidden;
 }
 
 /* Navbar */
@@ -20,16 +20,15 @@ html, body, #root {
   left: 0;
   right: 0;
   z-index: 100;
-  height: 72px; /* Slightly taller for better alignment */
+  height: 72px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0 4rem; /* Horizontal padding only */
+  padding: 0 4rem;
   background: rgba(255, 255, 255, 0.05);
   backdrop-filter: blur(10px);
   box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
 }
-
 
 .nav-logo {
   font-size: clamp(1rem, 3vw, 2rem);
@@ -37,10 +36,9 @@ html, body, #root {
   letter-spacing: 1px;
   display: flex;
   align-items: center;
-  height: 100%; /* makes sure it fills the navbar height */
+  height: 100%;
   margin-top: 1.5rem;
 }
-
 
 .gradient-text {
   background: linear-gradient(to right, #ff00ff, #ff0077, #ff0000);
@@ -54,42 +52,39 @@ html, body, #root {
   flex-direction: column;
   height: 100vh;
   width: 100%;
+  overflow: hidden;
 }
 
 .login-body {
   display: flex;
   flex: 1;
-  margin-top: 96px;
+  margin-top: 72px;
+  width: 100%;
+  position: relative;
 }
 
-/* Image */
+/* Image Section */
 .login-image {
   flex: 1;
   background: url("/login2.png") center center / cover no-repeat;
   border-top-left-radius: 100px;
   border-top-right-radius: 100px;
-  border-bottom-left-radius: 0;
-  border-bottom-right-radius: 0;
-
-  /* ✅ Shadow going up and right */
-  box-shadow: -30px -30px 60px rgba(0, 0, 0, 0.35), 
+  box-shadow: -30px -30px 60px rgba(0, 0, 0, 0.35),
               inset 0 0 20px rgba(255, 255, 255, 0.05);
-
-  /* Optional: mild tilt for fake 3D (still static) */
   transform: perspective(1000px) rotateY(-1deg);
   margin-left: -0.2rem;
-
-  transition: box-shadow 0.3s ease;
+  margin-top: 23px;
+  transition: all 0.4s ease-in-out;
 }
 
-
-/* Right content */
+/* Content/Form Section */
 .login-content {
   flex: 1;
   display: flex;
   justify-content: center;
   align-items: center;
   padding: 2rem;
+  transition: all 0.4s ease-in-out;
 }
 
 .login-container {
@@ -101,13 +96,12 @@ html, body, #root {
 
 /* Titles */
 .login-title {
-  font-size: 5rem; /* ⬆️ Larger font */
+  font-size: 5rem;
   margin-bottom: 0.5rem;
 }
 
 .login-purple {
   color: #d50268;
-
   font-weight: bold;
 }
 
@@ -121,7 +115,7 @@ html, body, #root {
 .login-form {
   display: flex;
   flex-direction: column;
-  gap: 2rem; /* ⬆️ More space between inputs */
+  gap: 2rem;
   align-items: center;
 }
 
@@ -147,11 +141,11 @@ html, body, #root {
   border-radius: 50px;
   font-weight: bold;
   font-size: 1rem;
-  background:  #d50268;
+  background: #d50268;
   color: white;
   border: none;
   cursor: pointer;
-  transition: 0.2s ease;
+  transition: background 0.3s ease, transform 0.2s ease;
   margin-top: 0.5rem;
 }
 
@@ -160,7 +154,7 @@ html, body, #root {
   transform: scale(1.01);
 }
 
-/* Sign up link */
+/* Sign Up Link */
 .login-small-link {
   font-size: 1rem;
   color: #bbb;
