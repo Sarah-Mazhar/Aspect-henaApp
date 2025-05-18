@@ -14,7 +14,7 @@ html, body, #root {
 }
 
 /* Navbar */
-.navbar {
+/* .navbar {
   position: fixed;
   top: 0;
   left: 0;
@@ -28,16 +28,16 @@ html, body, #root {
   background: rgba(255, 255, 255, 0.05);
   backdrop-filter: blur(10px);
   box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
-}
+} */
 
-.nav-logo {
+/* .nav-logo {
   font-size: clamp(1rem, 3vw, 2rem);
   font-weight: bold;
   letter-spacing: 1px;
   display: flex;
   align-items: center;
   height: 100%;
-}
+} */
 
 .gradient-text {
   background: linear-gradient(to right, #ff00ff, #ff0077, #ff0000);
