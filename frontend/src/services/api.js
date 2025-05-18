@@ -164,3 +164,92 @@ export const getAllEventsForAdmin = async () => {
   return response.data;
 };
 
+export const getAdminProfile = async (adminId) => {
+  const staticUser = { username: "admin", password: "adminpass" };
+  const authHeader = btoa(`${staticUser.username}:${staticUser.password}`);
+
+  const config = {
+    headers: {
+      Authorization: `Basic ${authHeader}`,
+    },
+  };
+
+  const response = await axios.get(`http://localhost:8080/api/user/${adminId}`, config);
+  return response.data;
+};
+
+export const updateAdminProfile = async (adminId, updatedData) => {
+  const staticUser = { username: "admin", password: "adminpass" };
+  const authHeader = btoa(`${staticUser.username}:${staticUser.password}`);
+
+  const config = {
+    headers: {
+      Authorization: `Basic ${authHeader}`,
+      "Content-Type": "application/json",
+    },
+  };
+
+  const response = await axios.put(
+    `http://localhost:8080/api/user/update/${adminId}`,
+    updatedData,
+    config
+  );
+  return response.data;
+};
+
+export const createEventByAdmin = async (adminId, eventData) => {
+  const staticUser = { username: "admin", password: "adminpass" };
+  const authHeader = btoa(`${staticUser.username}:${staticUser.password}`);
+
+  const config = {
+    headers: {
+      Authorization: `Basic ${authHeader}`,
+    },
+  };
+
+  const response = await axios.post(
+    `http://localhost:8080/api/event/create/${adminId}`,
+    eventData,
+    config
+  );
+
+  return response.data;
+};
+
+
+export const updateEventByAdmin = async ({ hostId, eventId, updatedData }) => {
+  const staticUser = { username: "admin", password: "adminpass" };
+  const authHeader = btoa(`${staticUser.username}:${staticUser.password}`);
+
+  const config = {
+    headers: {
+      Authorization: `Basic ${authHeader}`,
+    },
+  };
+
+  const response = await axios.put(
+    `http://localhost:8080/api/event/update/${hostId}/${eventId}`,
+    updatedData,
+    config
+  );
+
+  return response.data;
+};
+
+
+// ====== Notifications ======
+
+export const fetchUserNotifications = async (userId) => {
+  const staticUser = {
+    username: "user",
+    password: "userpass",
+  };
+  const authHeader = btoa(`${staticUser.username}:${staticUser.password}`);
+
+  const config = {
+    headers: { Authorization: `Basic ${authHeader}` },
+  };
+
+  const response = await axios.get(`${API_BASE}/notifications/user/${userId}`, config);
+  return response.data;
+};

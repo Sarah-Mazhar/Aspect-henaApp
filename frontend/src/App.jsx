@@ -1,4 +1,8 @@
-import { Routes, Route, Navigate } from "react-router-dom";
+import { Routes, Route, Navigate, useLocation } from "react-router-dom";
+import { AnimatePresence } from "framer-motion";
+import { ToastContainer } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
+
 import Register from "./features/auth/Register";
 import Login from "./features/auth/Login";
 import UserDashboard from "./features/dashboard/UserDashboard";
@@ -6,7 +10,6 @@ import HostDashboard from "./features/dashboard/HostDashboard";
 import AdminDashboard from "./features/dashboard/AdminDashboard";
 import CreateEventPage from "./features/admin/CreateEventPage";
 import AllEventsPage from "./features/admin/AllEventsPage";
-import ProtectedRoute from "./components/ProtectedRoute";
 import EditEventPage from "./features/admin/EditEventPage"; 
 import CreateUserPage from "./features/admin/CreateUserPage";
 import HostEventsPage from "./features/host/HostEventsPage";
@@ -16,8 +19,7 @@ import AdminProfilePage from "./features/admin/adminProfilePage";
 import HostProfilePage from "./features/host/HostProfilePage";
 import UserProfilePage from "./features/user/UserProfilePage"; 
 import LandingPage from './features/home/LandingPage';
-import { useLocation } from "react-router-dom";
-import { AnimatePresence } from "framer-motion";
+import ProtectedRoute from "./components/ProtectedRoute";
 
 
 function App() {
@@ -140,6 +142,7 @@ function App() {
 
     </Routes>
     </AnimatePresence>
+    
   );
 }
 

@@ -1,9 +1,7 @@
 import { useLocation, useNavigate } from "react-router-dom";
 import { useState } from "react";
-import axios from "axios";
+import { updateEventByAdmin } from "../../services/api";
 import "./EditEventPage.css";
-
-const API_BASE = "http://localhost:8080/api";
 
 export default function EditEventPage() {
   const { state } = useLocation();
@@ -26,15 +24,12 @@ export default function EditEventPage() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const authHeader = btoa("admin:adminpass");
     try {
-      await axios.put(
-        `${API_BASE}/event/update/${event.host.id}/${event.id}`,
-        form,
-        {
-          headers: { Authorization: `Basic ${authHeader}` },
-        }
-      );
+      await updateEventByAdmin({
+        hostId: event.host.id,
+        eventId: event.id,
+        updatedData: form,
+      });
       alert("✅ Event updated successfully!");
       navigate("/admin/events");
     } catch (err) {

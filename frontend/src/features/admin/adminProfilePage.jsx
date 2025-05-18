@@ -1,7 +1,10 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Navbar from "../../components/Navbar";
-import axios from "axios";
+import {
+  getAdminProfile,
+  updateAdminProfile
+} from "../../services/api";
 import "./adminProfilePage.css";
 
 export default function AdminProfilePage() {
@@ -16,23 +19,18 @@ export default function AdminProfilePage() {
 
   useEffect(() => {
     if (!id) {
-      setError("❌ Missing admin ID.");
+      setError("Missing admin ID.");
       setLoading(false);
       return;
     }
 
     const fetchAdmin = async () => {
       try {
-        const auth = btoa("admin:adminpass");
-        const res = await axios.get(`http://localhost:8080/api/user/${id}`, {
-          headers: {
-            Authorization: `Basic ${auth}`,
-          },
-        });
-        setAdmin(res.data);
-        setForm({ username: res.data.username, email: res.data.email });
+        const data = await getAdminProfile(id);
+        setAdmin(data);
+        setForm({ username: data.username, email: data.email });
       } catch {
-        setError("❌ Failed to load admin profile.");
+        setError("Failed to load admin profile.");
       } finally {
         setLoading(false);
       }
@@ -43,24 +41,14 @@ export default function AdminProfilePage() {
 
   const handleUpdate = async () => {
     try {
-      const auth = btoa("admin:adminpass");
-      await axios.put(
-        `http://localhost:8080/api/user/update/${id}`,
-        form,
-        {
-          headers: {
-            Authorization: `Basic ${auth}`,
-            "Content-Type": "application/json",
-          },
-        }
-      );
+      await updateAdminProfile(id, form);
       setAdmin((prev) => ({ ...prev, ...form }));
-      setSuccess("✅ Profile updated successfully.");
+      setSuccess("Profile updated successfully.");
       setError("");
       setEditing(false);
     } catch {
       setSuccess("");
-      setError("❌ Update failed.");
+      setError("Update failed.");
     }
   };
 
@@ -76,41 +64,30 @@ export default function AdminProfilePage() {
 
       <div className="profile-card">
         <h2 className="profile-title">
-  <span className="pink-text">Profile</span> <span className="white-text">Details</span>
-</h2>
-
+          <span className="pink-text">Profile</span> <span className="white-text">Details</span>
+        </h2>
 
         <input
           type="text"
           value={form.username}
           disabled={!editing}
-          onChange={(e) =>
-            setForm((prev) => ({ ...prev, username: e.target.value }))
-          }
+          onChange={(e) => setForm({ ...form, username: e.target.value })}
         />
-
         <input
           type="email"
           value={form.email}
           disabled={!editing}
-          onChange={(e) =>
-            setForm((prev) => ({ ...prev, email: e.target.value }))
-          }
+          onChange={(e) => setForm({ ...form, email: e.target.value })}
         />
-
         <input type="text" value={admin.role} disabled />
 
         <div className="profile-actions">
           {editing ? (
             <button onClick={handleUpdate}>Save</button>
           ) : (
-            <button className="full-width-btn" onClick={() => setEditing(true)}>
-              Edit
-            </button>
+            <button className="full-width-btn" onClick={() => setEditing(true)}>Edit</button>
           )}
-          <button className="cancel-btn" onClick={() => navigate("/admin-dashboard")}>
-            Cancel
-          </button>
+          <button className="cancel-btn" onClick={() => navigate("/admin-dashboard")}>Cancel</button>
         </div>
       </div>
     </div>

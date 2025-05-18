@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { useEffect, useRef, useState } from "react";
-import axios from "axios";
 import { FaUserCircle, FaSignOutAlt } from "react-icons/fa";
+import { fetchUserNotifications } from "../services/api";
 import "./Navbar.css";
 
 export default function Navbar({ userId, role = "USER" }) {
@@ -27,21 +27,9 @@ export default function Navbar({ userId, role = "USER" }) {
 
   const fetchNewNotification = async () => {
     try {
-      const staticUser = {
-        username: "user",
-        password: "userpass",
-      };
-      const authHeader = btoa(`${staticUser.username}:${staticUser.password}`);
-      const config = {
-        headers: { Authorization: `Basic ${authHeader}` },
-      };
+      const notifications = await fetchUserNotifications(userId);
 
-      const res = await axios.get(
-        `http://localhost:8080/api/notifications/user/${userId}`,
-        config
-      );
-
-      const newNotif = res.data.find(
+      const newNotif = notifications.find(
         (n) => new Date(n.timestamp).getTime() > lastSeenRef.current
       );
 
