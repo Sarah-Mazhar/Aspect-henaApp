@@ -14,91 +14,96 @@ html, body, #root {
   overflow-x: hidden;
 }
 
+/* === Wrapper with BACKGROUND === */
 /* === Wrapper === */
 .profile-wrapper {
+  background-image: url("/back.png");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding-top: 80px;
+  justify-content: center; /* ✅ vertically center */
   min-height: 100vh;
+  padding-top: 100px;
+  padding-bottom: 50px;
 }
 
-/* === Title === */
-.profile-title {
-  font-size: 2rem;
-  font-weight: bold;
-  margin-bottom: 2rem;
-  background: linear-gradient(to right, #ff00ff, #ff0077, #ff0000);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  text-align: center;
-}
 
 /* === Card === */
 .profile-card {
   width: 90%;
   max-width: 600px;
-  min-width: 350px;
-  background-color: rgba(255, 255, 255, 0.03);
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background-color: #12112a;
   border-radius: 24px;
   padding: 3rem 2rem;
-  box-shadow: 0 0 50px rgba(255, 0, 128, 0.18);
   display: flex;
   flex-direction: column;
-  gap: 1.2rem;
+  gap: 1rem;
+  text-align: center;
 }
 
-/* === Label/Input === */
-.profile-card label {
-  display: flex;
-  flex-direction: column;
-  font-size: 0.95rem;
-  color: #ccc;
+/* === Title === */
+.profile-title {
+  font-size: 2.4rem;
+  font-weight: bold;
+  margin-bottom: 1.5rem;
+  color: #d50268;
 }
 
+/* === Inputs === */
 .profile-card input {
-  margin-top: 0.5rem;
   padding: 14px;
-  border-radius: 12px;
+  border-radius: 50px;
   border: 1px solid #3a3a3a;
-  background-color: #12112a;
+  background-color: #1a1a2e;
   color: white;
   font-size: 0.95rem;
   transition: 0.3s ease;
 }
 
 .profile-card input:focus {
-  border-color: #ff00cc;
-  box-shadow: 0 0 0 2px rgba(255, 0, 204, 0.3);
+  border-color: #d50268;
+  box-shadow: 0 0 0 2px rgba(213, 2, 104, 0.3);
   outline: none;
 }
 
-/* === Button Actions === */
+/* === Actions === */
 .profile-actions {
   display: flex;
-  justify-content: center;
+  flex-direction: column;
   gap: 1rem;
-  margin-top: 1.5rem;
+  margin-top: 1rem;
 }
 
 .profile-actions button {
-  padding: 14px 24px;
-  border-radius: 30px;
-  font-weight: bold;
+  padding: 14px;
   font-size: 1rem;
-  background: linear-gradient(to right, #ff00ff, #ff0077, #ff0000);
-  color: white;
+  font-weight: bold;
   border: none;
+  border-radius: 50px;
   cursor: pointer;
-  transition: background 0.3s ease, transform 0.2s ease;
-  box-shadow: 0 0 12px rgba(255, 0, 128, 0.3);
+  background: #d50268;
+  color: white;
+  transition: all 0.3s ease;
+  width: 100%;
 }
 
 .profile-actions button:hover {
-  transform: scale(1.05);
-  background: linear-gradient(to right, #ff33ff, #ff3399, #ff3333);
+  background: #bc006c;
+  transform: scale(1.03);
+}
+
+.cancel-btn {
+  background-color: #444;
+  color: white;
+}
+
+.cancel-btn:hover {
+  background-color: #666;
 }
 
 /* === Messages === */
@@ -132,7 +137,6 @@ html, body, #root {
 @media (max-width: 480px) {
   .profile-card {
     padding: 2rem 1.5rem;
-    min-width: unset;
   }
 
   .profile-title {
@@ -141,6 +145,23 @@ html, body, #root {
 
   .profile-actions button {
     font-size: 0.9rem;
-    padding: 12px 20px;
+    padding: 12px;
   }
+}
+
+.cancel-btn {
+  background-color: #444;
+  color: white;
+  border-radius: 50px;
+  border: none;
+  padding: 14px;
+  font-weight: bold;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: 0.3s ease;
+  width: 100%;
+}
+
+.cancel-btnadminprof:hover {
+  background-color: #666;
 }

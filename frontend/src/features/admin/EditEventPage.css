@@ -1,76 +1,139 @@
-/* Reset & base layout */
-html,
-body,
-#root {
-  height: 100%;
-  background-color: #0f0f0f;
-  font-family: 'Segoe UI', sans-serif;
+/* === RESET & BASE === */
+* {
+  box-sizing: border-box;
+}
+
+html, body, #root {
+  margin: 0;
+  padding: 0;
+  min-height: 100%;
+  width: 100%;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: #020026;
+  color: white;
+}
+
+/* === WRAPPER WITH BACKGROUND === */
+.edit-event-wrapper {
+  background-image: url("/back.png");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  width: 100vw;
+  min-height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
+  padding-top: 100px;
 }
 
-/* Main card container */
+/* === CONTAINER BOX === */
 .edit-event-container {
-  background-color: #1a1a1a;
-  padding: 3.5rem 3rem;
-  border-radius: 16px;
-  box-shadow: 0 0 20px rgba(128, 0, 255, 0.12),
-              0 0 60px rgba(128, 0, 255, 0.06),
-              0 0 100px rgba(128, 0, 255, 0.04);
+  background-color: #12112a;
+  padding: 3rem 2.5rem;
+  border-radius: 20px;
+  
   max-width: 560px;
-  width: 100%;
-  color: #fff;
+  width: 90%;
+  color: white;
   text-align: center;
 }
 
-/* Header */
-.edit-event-container h2 {
-  font-size: 26px;
-  font-weight: 600;
+/* === TITLE === */
+.edit-event-title {
+  font-size: 2.6rem;
+  font-weight: bold;
   margin-bottom: 2rem;
+  margin-top: -10px;
 }
 
-/* Form layout */
+.pink-text {
+  color: #d50268;
+}
+
+.white-text {
+  color: white;
+}
+
+/* === FORM === */
 .edit-event-form {
   display: flex;
   flex-direction: column;
   gap: 1.2rem;
+  
 }
 
-/* Inputs */
 .edit-event-form input,
 .edit-event-form textarea {
-  padding: 16px;
+  padding: 14px;
   font-size: 16px;
-  border-radius: 10px;
-  background-color: #2a2a2a;
+  border-radius: 50px; /* ✅ Rounded inputs */
+  background-color: #12112a;
   border: 1px solid #3a3a3a;
   color: #eee;
-  transition: all 0.3s ease;
+  transition: 0.3s ease;
 }
 
 .edit-event-form input:focus,
 .edit-event-form textarea:focus {
-  border-color: #b266ff;
-  box-shadow: 0 0 0 2px rgba(178, 102, 255, 0.3);
+  border-color: #d50268;
+  box-shadow: 0 0 0 2px rgba(213, 2, 104, 0.3);
   outline: none;
 }
 
-/* Buttons */
+/* === BUTTONS === */
 .edit-event-form button {
-  padding: 15px;
-  font-size: 17px;
-  font-weight: 600;
-  background: linear-gradient(135deg, #b266ff, #8c1aff);
-  color: #fff;
+  padding: 14px;
+  font-size: 1rem;
+  font-weight: bold;
   border: none;
-  border-radius: 10px;
+  border-radius: 50px; /* ✅ Rounded buttons */
   cursor: pointer;
   transition: all 0.3s ease;
+  background: #d50268;
+  color: white;
+
 }
 
 .edit-event-form button:hover {
-  background: linear-gradient(135deg, #a84dff, #7f1aff);
-  transform: translateY(-1px);
+  transform: scale(1.05);
+  background: #bc006c;
+}
+
+/* === CANCEL BUTTON === */
+.cancel-btnn {
+  margin-top: 1rem;
+  background-color: #444;
+  color: white;
+  text-decoration: none; /* ensures no underline */
+  border-radius: 50px;
+  border: none;
+  padding: 14px;
+  font-weight: bold;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: 0.3s ease;
+  margin-top: -1px;
+  
+}
+
+.cancel-btnn:hover {
+  background-color: #666;
+}
+
+/* === RESPONSIVE === */
+@media (max-width: 480px) {
+  .edit-event-container {
+    padding: 2rem 1.5rem;
+  }
+
+  .edit-event-title {
+    font-size: 2rem;
+  }
+
+  .edit-event-form button {
+    font-size: 0.95rem;
+    padding: 12px;
+  }
 }

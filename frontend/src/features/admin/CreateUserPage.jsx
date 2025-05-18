@@ -46,10 +46,10 @@ export default function CreateUserPage() {
 
       const roleMsg =
         createdRole === "ADMIN"
-          ? `🛡️ Admin '${createdUsername}' created with full privileges.`
+          ? `Admin '${createdUsername}' created with full privileges.`
           : createdRole === "HOST"
-          ? `🎙️ Host '${createdUsername}' can now manage events.`
-          : `👤 User '${createdUsername}' created successfully.`;
+          ? `Host '${createdUsername}' can now manage events.`
+          : `User '${createdUsername}' created successfully.`;
 
       setMessage(`✅ ${roleMsg}`);
       setFormData({
@@ -71,7 +71,7 @@ export default function CreateUserPage() {
     <div className="create-user-wrapper">
       <Navbar role="ADMIN" />
       <div className="create-user-card">
-        <h2 className="create-user-title">Create New User 👤</h2>
+        <h2 className="create-user-title">Create New User</h2>
         <form className="create-user-form" onSubmit={handleSubmit}>
           <input
             name="username"
@@ -108,8 +108,11 @@ export default function CreateUserPage() {
 
         {message && <div className="feedback-msg">{message}</div>}
 
-        <button className="cancel-btn" onClick={() => navigate("/admin-dashboard")}>
-           Back to Dashboard
+        <button
+          className="cancel-btn-create"
+          onClick={() => navigate("/admin-dashboard")}
+        >
+          Cancel
         </button>
       </div>
     </div>
