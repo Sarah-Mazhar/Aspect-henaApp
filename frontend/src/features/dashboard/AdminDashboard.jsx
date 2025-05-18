@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Navbar from "../../components/Navbar";
 import "./AdminDashboard.css";
+import { FaCalendarPlus, FaCalendarAlt, FaUserPlus } from "react-icons/fa";
 
 export default function AdminDashboard() {
   const token = localStorage.getItem("token");
@@ -17,28 +18,41 @@ export default function AdminDashboard() {
   }, [token, role, adminId, navigate]);
 
   return (
-    <div className="dashboard-wrapper">
+    <div className="admin-bg">
       <Navbar role={role} />
+      <div className="dashboard-wrapper">
+        <h1 className="custom-title">Elevating Events For A Smarter Tomorrow</h1>
 
-      <h1 className="gradient-text dashboard-heading">Admin Dashboard</h1>
+        <div className="card-grid centered-grid clickable-grid">
+          <div
+            className="glass-card no-header"
+            onClick={() => navigate("/admin/create-event")}
+          >
+            <div className="card-content">
+              <FaCalendarPlus className="card-icon" />
+              <span>Create Event</span>
+            </div>
+          </div>
 
-      <div className="card-grid centered-grid">
-        <div className="glass-card no-header">
-          <button onClick={() => navigate("/admin/create-event")}>
-             Create Event
-          </button>
-        </div>
+          <div
+            className="glass-card no-header"
+            onClick={() => navigate("/admin/events")}
+          >
+            <div className="card-content">
+              <FaCalendarAlt className="card-icon" />
+              <span>Show All Events</span>
+            </div>
+          </div>
 
-        <div className="glass-card no-header">
-          <button onClick={() => navigate("/admin/events")}>
-             Show All Events
-          </button>
-        </div>
-
-        <div className="glass-card no-header">
-          <button onClick={() => navigate("/admin/create-user")}>
-             Create User
-          </button>
+          <div
+            className="glass-card no-header"
+            onClick={() => navigate("/admin/create-user")}
+          >
+            <div className="card-content">
+              <FaUserPlus className="card-icon" />
+              <span>Create User</span>
+            </div>
+          </div>
         </div>
       </div>
     </div>

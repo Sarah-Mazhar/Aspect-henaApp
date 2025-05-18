@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { FaUserPlus } from "react-icons/fa";
+import { motion } from "framer-motion";
 import "./Register.css";
 
 function Register() {
@@ -35,9 +35,7 @@ function Register() {
         body: JSON.stringify(formData),
       });
 
-      if (!res.ok) {
-        throw new Error(await res.text());
-      }
+      if (!res.ok) throw new Error(await res.text());
 
       const data = await res.json();
       setMessage(`✅ Registered: ${data.username}`);
@@ -51,62 +49,86 @@ function Register() {
   };
 
   return (
-    <div className="landing-wrapper">
+    <motion.div
+      className="register-page"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.6 }}
+    >
       <nav className="navbar">
         <div className="nav-logo gradient-text">HENA</div>
       </nav>
 
-      <div className="register-container">
-        <FaUserPlus className="register-icon" />
-        <h1 className="register-title gradient-text">Create Account</h1>
-        <form className="signup-form" onSubmit={handleSubmit}>
-          <input
-            name="username"
-            placeholder="Username"
-            value={formData.username}
-            onChange={handleChange}
-            required
-          />
-          <input
-            name="email"
-            type="email"
-            placeholder="Email"
-            value={formData.email}
-            onChange={handleChange}
-            required
-          />
-          <input
-            name="password"
-            type="password"
-            placeholder="Password"
-            value={formData.password}
-            onChange={handleChange}
-            required
-          />
-          <select name="role" value={formData.role} onChange={handleChange}>
-            <option value="USER">User</option>
-            <option value="HOST">Host</option>
-            <option value="ADMIN">Admin</option>
-          </select>
-          <button type="submit" disabled={loading}>
-            {loading ? "Registering..." : "Register"}
-          </button>
-        </form>
-
-        {message && (
-          <div className={error ? "message error" : "message success"}>
-            {message}
+      <div className="register-body">
+        {/* LEFT: Form comes from left, exits to right */}
+        <motion.div
+          className="register-content"
+          initial={{ opacity: 0, x: -50 }}
+          animate={{ opacity: 1, x: 0 }}
+          exit={{ opacity: 0, x: 100 }}
+          transition={{ duration: 0.6 }}
+        >
+          <div className="register-form-container">
+            <h2 className="register-title">Create Account</h2>
+            <p className="register-subtitle">Join the platform!</p>
+            <form className="register-form" onSubmit={handleSubmit}>
+              <input
+                name="username"
+                placeholder="Username"
+                value={formData.username}
+                onChange={handleChange}
+                required
+              />
+              <input
+                name="email"
+                type="email"
+                placeholder="Email"
+                value={formData.email}
+                onChange={handleChange}
+                required
+              />
+              <input
+                name="password"
+                type="password"
+                placeholder="Password"
+                value={formData.password}
+                onChange={handleChange}
+                required
+              />
+              <select name="role" value={formData.role} onChange={handleChange}>
+                <option value="USER">User</option>
+                <option value="HOST">Host</option>
+                <option value="ADMIN">Admin</option>
+              </select>
+              <button type="submit" disabled={loading}>
+                {loading ? "Registering..." : "Register"}
+              </button>
+            </form>
+            {message && (
+              <div className={error ? "message error" : "message success"}>
+                {message}
+              </div>
+            )}
+            <p className="register-small-link">
+              Already have an account?{" "}
+              <span className="link" onClick={() => navigate("/login")}>
+                Login
+              </span>
+            </p>
           </div>
-        )}
+        </motion.div>
 
-        <div className="text-link">
-          Already have an account?
-          <span className="link" onClick={() => navigate("/login")}>
-            Login
-          </span>
-        </div>
+        {/* RIGHT: Image comes from right, exits to left */}
+        <motion.div
+          className="register-image"
+          initial={{ opacity: 0, x: 50 }}
+          animate={{ opacity: 1, x: 0 }}
+          exit={{ opacity: 0, x: -100 }}
+          transition={{ duration: 0.6 }}
+        />
       </div>
-    </div>
+    </motion.div>
   );
 }
 

@@ -16,15 +16,18 @@ import AdminProfilePage from "./features/admin/adminProfilePage";
 import HostProfilePage from "./features/host/HostProfilePage";
 import UserProfilePage from "./features/user/UserProfilePage"; 
 import LandingPage from './features/home/LandingPage';
+import { useLocation } from "react-router-dom";
+import { AnimatePresence } from "framer-motion";
+
 
 function App() {
+  const location = useLocation();
   return (
-    <Routes>
-      {/* Public Routes */}
-      <Route path="/" element={<LandingPage />} />
-      {/* <Route path="/" element={<Navigate to="/login" />} /> */}
-      <Route path="/signup" element={<Register />} />
-      <Route path="/login" element={<Login />} />
+    <AnimatePresence mode="wait">
+      <Routes location={location} key={location.pathname}>
+        <Route path="/" element={<LandingPage />} />
+        <Route path="/signup" element={<Register />} />
+        <Route path="/login" element={<Login />} />
 
       {/* Protected Routes */}
       <Route
@@ -136,6 +139,7 @@ function App() {
 
 
     </Routes>
+    </AnimatePresence>
   );
 }
 
