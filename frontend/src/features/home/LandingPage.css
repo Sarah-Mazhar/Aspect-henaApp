@@ -28,7 +28,7 @@ html, body, #root {
 }
 
 /* Navbar */
-.navbar {
+/* .navbar {
   position: fixed;
   top: 0;
   left: 0;
@@ -57,7 +57,7 @@ html, body, #root {
   border-radius: 20px;
   cursor: pointer;
   font-size: clamp(0.8rem, 1vw, 1.1rem);
-}
+} */
 
 /* Main container */
 .landing-container {

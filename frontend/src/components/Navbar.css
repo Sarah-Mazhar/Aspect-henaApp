@@ -1,93 +1,62 @@
-=== NAVBAR CONTAINER ===
 .navbar {
   position: fixed;
   top: 0;
   left: 0;
-  width: 100%;
-  height: 72px; /* ✅ slightly taller than 64px */
-  z-index: 1000;
-  background: rgba(20, 18, 40, 0.9);
-  backdrop-filter: blur(12px);
-  color: white;
-  padding: 0 2rem;
+  right: 0;
+  z-index: 100;
+  height: 72px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  box-shadow: 0 4px 12px rgba(148, 0, 211, 0.2);
-  font-family: 'Poppins', 'Segoe UI', sans-serif;
+  padding: 0 4rem;
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
 }
 
-/* === NAVBAR TITLE === */
-.nav-title {
-  font-size: 1.7rem; /* ✅ slightly larger */
-  font-weight: 700;
+.nav-logo {
+  font-size: clamp(1rem, 3vw, 2rem);
+  font-weight: bold;
+  letter-spacing: 1px;
   display: flex;
-  align-items: center; /* ✅ vertically center text */
-  height: 100%;         /* ✅ ensures full navbar height */
-  background: linear-gradient(to right, #a500ff, #ff005c);
+  align-items: center;
+ 
+}
+
+.gradient-text {
+  background: linear-gradient(to right, #ff00ff, #ff0077, #ff0000);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-  letter-spacing: 1px;
-  line-height: 1;
 }
 
-/* === ICON BUTTON GROUP === */
-.nav-buttons {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-}
-
-/* === ICON BUTTON STYLING === */
-.nav-buttons button {
-  background: linear-gradient(to right, #7b2ff7, #f107a3);
-  border: none;
-  padding: 0.55rem 0.9rem;
-  border-radius: 12px;
-  font-size: 1.1rem;
+.nav-right button {
+  background: transparent;
   color: white;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  border: 1px solid white;
+  padding: 0.5rem 1.2rem;
+  border-radius: 20px;
   cursor: pointer;
-  transition: all 0.3s ease;
-  box-shadow: 0 0 12px rgba(255, 0, 128, 0.25);
-}
-
-.nav-buttons button:hover {
-  transform: scale(1.05);
-  background: linear-gradient(to right, #8e33ff, #ff3b84);
-  box-shadow: 0 0 20px rgba(255, 0, 128, 0.4);
-}
-
-/* === NOTIFICATION POPUP === */
-.notification-popup {
-  position: fixed;
-  top: 80px;
-  left: 50%;
-  transform: translateX(-50%);
-  background-color: #ff4d88;
-  color: white;
-  padding: 1rem 2rem;
-  border-radius: 12px;
   font-size: 1rem;
-  font-weight: 500;
-  max-width: 90%;
-  width: 600px;
-  text-align: center;
-  z-index: 1000;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-  animation: slideDownFade 0.3s ease;
 }
 
-/* === FADE ANIMATION === */
-@keyframes slideDownFade {
-  from {
-    opacity: 0;
-    transform: translateX(-50%) translateY(-10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(-50%) translateY(0);
-  }
+/* Shared icon styles */
+.nav-icon {
+  font-size: 2rem;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+/* Profile icon - pink */
+.profile-icon {
+  color: #d50268;
+  margin-right: 2rem;
+}
+
+/* Logout icon - dark red */
+.logout-icon {
+  color: #a30000;
+}
+
+.nav-icon:hover {
+  transform: scale(1.15);
 }
