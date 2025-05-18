@@ -1,6 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { useEffect, useRef, useState } from "react";
 import axios from "axios";
+import { FaUserCircle, FaSignOutAlt } from "react-icons/fa";
 import "./Navbar.css";
 
 export default function Navbar({ userId, role = "USER" }) {
@@ -19,7 +20,6 @@ export default function Navbar({ userId, role = "USER" }) {
     else navigate(`/profile/${userId}`);
   };
 
-  // Poll every 3 seconds to check for new notifications
   useEffect(() => {
     const interval = setInterval(fetchNewNotification, 3000);
     return () => clearInterval(interval);
@@ -33,9 +33,7 @@ export default function Navbar({ userId, role = "USER" }) {
       };
       const authHeader = btoa(`${staticUser.username}:${staticUser.password}`);
       const config = {
-        headers: {
-          Authorization: `Basic ${authHeader}`,
-        },
+        headers: { Authorization: `Basic ${authHeader}` },
       };
 
       const res = await axios.get(
@@ -50,8 +48,6 @@ export default function Navbar({ userId, role = "USER" }) {
       if (newNotif) {
         lastSeenRef.current = new Date(newNotif.timestamp).getTime();
         setPopupNotif(newNotif);
-
-        // Auto-hide popup after 4 seconds
         setTimeout(() => setPopupNotif(null), 4000);
       }
     } catch (err) {
@@ -61,10 +57,15 @@ export default function Navbar({ userId, role = "USER" }) {
 
   return (
     <nav className="navbar">
-      <h2>{role === "ADMIN" ? "Admin Dashboard" : "User Dashboard"}</h2>
+      <h2 className="nav-title">HENA</h2>
+
       <div className="nav-buttons">
-        <button onClick={handleProfileClick}>Profile</button>
-        <button onClick={handleLogout}>Logout</button>
+        <button onClick={handleProfileClick} title="Profile">
+          <FaUserCircle size={20} />
+        </button>
+        <button onClick={handleLogout} title="Logout">
+          <FaSignOutAlt size={20} />
+        </button>
       </div>
 
       {popupNotif && (

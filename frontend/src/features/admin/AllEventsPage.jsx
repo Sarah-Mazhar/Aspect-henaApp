@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import Navbar from "../../components/Navbar";
 import "./AllEventsPage.css";
 
 const API_BASE = "http://localhost:8080/api";
@@ -24,7 +25,7 @@ export default function AllEventsPage() {
   }, []);
 
   const fetchEvents = async () => {
-    const authHeader = btoa(`admin:adminpass`);
+    const authHeader = btoa("admin:adminpass");
     try {
       const res = await axios.get(`${API_BASE}/event/admin/${adminId}`, {
         headers: { Authorization: `Basic ${authHeader}` },
@@ -32,6 +33,7 @@ export default function AllEventsPage() {
       setEvents(res.data);
     } catch (err) {
       console.error("Error fetching events:", err);
+      alert("Failed to load events.");
     } finally {
       setLoading(false);
     }
@@ -39,15 +41,16 @@ export default function AllEventsPage() {
 
   const handleDelete = async (eventId) => {
     if (!window.confirm("Are you sure you want to delete this event?")) return;
-    const authHeader = btoa(`admin:adminpass`);
+
+    const authHeader = btoa("admin:adminpass");
     try {
       await axios.delete(`${API_BASE}/event/delete/${adminId}/${eventId}`, {
         headers: { Authorization: `Basic ${authHeader}` },
       });
-      setEvents(events.filter((e) => e.id !== eventId));
+      setEvents((prev) => prev.filter((e) => e.id !== eventId));
     } catch (err) {
       console.error("Error deleting event:", err);
-      alert("Failed to delete the event.");
+      alert("Failed to delete event.");
     }
   };
 
@@ -58,39 +61,35 @@ export default function AllEventsPage() {
   if (loading) return <p className="loading-text">Loading events...</p>;
 
   return (
-    <div className="all-events-container">
-      <h2>📋 All Events Created by Admin</h2>
-      {events.length === 0 ? (
-        <p className="no-events-text">No events found.</p>
-      ) : (
-        <ul className="events-list">
-          {events.map((event) => (
-            <li className="event-card" key={event.id}>
-              <h3>{event.name}</h3>
-              <p><strong>Category:</strong> {event.category}</p>
-              <p><strong>Date:</strong> {new Date(event.eventDate).toLocaleString()}</p>
-              <p><strong>Description:</strong> {event.description}</p>
+    <div className="all-events-wrapper">
+      <Navbar role="ADMIN" />
+      <div className="all-events-container">
+        <h2 className="events-title">📋 All Events Created by Admin</h2>
 
-              <div className="event-actions">
-                <button
-                  onClick={() => handleEdit(event)}
-                  className="btn edit-btn"
-                  title="Edit"
-                >
-                  Edit
-                </button>
-                <button
-                  onClick={() => handleDelete(event.id)}
-                  className="btn delete-btn"
-                  title="Delete"
-                >
-                  Delete
-                </button>
-              </div>
-            </li>
-          ))}
-        </ul>
-      )}
+        {events.length === 0 ? (
+          <p className="no-events-text">No events found.</p>
+        ) : (
+          <ul className="events-list">
+            {events.map((event) => (
+              <li className="event-card" key={event.id}>
+                <h3>{event.name}</h3>
+                <p><strong>Category:</strong> {event.category}</p>
+                <p><strong>Date:</strong> {new Date(event.eventDate).toLocaleString()}</p>
+                <p><strong>Description:</strong> {event.description}</p>
+
+                <div className="event-actions">
+                  <button className="btn edit-btn" onClick={() => handleEdit(event)}>
+                    ✏️ Edit
+                  </button>
+                  <button className="btn delete-btn" onClick={() => handleDelete(event.id)}>
+                    🗑️ Delete
+                  </button>
+                </div>
+              </li>
+            ))}
+          </ul>
+        )}
+      </div>
     </div>
   );
 }

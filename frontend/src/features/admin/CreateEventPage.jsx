@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { createEvent } from "../../services/api";
-import "./CreateEventPage.css"; // Make sure this file exists and is updated as below
+import Navbar from "../../components/Navbar";
+import "./CreateEventPage.css";
 
 export default function CreateEventPage() {
   const navigate = useNavigate();
@@ -59,7 +60,7 @@ export default function CreateEventPage() {
         adminId,
       });
 
-      alert(`✅ Event "${result.name}" created successfully!`);
+      alert(`Event "${result.name}" created successfully!`);
       setEventData({
         name: "",
         description: "",
@@ -71,77 +72,29 @@ export default function CreateEventPage() {
       });
       navigate("/admin-dashboard");
     } catch (error) {
-      console.error("❌ Error creating event:", error);
+      console.error("Error creating event:", error);
       alert("Failed to create event.");
     }
   };
 
   return (
-    <div className="create-event-container">
-      <h2>Create New Event 🎉</h2>
+    <div className="create-event-wrapper">
+      <Navbar role="ADMIN" />
+
+      <h2 className="create-event-title">Create New Event 🎉</h2>
       <form className="create-event-form" onSubmit={handleSubmit}>
-        <input
-          type="text"
-          name="name"
-          placeholder="Event Name"
-          value={eventData.name}
-          onChange={handleChange}
-          required
-        />
-        <input
-          type="text"
-          name="description"
-          placeholder="Description"
-          value={eventData.description}
-          onChange={handleChange}
-          required
-        />
-        <input
-          type="date"
-          name="date"
-          value={eventData.date}
-          onChange={handleChange}
-          required
-        />
-        <input
-          type="time"
-          name="time"
-          value={eventData.time}
-          onChange={handleChange}
-        />
-        <input
-          type="text"
-          name="location"
-          placeholder="Location"
-          value={eventData.location}
-          onChange={handleChange}
-          required
-        />
-        <input
-          type="text"
-          name="category"
-          placeholder="Category"
-          value={eventData.category}
-          onChange={handleChange}
-          required
-        />
-        <input
-          type="number"
-          name="maxAttendees"
-          placeholder="Max Attendees"
-          value={eventData.maxAttendees}
-          onChange={handleChange}
-          required
-          min={1}
-        />
-        <button type="submit">✅ Submit Event</button>
-        <button
-          type="button"
-          onClick={() => navigate("/admin-dashboard")}
-          style={{ marginTop: "1rem", backgroundColor: "#444", color: "#fff" }}
-        >
-          🔙 Cancel
-        </button>
+        <input type="text" name="name" placeholder="Event Name" value={eventData.name} onChange={handleChange} required />
+        <input type="text" name="description" placeholder="Description" value={eventData.description} onChange={handleChange} required />
+        <input type="date" name="date" value={eventData.date} onChange={handleChange} required />
+        <input type="time" name="time" value={eventData.time} onChange={handleChange} />
+        <input type="text" name="location" placeholder="Location" value={eventData.location} onChange={handleChange} required />
+        <input type="text" name="category" placeholder="Category" value={eventData.category} onChange={handleChange} required />
+        <input type="number" name="maxAttendees" placeholder="Max Attendees" min={1} value={eventData.maxAttendees} onChange={handleChange} required />
+
+        <div className="event-buttons">
+          <button type="submit">Submit Event</button>
+          <button type="button" onClick={() => navigate("/admin-dashboard")}>Cancel</button>
+        </div>
       </form>
     </div>
   );

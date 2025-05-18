@@ -19,8 +19,9 @@ html, body, #root {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
-  padding-top: 80px;
+  justify-content: center;
   align-items: center;
+  padding: 0 1rem;
 }
 
 /* Navbar */
@@ -31,7 +32,7 @@ html, body, #root {
   right: 0;
   z-index: 100;
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
   padding: 1rem 4vw;
   background: rgba(255, 255, 255, 0.05);
@@ -40,21 +41,21 @@ html, body, #root {
 }
 
 .nav-logo {
-  font-size: clamp(2rem, 4vw, 3rem);
-  font-weight: 900;
-  letter-spacing: 2px;
+  font-size: clamp(1.2rem, 3vw, 2rem);
+  font-weight: bold;
+  letter-spacing: 1px;
   text-transform: uppercase;
 }
 
-/* Gradient Text Utility */
+/* Gradient Text */
 .gradient-text {
   background: linear-gradient(to right, #ff00ff, #ff0077, #ff0000);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 
-/* Register Card */
-.register-container {
+/* Login Card */
+.login-container {
   background-color: rgba(255, 255, 255, 0.03);
   backdrop-filter: blur(10px);
   border: 1px solid rgba(255, 255, 255, 0.1);
@@ -68,15 +69,15 @@ html, body, #root {
   margin-top: 4rem;
 }
 
-/* Icon above title */
-.register-icon {
-  font-size: 3rem;
+/* Icon */
+.login-icon {
+  font-size: 2.5rem;
   margin-bottom: 0.5rem;
   color: #ff00ff;
 }
 
-/* Smaller Title */
-.register-title {
+/* Title */
+.login-title {
   font-size: 2rem;       
   font-weight: 600;
   line-height: 1.4;
@@ -84,15 +85,15 @@ html, body, #root {
 }
 
 /* Form */
-.signup-form {
+.login-form {
   display: flex;
   flex-direction: column;
   gap: 1.2rem;
   margin-top: 1.5rem;
 }
 
-.signup-form input,
-.signup-form select {
+.login-form input,
+.login-form select {
   padding: 14px;
   border-radius: 12px;
   border: 1px solid #3a3a3a;
@@ -102,19 +103,19 @@ html, body, #root {
   transition: 0.3s ease;
 }
 
-.signup-form input:focus,
-.signup-form select:focus {
+.login-form input:focus,
+.login-form select:focus {
   border-color: #ff00cc;
   box-shadow: 0 0 0 2px rgba(255, 0, 204, 0.3);
   outline: none;
 }
 
 /* Button */
-.signup-form button {
-  padding: 14px;
-  border-radius: 30px;
+.login-form button {
+  padding: 12px;
+  border-radius: 24px;
   font-weight: bold;
-  font-size: 1rem;
+  font-size: 0.95rem;
   background: linear-gradient(to right, #ff00ff, #ff0077, #ff0000);
   color: white;
   border: none;
@@ -122,17 +123,17 @@ html, body, #root {
   transition: background 0.3s ease, transform 0.2s ease;
 }
 
-.signup-form button:hover {
+.login-form button:hover {
   transform: scale(1.02);
   background: linear-gradient(to right, #ff33ff, #ff3399, #ff3333);
 }
 
 /* Message */
 .message {
-  margin-top: 1.2rem;
-  padding: 10px;
-  border-radius: 8px;
-  font-size: 0.95rem;
+  margin-top: 1rem;
+  padding: 8px;
+  border-radius: 6px;
+  font-size: 0.9rem;
 }
 
 .message.success {
@@ -145,10 +146,10 @@ html, body, #root {
   color: #ff4e4e;
 }
 
-/* Link */
+/* Text Link */
 .text-link {
-  margin-top: 1.6rem;
-  font-size: 0.95rem;
+  margin-top: 1.2rem;
+  font-size: 0.9rem;
   color: #bbb;
 }
 
@@ -166,11 +167,19 @@ html, body, #root {
 
 /* Responsive */
 @media (max-width: 480px) {
-  .register-container {
-    padding: 2rem 1.5rem;
+  .login-container {
+    padding: 1.5rem 1rem;
   }
 
   .nav-logo {
-    font-size: 1.8rem;
+    font-size: 1.4rem;
+  }
+
+  .login-title {
+    font-size: 1.2rem;
+  }
+
+  .login-icon {
+    font-size: 2rem;
   }
 }

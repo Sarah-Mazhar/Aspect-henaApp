@@ -3,16 +3,19 @@
   box-sizing: border-box;
 }
 
-html, body {
+html, body, #root {
   margin: 0;
   padding: 0;
+  min-height: 100%;
+  width: 100%;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   background: #020026;
   color: white;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  overflow-x: hidden;
 }
 
 /* === Wrapper === */
-.create-event-wrapper {
+.profile-wrapper {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -21,7 +24,7 @@ html, body {
 }
 
 /* === Title === */
-.create-event-title {
+.profile-title {
   font-size: 2rem;
   font-weight: bold;
   margin-bottom: 2rem;
@@ -31,8 +34,8 @@ html, body {
   text-align: center;
 }
 
-/* === Form === */
-.create-event-form {
+/* === Card === */
+.profile-card {
   width: 90%;
   max-width: 600px;
   min-width: 350px;
@@ -47,8 +50,16 @@ html, body {
   gap: 1.2rem;
 }
 
-/* === Inputs === */
-.create-event-form input {
+/* === Label/Input === */
+.profile-card label {
+  display: flex;
+  flex-direction: column;
+  font-size: 0.95rem;
+  color: #ccc;
+}
+
+.profile-card input {
+  margin-top: 0.5rem;
   padding: 14px;
   border-radius: 12px;
   border: 1px solid #3a3a3a;
@@ -58,21 +69,21 @@ html, body {
   transition: 0.3s ease;
 }
 
-.create-event-form input:focus {
+.profile-card input:focus {
   border-color: #ff00cc;
   box-shadow: 0 0 0 2px rgba(255, 0, 204, 0.3);
   outline: none;
 }
 
-/* === Buttons === */
-.event-buttons {
+/* === Button Actions === */
+.profile-actions {
   display: flex;
-  gap: 1rem;
   justify-content: center;
+  gap: 1rem;
   margin-top: 1.5rem;
 }
 
-.event-buttons button {
+.profile-actions button {
   padding: 14px 24px;
   border-radius: 30px;
   font-weight: bold;
@@ -81,27 +92,54 @@ html, body {
   color: white;
   border: none;
   cursor: pointer;
-  transition: 0.3s ease;
+  transition: background 0.3s ease, transform 0.2s ease;
   box-shadow: 0 0 12px rgba(255, 0, 128, 0.3);
 }
 
-.event-buttons button:hover {
+.profile-actions button:hover {
   transform: scale(1.05);
   background: linear-gradient(to right, #ff33ff, #ff3399, #ff3333);
 }
 
+/* === Messages === */
+.success-msg, .error-msg {
+  max-width: 500px;
+  width: 90%;
+  text-align: center;
+  font-size: 0.95rem;
+  padding: 10px;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+}
+
+.success-msg {
+  background-color: #1b472a;
+  color: #00ffb3;
+}
+
+.error-msg {
+  background-color: #471b1b;
+  color: #ff4e4e;
+}
+
+.loading {
+  font-size: 1.2rem;
+  margin-top: 5rem;
+  color: #aaa;
+}
+
 /* === Responsive === */
 @media (max-width: 480px) {
-  .create-event-form {
+  .profile-card {
     padding: 2rem 1.5rem;
     min-width: unset;
   }
 
-  .create-event-title {
+  .profile-title {
     font-size: 1.6rem;
   }
 
-  .event-buttons button {
+  .profile-actions button {
     font-size: 0.9rem;
     padding: 12px 20px;
   }

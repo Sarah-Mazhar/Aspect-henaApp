@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { createUser } from "../../services/api";
+import Navbar from "../../components/Navbar";
 import "./CreateUserPage.css";
 
 export default function CreateUserPage() {
@@ -19,7 +20,6 @@ export default function CreateUserPage() {
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
 
-  // Redirect if not authenticated or not admin
   useEffect(() => {
     if (!token || role !== "ADMIN" || !adminId) {
       alert("Unauthorized access. Redirecting to login...");
@@ -41,26 +41,17 @@ export default function CreateUserPage() {
 
     try {
       const response = await createUser({ formData, adminId });
-
       const createdUsername = response.username;
       const createdRole = response.role;
 
-      let roleMsg = "";
-      switch (createdRole) {
-        case "ADMIN":
-          roleMsg = `🛡️ Admin '${createdUsername}' created with full privileges.`;
-          break;
-        case "HOST":
-          roleMsg = `🎙️ Host '${createdUsername}' can now manage events.`;
-          break;
-        default:
-          roleMsg = `👤 User '${createdUsername}' created successfully.`;
-          break;
-      }
+      const roleMsg =
+        createdRole === "ADMIN"
+          ? `🛡️ Admin '${createdUsername}' created with full privileges.`
+          : createdRole === "HOST"
+          ? `🎙️ Host '${createdUsername}' can now manage events.`
+          : `👤 User '${createdUsername}' created successfully.`;
 
       setMessage(`✅ ${roleMsg}`);
-
-      // Reset form
       setFormData({
         username: "",
         email: "",
@@ -77,12 +68,10 @@ export default function CreateUserPage() {
   };
 
   return (
-    <div className="create-user-container">
-      <div className="create-user-form-wrapper">
-        <button className="back-btn" onClick={() => navigate("/admin-dashboard")}>
-          ⬅ Back to Dashboard
-        </button>
-        <h2>Create New User</h2>
+    <div className="create-user-wrapper">
+      <Navbar role="ADMIN" />
+      <div className="create-user-card">
+        <h2 className="create-user-title">Create New User 👤</h2>
         <form className="create-user-form" onSubmit={handleSubmit}>
           <input
             name="username"
@@ -116,7 +105,12 @@ export default function CreateUserPage() {
             {loading ? "Creating..." : "Create User"}
           </button>
         </form>
+
         {message && <div className="feedback-msg">{message}</div>}
+
+        <button className="cancel-btn" onClick={() => navigate("/admin-dashboard")}>
+           Back to Dashboard
+        </button>
       </div>
     </div>
   );

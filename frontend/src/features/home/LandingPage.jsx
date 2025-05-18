@@ -19,7 +19,7 @@ const LandingPage = () => {
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setIndex(prev => (prev + 1) % words.length);
+      setIndex((prev) => (prev + 1) % words.length);
     }, 3000);
     return () => clearInterval(interval);
   }, []);
@@ -38,7 +38,6 @@ const LandingPage = () => {
       </nav>
 
       <div className="landing-container">
-        {/* Logo from public folder */}
         <img src="/logo.png" alt="Logo" className="landing-logo" />
 
         <div className="main-title">Event Management</div>
@@ -56,9 +55,9 @@ const LandingPage = () => {
           </motion.div>
         </AnimatePresence>
 
-        <p>
+        <p className="description">
           Deliver exceptional events with ease. Our powerful platform streamlines
-          planning, maximizes engagement, and ensures unforgettable experiences—every time.
+          planning, maximizes engagement, and ensures unforgettable experiences every time.
         </p>
 
         <button className="get-started" onClick={() => navigate('/login')}>

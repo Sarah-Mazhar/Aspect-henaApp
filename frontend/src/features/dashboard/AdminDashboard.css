@@ -1,72 +1,101 @@
 /* === BASE STYLES === */
 body {
   margin: 0;
-  font-family: 'Segoe UI', sans-serif;
-  background-color: #0d0f1b;
+  font-family: 'Poppins', 'Segoe UI', sans-serif;
+  background: linear-gradient(to bottom right, #0d0f1b, #191b2f);
   color: white;
-  font-size: 18px;
 }
 
-/* === ADMIN DASHBOARD WRAPPER === */
+/* === TEXT GRADIENT === */
+.gradient-text {
+  background: linear-gradient(to right, #8000ff, #c100ff, #ff0033);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* === WRAPPER === */
 .dashboard-wrapper {
-  padding-top: 64px;
-  width: 100%;
+  padding-top: 80px;
   min-height: 100vh;
-  background: linear-gradient(to bottom, #0d0f1b, #1c1f2f);
+  width: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
   box-sizing: border-box;
 }
 
-/* === ADMIN DASHBOARD CARD === */
-.admin-dashboard-box {
-  background-color: #1a1d2e;
-  padding: 3rem;
-  border-radius: 16px;
-  box-shadow: 0 8px 24px rgba(255, 0, 128, 0.25);
-  border: 1px solid #2a2f47;
-  max-width: 600px;
-  width: 90%;
-  text-align: center;
-  margin-top: 3rem;
-  font-size: 1.2rem;
+/* === DASHBOARD TITLE === */
+.dashboard-heading {
+  font-size: 2.4rem;
+  margin: 2rem 0 3rem;
+  font-weight: 700;
 }
 
-/* === ADMIN HEADING === */
-.admin-dashboard-box h1 {
-  font-size: 2.5rem;
-  color: #f72585;
-  margin-bottom: 1rem;
-}
-
-.admin-dashboard-box p {
-  font-size: 1.2rem;
-  margin-bottom: 2rem;
-  color: #d1d5db;
-}
-
-/* === BUTTON GROUP === */
-.admin-actions {
+/* === CENTERED GRID === */
+.card-grid.centered-grid {
   display: flex;
-  flex-direction: column;
-  gap: 1rem;
+  justify-content: center;
   align-items: center;
+  flex-wrap: wrap;
+  gap: 2rem;
+  width: 100%;
+  max-width: 1200px;
+  padding: 0 2rem;
 }
 
-.admin-actions button {
-  background-color: #ff007a;
+/* === GLASS CARD === */
+.glass-card {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(12px);
+  border-radius: 16px;
+  padding: 2.5rem 2rem;
+  box-shadow: 0 0 25px rgba(255, 0, 128, 0.15);
+  text-align: center;
+  width: 280px;
+  transition: transform 0.3s ease;
+}
+
+.glass-card:hover {
+  transform: translateY(-5px);
+}
+
+.glass-card.no-header h2 {
+  display: none;
+}
+
+/* === BUTTON === */
+.glass-card button {
+  background: linear-gradient(to right, #8000ff, #c100ff, #ff0033);
   color: white;
   border: none;
-  padding: 1rem 2rem;
-  font-size: 1.1rem;
+  padding: 1.2rem 2rem;
+  font-size: 1.15rem;
   font-weight: bold;
-  border-radius: 10px;
-  cursor: pointer;
-  transition: background 0.3s ease;
-  min-width: 250px;
+  border-radius: 50px;
+  width: 100%;
+  transition: all 0.3s ease;
+  box-shadow: 0 0 16px rgba(255, 0, 128, 0.3);
 }
 
-.admin-actions button:hover {
-  background-color: #d60068;
+.glass-card button:hover {
+  transform: scale(1.04);
+  box-shadow: 0 0 24px rgba(255, 0, 128, 0.4);
+}
+
+/* === RESPONSIVE === */
+@media (max-width: 480px) {
+  .dashboard-heading {
+    font-size: 1.8rem;
+  }
+
+  .glass-card {
+    width: 100%;
+    max-width: 90%;
+  }
+
+  .glass-card button {
+    font-size: 1rem;
+    padding: 1rem 1.4rem;
+  }
 }

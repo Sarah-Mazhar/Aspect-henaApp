@@ -1,40 +1,60 @@
-/* src/components/Navbar.css */
-
+/* === NAVBAR CONTAINER === */
 .navbar {
   position: fixed;
   top: 0;
   width: 100%;
   height: 64px;
   z-index: 1000;
-  background: #141625;
+  background: rgba(20, 18, 40, 0.9);
+  backdrop-filter: blur(12px);
   color: white;
   padding: 0 2rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  box-shadow: 0 4px 12px rgba(255, 0, 255, 0.15);
+  box-shadow: 0 4px 12px rgba(148, 0, 211, 0.2);
+  font-family: 'Poppins', 'Segoe UI', sans-serif;
 }
 
+/* === NAVBAR TITLE === */
+.nav-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  background: linear-gradient(to right, #a500ff, #ff005c);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  letter-spacing: 1px;
+}
+
+/* === ICON BUTTON GROUP === */
 .nav-buttons {
   display: flex;
   gap: 0.75rem;
 }
 
+/* === ICON BUTTON STYLING === */
 .nav-buttons button {
-  background-color: #ff007a;
-  color: white;
+  background: linear-gradient(to right, #7b2ff7, #f107a3);
   border: none;
-  padding: 0.75rem 1.4rem;
-  border-radius: 6px;
-  font-weight: bold;
-  font-size: 1.05rem;
-  transition: background 0.3s ease;
-  text-shadow: 0 0 3px #000;
+  padding: 0.55rem 0.9rem;
+  border-radius: 12px;
+  font-size: 1.1rem;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 0 12px rgba(255, 0, 128, 0.25);
 }
 
 .nav-buttons button:hover {
-  background-color: #e6006d;
+  transform: scale(1.05);
+  background: linear-gradient(to right, #8e33ff, #ff3b84);
+  box-shadow: 0 0 20px rgba(255, 0, 128, 0.4);
 }
+
+/* === NOTIFICATION POPUP === */
 .notification-popup {
   position: fixed;
   top: 70px;
@@ -44,17 +64,17 @@
   color: white;
   padding: 1rem 2rem;
   border-radius: 12px;
-  font-size: 1.2rem; /* Increase font size */
+  font-size: 1rem;
   font-weight: 500;
-  max-width: 90%; /* Allows wide display but keeps margin */
-  width: 600px; /* Set a wider width */
+  max-width: 90%;
+  width: 600px;
   text-align: center;
   z-index: 1000;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
   animation: slideDownFade 0.3s ease;
 }
 
-/* Optional smooth entrance */
+/* === FADE ANIMATION === */
 @keyframes slideDownFade {
   from {
     opacity: 0;

@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
 import Navbar from "../../components/Navbar";
 import axios from "axios";
-
+import "./adminProfilePage.css";
 
 export default function AdminProfilePage() {
-  const id = localStorage.getItem("adminId"); // ✅ use correct key here
+  const id = localStorage.getItem("adminId");
   const [admin, setAdmin] = useState(null);
   const [form, setForm] = useState({ username: "", email: "" });
   const [editing, setEditing] = useState(false);
@@ -21,15 +21,15 @@ export default function AdminProfilePage() {
 
     const fetchAdmin = async () => {
       try {
-        const staticAuth = btoa("admin:adminpass");
+        const auth = btoa("admin:adminpass");
         const res = await axios.get(`http://localhost:8080/api/user/${id}`, {
           headers: {
-            Authorization: `Basic ${staticAuth}`,
+            Authorization: `Basic ${auth}`,
           },
         });
         setAdmin(res.data);
         setForm({ username: res.data.username, email: res.data.email });
-      } catch (err) {
+      } catch {
         setError("❌ Failed to load admin profile.");
       } finally {
         setLoading(false);
@@ -40,18 +40,24 @@ export default function AdminProfilePage() {
   }, [id]);
 
   const handleUpdate = async () => {
-    const staticAuth = btoa("admin:adminpass");
     try {
-      await axios.put(`http://localhost:8080/api/user/update/${id}`, form, {
-        headers: {
-          Authorization: `Basic ${staticAuth}`,
-          "Content-Type": "application/json",
-        },
-      });
+      const auth = btoa("admin:adminpass");
+      await axios.put(
+        `http://localhost:8080/api/user/update/${id}`,
+        form,
+        {
+          headers: {
+            Authorization: `Basic ${auth}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
       setAdmin((prev) => ({ ...prev, ...form }));
       setSuccess("✅ Profile updated successfully.");
+      setError("");
       setEditing(false);
-    } catch (err) {
+    } catch {
+      setSuccess("");
       setError("❌ Update failed.");
     }
   };
@@ -60,13 +66,14 @@ export default function AdminProfilePage() {
   if (!admin) return <p className="error-msg">{error || "No admin data found."}</p>;
 
   return (
-    <div className="user-profile-container">
+    <div className="profile-wrapper">
       <Navbar role="ADMIN" />
-      <h2>Admin Profile</h2>
+      <h2 className="profile-title">Admin Profile</h2>
+
       {error && <p className="error-msg">{error}</p>}
       {success && <p className="success-msg">{success}</p>}
 
-      <div className="profile-form">
+      <div className="profile-card">
         <label>
           Username:
           <input
@@ -96,14 +103,14 @@ export default function AdminProfilePage() {
           <input type="text" value={admin.role} disabled />
         </label>
 
-        <div className="profile-buttons">
+        <div className="profile-actions">
           {editing ? (
             <>
-              <button onClick={handleUpdate}>Save</button>
-              <button onClick={() => setEditing(false)}>Cancel</button>
+              <button onClick={handleUpdate}>💾 Save</button>
+              <button onClick={() => setEditing(false)}>❌ Cancel</button>
             </>
           ) : (
-            <button onClick={() => setEditing(true)}>Edit</button>
+            <button onClick={() => setEditing(true)}>✏️ Edit</button>
           )}
         </div>
       </div>

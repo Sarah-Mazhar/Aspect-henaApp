@@ -1,7 +1,8 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import "./Register.css";
+import { FaSignInAlt } from "react-icons/fa";
 import { login } from "../../services/api";
+import "./Login.css";
 
 export default function Login() {
   const [form, setForm] = useState({
@@ -50,35 +51,42 @@ export default function Login() {
   };
 
   return (
-    <div className="signup-container">
-      <h2>Login</h2>
-      <form className="signup-form" onSubmit={handleSubmit}>
-        <input
-          name="username"
-          placeholder="Username"
-          onChange={handleChange}
-          required
-        />
-        <input
-          name="password"
-          type="password"
-          placeholder="Password"
-          onChange={handleChange}
-          required
-        />
-        <select name="role" value={form.role} onChange={handleChange}>
-          <option value="USER">User</option>
-          <option value="HOST">Host</option>
-          <option value="ADMIN">Admin</option>
-        </select>
-        <button type="submit">Login</button>
-      </form>
+    <div className="landing-wrapper">
+      <nav className="navbar">
+        <div className="nav-logo gradient-text">HENA</div>
+      </nav>
 
-      <div className="text-link">
-        Don’t have an account?
-        <span className="link" onClick={() => navigate("/signup")}>
-          Sign up
-        </span>
+      <div className="login-container">
+        <FaSignInAlt className="login-icon" />
+        <h2 className="login-title gradient-text">Login</h2>
+        <form className="login-form" onSubmit={handleSubmit}>
+          <input
+            name="username"
+            placeholder="Username"
+            onChange={handleChange}
+            required
+          />
+          <input
+            name="password"
+            type="password"
+            placeholder="Password"
+            onChange={handleChange}
+            required
+          />
+          <select name="role" value={form.role} onChange={handleChange}>
+            <option value="USER">User</option>
+            <option value="HOST">Host</option>
+            <option value="ADMIN">Admin</option>
+          </select>
+          <button type="submit">Login</button>
+        </form>
+
+        <div className="text-link">
+          Don’t have an account?
+          <span className="link" onClick={() => navigate("/signup")}>
+            Sign up
+          </span>
+        </div>
       </div>
     </div>
   );
