@@ -1,8 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Navbar from "../../components/Navbar";
-import { getAllEventsForAdmin } from "../../services/api";
-import axios from "axios";
+import { getAllEventsForAdmin, deleteEvent } from "../../services/api";
 import { FaEdit, FaTrash } from "react-icons/fa";
 import "./AllEventsPage.css";
 
@@ -40,10 +39,7 @@ export default function AllEventsPage() {
     if (!window.confirm("Are you sure you want to delete this event?")) return;
 
     try {
-      const authHeader = btoa("admin:adminpass");
-      await axios.delete(`http://localhost:8080/api/event/delete/${adminId}/${eventId}`, {
-        headers: { Authorization: `Basic ${authHeader}` },
-      });
+      await deleteEvent({ eventId, hostId: adminId, role: "ADMIN" });
       setEvents((prev) => prev.filter((e) => e.id !== eventId));
     } catch (err) {
       console.error("Error deleting event:", err);
@@ -61,9 +57,9 @@ export default function AllEventsPage() {
     <div className="all-events-wrapper">
       <Navbar role="ADMIN" />
       <h2 className="browse-events-title">
-  <span className="browse-text">Browse</span> <span className="events-text">Events</span>
-</h2>
-
+        <span className="browse-text">Browse</span>{" "}
+        <span className="events-text">Events</span>
+      </h2>
 
       <div className="events-grid">
         {events.map((event) => (

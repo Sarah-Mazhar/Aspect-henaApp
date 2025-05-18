@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
+import { fetchUserNotifications } from "../../services/api";
 import "./Notifications.css";
 
 export default function Notifications({ userId }) {
@@ -9,9 +9,16 @@ export default function Notifications({ userId }) {
   useEffect(() => {
     if (!userId) return;
 
-    axios.get(`/api/notifications/user/${userId}`)
-      .then((res) => setNotifications(res.data.reverse()))
-      .catch((err) => console.error("❌ Failed to fetch notifications:", err));
+    const loadNotifications = async () => {
+      try {
+        const data = await fetchUserNotifications(userId);
+        setNotifications(data.reverse());
+      } catch (err) {
+        console.error("Failed to fetch notifications:", err);
+      }
+    };
+
+    loadNotifications();
   }, [userId]);
 
   const unreadCount = notifications.filter((n) => !n.read).length;
@@ -19,7 +26,7 @@ export default function Notifications({ userId }) {
   return (
     <div className="notification-bell">
       <button onClick={() => setShowDropdown(!showDropdown)}>
-        🔔 {unreadCount > 0 ? <span className="notif-count">{unreadCount}</span> : ""}
+        {unreadCount > 0 && <span className="notif-count">{unreadCount}</span>}
       </button>
       {showDropdown && (
         <div className="dropdown">
