@@ -44,7 +44,11 @@ export default function Login() {
       localStorage.setItem("userId", result.userId);
 
       if (result.role === "ADMIN") localStorage.setItem("adminId", result.userId);
-      if (result.role === "HOST") localStorage.setItem("hostId", result.userId);
+      if (result.role === "HOST") {
+        localStorage.setItem("hostId", result.userId);
+        localStorage.setItem("username", result.username); // Add these
+        localStorage.setItem("email", result.email);       // Add these
+      }
 
       navigate(`/${result.role.toLowerCase()}-dashboard`);
     } catch (error) {

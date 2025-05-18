@@ -57,10 +57,10 @@ export default function HostCreateEventPage() {
       const result = await createEvent({
         eventData: payload,
         role: "HOST",
-        adminId: hostId, // backend uses "adminId" even for host
+        adminId: hostId,
       });
 
-      alert(`✅ Event "${result.name}" created successfully!`);
+      alert(`Event "${result.name}" created successfully!`);
       setEventData({
         name: "",
         description: "",
@@ -72,7 +72,7 @@ export default function HostCreateEventPage() {
       });
       navigate("/host-dashboard");
     } catch (error) {
-      console.error("❌ Error creating event:", error);
+      console.error("Error creating event:", error);
       alert("Failed to create event.");
     }
   };

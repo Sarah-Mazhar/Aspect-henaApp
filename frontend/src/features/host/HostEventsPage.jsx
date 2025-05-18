@@ -17,7 +17,7 @@ export default function HostEventsPage() {
       const data = await getHostEvents(hostId);
       setEvents(data);
     } catch (err) {
-      console.error("❌ Error fetching events:", err);
+      console.error("Error fetching events:", err);
       setError("Failed to load events.");
     } finally {
       setLoading(false);
@@ -39,10 +39,10 @@ export default function HostEventsPage() {
 
     try {
       await deleteEvent({ eventId, hostId });
-      alert("✅ Event deleted successfully.");
-      fetchEvents(); // Refresh list
+      alert("Event deleted successfully.");
+      fetchEvents();
     } catch (err) {
-      console.error("❌ Error deleting event:", err);
+      console.error("Error deleting event:", err);
       alert("Failed to delete event.");
     }
   };
