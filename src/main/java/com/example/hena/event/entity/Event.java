@@ -6,45 +6,48 @@ import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
+/**
+ * Entity class representing an Event in the system.
+ */
 @Entity
 public class Event {
 
+    // ========== Primary Key ==========
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    // ========== Event Info ==========
     private String name;
     private String description;
     private String location;
 
     @Column(name = "event_date")
-    private LocalDateTime eventDate;  // Ensure this is LocalDateTime
+    private LocalDateTime eventDate;
 
-    private String category;  // The category as a String
+    private String category;
+
+    // ========== Attendance ==========
     private int maxAttendees;
-
     private int currentAttendees = 0;
 
-    //
-//    @ManyToOne
-    //    private User host;
-// The user who hosts the event
+    // ========== Host Info ==========
     @ManyToOne
     @JoinColumn(name = "host_id")
     private User host;
 
+    private Long createdByAdminId;
 
+    // ========== RSVPs ==========
     @ManyToMany
     @JoinTable(
             name = "event_rsvp",
             joinColumns = @JoinColumn(name = "event_id"),
             inverseJoinColumns = @JoinColumn(name = "user_id")
     )
-    private Set<User> rsvps = new HashSet<>();  // Track users who RSVP to the event
+    private Set<User> rsvps = new HashSet<>();
 
-    private Long createdByAdminId;  // ID of the admin who created the event
-
-    // Getters and Setters
+    // ========== Getters & Setters ==========
 
     public Long getId() {
         return id;
@@ -94,30 +97,6 @@ public class Event {
         this.category = category;
     }
 
-    public User getHost() {
-        return host;
-    }
-
-    public void setHost(User host) {
-        this.host = host;
-    }
-
-    public Set<User> getRsvps() {
-        return rsvps;
-    }
-
-    public void setRsvps(Set<User> rsvps) {
-        this.rsvps = rsvps;
-    }
-
-    public Long getCreatedByAdminId() {
-        return createdByAdminId;
-    }
-
-    public void setCreatedByAdminId(Long createdByAdminId) {
-        this.createdByAdminId = createdByAdminId;
-    }
-
     public int getMaxAttendees() {
         return maxAttendees;
     }
@@ -134,4 +113,27 @@ public class Event {
         this.currentAttendees = currentAttendees;
     }
 
+    public User getHost() {
+        return host;
+    }
+
+    public void setHost(User host) {
+        this.host = host;
+    }
+
+    public Long getCreatedByAdminId() {
+        return createdByAdminId;
+    }
+
+    public void setCreatedByAdminId(Long createdByAdminId) {
+        this.createdByAdminId = createdByAdminId;
+    }
+
+    public Set<User> getRsvps() {
+        return rsvps;
+    }
+
+    public void setRsvps(Set<User> rsvps) {
+        this.rsvps = rsvps;
+    }
 }

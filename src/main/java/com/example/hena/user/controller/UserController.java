@@ -1,58 +1,67 @@
-
 package com.example.hena.user.controller;
 
 import com.example.hena.event.entity.Event;
 import com.example.hena.event.service.EventService;
 import com.example.hena.redis.annotations.DistributedLock;
 import com.example.hena.redis.annotations.RateLimit;
+import com.example.hena.security.JwtUtil;
 import com.example.hena.user.dto.CreateUserDTO;
 import com.example.hena.user.dto.LoginDTO;
 import com.example.hena.user.dto.UpdateUserDTO;
 import com.example.hena.user.entity.User;
 import com.example.hena.user.service.UserService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-import com.example.hena.security.JwtUtil;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 
 import java.security.Principal;
+import java.util.HashMap;
+import java.util.Map;
 
-
+/**
+ * Controller that handles user operations such as registration, login,
+ * profile update, RSVP actions, and user lookup.
+ */
 @RestController
 @RequestMapping("/api/user")
 public class UserController {
-//    A User role can search and RSVP to events, but won't have permissions to create or edit them.
-//    Defines REST endpoints for registration, update, RSVP, and event search.
 
     @Autowired
     private UserService userService;
 
     @Autowired
-    private EventService eventService;  // Inject EventService
+    private EventService eventService;
 
+    // ============================
+    //  Registration
+    // ============================
 
-    // Register a new user
+    /**
+     * Register a new user with username, email, password, and role.
+     */
     @PostMapping("/register")
     public User registerUser(@RequestBody CreateUserDTO userDTO) {
         User user = new User();
         user.setUsername(userDTO.getUsername());
         user.setEmail(userDTO.getEmail());
-        user.setPassword(userDTO.getPassword()); // Password should be encoded in real logic
+        user.setPassword(userDTO.getPassword()); // encode password
         user.setRole(userDTO.getRole());
         return userService.createUser(user);
     }
 
+    // ============================
+    //  Login with JWT Token
+    // ============================
 
+    /**
+     * Authenticates a user and returns a JWT token along with user ID and role.
+     */
     @PostMapping("/login")
-//  @RateLimit(limit = 1, duration = 10, keyPrefix = "login")
+    // @RateLimit(limit = 1, duration = 10, keyPrefix = "login")
     public ResponseEntity<?> login(@RequestBody LoginDTO loginDTO) {
         User user = userService.getUserByUsername(loginDTO.getUsername());
 
@@ -64,7 +73,6 @@ public class UserController {
 
         String token = JwtUtil.generateToken(user.getUsername());
 
-        // Return token + userId + role to frontend
         Map<String, Object> response = new HashMap<>();
         response.put("token", token);
         response.put("userId", user.getId());
@@ -73,48 +81,51 @@ public class UserController {
         return ResponseEntity.ok(response);
     }
 
+    // ============================
+    //  Update Profile
+    // ============================
 
-    // Update personal profile info (only for the current user)
-//    @PathVariable entirely and extract user identity from the token (
-//    which is mapped to the Principal automatically by Spring Security).
+    /**
+     * Allows a user to update their own profile (username, email).
+     */
     @PutMapping("/update/{id}")
     @RateLimit(limit = 1, duration = 10, keyPrefix = "login")
     public ResponseEntity<User> updateUser(@PathVariable("id") Long id, @RequestBody UpdateUserDTO userDTO) {
-        // Create a new User object and set only username and email from DTO
         User userDetails = new User();
         userDetails.setUsername(userDTO.getUsername());
         userDetails.setEmail(userDTO.getEmail());
-
-        // Do NOT set role here, so role remains unchanged in update service method
 
         User updatedUser = userService.updateUser(id, userDetails);
         return ResponseEntity.ok(updatedUser);
     }
 
+    // ============================
+    //  RSVP to Event
+    // ============================
 
-    // Placeholder endpoint: RSVP to an event
+    /**
+     * Allows a user to RSVP to an event.
+     */
     @PreAuthorize("hasRole('USER')")
     @PostMapping("/rsvp/{userId}/{eventId}")
     @DistributedLock(keyPrefix = "rsvp", keyIdentifierExpression = "#eventId", leaseTime = 10)
     public String rsvpToEvent(@PathVariable("userId") Long userId,
                               @PathVariable("eventId") Long eventId,
                               Principal principal) {
-        // Keep original behavior
         User user = userService.getUserById(userId);
         Event event = eventService.findEventById(eventId);
-
-        // Instead of calling eventService directly, delegate logic to UserService
         userService.rsvpToEvent(eventId, userId);
-
-        // Still return message with event name
         return "responded successfully to attend: " + event.getName();
     }
 
+    /**
+     * Allows a user to cancel their RSVP for an event.
+     */
     @PreAuthorize("hasRole('USER')")
     @RequestMapping(
             value = "/rsvp/{userId}/{eventId}",
             method = RequestMethod.DELETE,
-            consumes = MediaType.ALL_VALUE // Handles empty body from Axios
+            consumes = MediaType.ALL_VALUE
     )
     @DistributedLock(keyPrefix = "rsvp-cancel", keyIdentifierExpression = "#eventId", leaseTime = 10)
     public String cancelRSVP(@PathVariable("userId") Long userId,
@@ -122,26 +133,25 @@ public class UserController {
                              Principal principal) {
         User user = userService.getUserById(userId);
         Event event = eventService.findEventById(eventId);
-
         eventService.cancelRSVP(eventId, user);
-
         return "Successfully cancelled RSVP for: " + event.getName();
     }
 
+    // ============================
+    //  Utility & Debug Endpoints
+    // ============================
 
-//    // Placeholder endpoint: Search for events
-//    @GetMapping("/search")
-//    public String searchEvents(@RequestParam(required = false) String date,
-//                               @RequestParam(required = false) String category) {
-//        // You will integrate with EventService for real search logic
-//        return "Searched for events on date: " + date + ", category: " + category;
-//    }
-
+    /**
+     * Test endpoint to trigger logging logic.
+     */
     @GetMapping("/test-log")
     public String testLog() {
         return userService.testLoggingAspect("Omar");
     }
 
+    /**
+     * Retrieve a user by their ID. Accessible to all authenticated roles.
+     */
     @PreAuthorize("hasAnyRole('USER', 'ADMIN', 'HOST')")
     @GetMapping("/{id}")
     public ResponseEntity<?> getUserById(@PathVariable Long id) {

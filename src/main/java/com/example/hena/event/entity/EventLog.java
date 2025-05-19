@@ -10,12 +10,11 @@ public class EventLog {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private Long adminId;  // ID of the admin who performed the action
-    private String action;  // The action taken (e.g., CREATE_EVENT, UPDATE_EVENT, DELETE_EVENT)
-    private Long eventId;   // The ID of the event the action was performed on
-    private LocalDateTime timestamp;  // Timestamp of the action
+    private Long adminId;
+    private String action;
+    private Long eventId;
+    private LocalDateTime timestamp;
 
-    // Getters and Setters
     public Long getId() {
         return id;
     }
