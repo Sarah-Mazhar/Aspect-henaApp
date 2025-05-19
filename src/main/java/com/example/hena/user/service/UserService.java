@@ -87,14 +87,23 @@ public class UserService {
         System.out.println("Updating user with id: " + userId);
         System.out.println("New username: " + userDetails.getUsername());
         System.out.println("New email: " + userDetails.getEmail());
-        System.out.println("New role: " + userDetails.getRole());
 
         if (userDetails.getUsername() != null) user.setUsername(userDetails.getUsername());
         if (userDetails.getEmail() != null) user.setEmail(userDetails.getEmail());
         if (userDetails.getRole() != null) user.setRole(userDetails.getRole());
 
-        return userRepository.save(user);
+        user = userRepository.save(user); // ✅ save and assign back
+
+        try {
+            redis.set("user:id:" + userId, objectMapper.writeValueAsString(user), Duration.ofMinutes(10));
+            redis.set("user:username:" + user.getUsername(), objectMapper.writeValueAsString(user), Duration.ofMinutes(10));
+        } catch (Exception e) {
+            System.err.println("Redis error (updateUser cache refresh): " + e.getMessage());
+        }
+
+        return user;
     }
+
 
     // ============================
     // 🔹 Retrieve by Username
