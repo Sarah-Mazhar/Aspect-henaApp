@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { login } from "../../services/api";
 import "./Login.css";
+import { FaArrowLeft } from "react-icons/fa";
 
 export default function Login() {
   const [form, setForm] = useState({
@@ -65,7 +66,14 @@ export default function Login() {
       transition={{ duration: 0.6 }}
     >
       <nav className="navbar">
-        <div className="nav-logo gradient-text">HENA</div>
+        <div className="nav-left">
+          <FaArrowLeft
+            className="nav-icon back-icon"
+            onClick={() => navigate("/")}
+            title="Back to Home"
+          />
+          <div className="nav-logo gradient-text">HENA</div>
+        </div>
       </nav>
 
       <div className="login-body">
