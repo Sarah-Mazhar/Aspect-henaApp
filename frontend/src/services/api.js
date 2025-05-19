@@ -2,340 +2,261 @@ import axios from "axios";
 
 const API_BASE = "http://localhost:8080/api";
 
+// Static credentials per role
 const staticCreds = {
   USER: { username: "user", password: "userpass" },
   HOST: { username: "host", password: "hostpass" },
   ADMIN: { username: "admin", password: "adminpass" },
 };
 
+// Helper to generate Basic Auth header
+const getAuthHeader = (role) => {
+  const { username, password } = staticCreds[role];
+  return `Basic ${btoa(`${username}:${password}`)}`;
+};
 
+/* ================================
+   AUTHENTICATION
+================================= */
 
 export const login = async ({ username, password, role }) => {
-  const staticUser = staticCreds[role];
-  const authHeader = btoa(`${staticUser.username}:${staticUser.password}`);
   const config = {
     headers: {
-      Authorization: `Basic ${authHeader}`,
+      Authorization: getAuthHeader(role),
     },
   };
   const response = await axios.post(`${API_BASE}/user/login`, { username, password, role }, config);
   return response.data;
 };
 
-export const createEvent = async ({ eventData, role = "ADMIN", adminId }) => {
-  const staticUser = staticCreds[role];
-  const authHeader = btoa(`${staticUser.username}:${staticUser.password}`);
+/* ================================
+   USER MANAGEMENT (Admin-managed)
+================================= */
+
+export const createUser = async ({ formData, adminId }) => {
   const config = {
     headers: {
-      Authorization: `Basic ${authHeader}`,
+      Authorization: getAuthHeader("ADMIN"),
     },
   };
-
-  const response = await axios.post(
-    `${API_BASE}/event/create/${adminId}`,
-    eventData,
-    config
-  );
+  const response = await axios.post(`${API_BASE}/admin/createUser/${adminId}`, formData, config);
   return response.data;
 };
 
-export const createUser = async ({ formData, adminId }) => {
-  const staticUser = staticCreds["ADMIN"];
-  const authHeader = btoa(`${staticUser.username}:${staticUser.password}`);
+/* ================================
+   USER PROFILE (USER)
+================================= */
 
+export const getUserProfile = async (userId) => {
   const config = {
     headers: {
-      Authorization: `Basic ${authHeader}`,
+      Authorization: getAuthHeader("USER"),
     },
   };
+  const response = await axios.get(`${API_BASE}/user/${userId}`, config);
+  return response.data;
+};
 
-  const response = await axios.post(
-    `${API_BASE}/admin/createUser/${adminId}`,
-    formData,
-    config
-  );
+export const updateUserById = async (userId, payload) => {
+  const config = {
+    headers: {
+      Authorization: getAuthHeader("USER"),
+      "Content-Type": "application/json",
+    },
+  };
+  const response = await axios.put(`${API_BASE}/user/update/${userId}`, payload, config);
+  return response.data;
+};
 
+/* ================================
+   HOST PROFILE
+================================= */
+
+export const getHostProfile = async (hostId) => {
+  const config = {
+    headers: {
+      Authorization: getAuthHeader("HOST"),
+    },
+  };
+  const response = await axios.get(`${API_BASE}/user/${hostId}`, config);
+  return response.data;
+};
+
+export const updateHostProfile = async (hostId, updatedData) => {
+  const config = {
+    headers: {
+      Authorization: getAuthHeader("HOST"),
+      "Content-Type": "application/json",
+    },
+  };
+  const response = await axios.put(`${API_BASE}/user/update/${hostId}`, updatedData, config);
+  return response.data;
+};
+
+/* ================================
+   ADMIN PROFILE
+================================= */
+
+export const getAdminProfile = async (adminId) => {
+  const config = {
+    headers: {
+      Authorization: getAuthHeader("ADMIN"),
+    },
+  };
+  const response = await axios.get(`${API_BASE}/user/${adminId}`, config);
+  return response.data;
+};
+
+export const updateAdminProfile = async (adminId, updatedData) => {
+  const config = {
+    headers: {
+      Authorization: getAuthHeader("ADMIN"),
+      "Content-Type": "application/json",
+    },
+  };
+  const response = await axios.put(`${API_BASE}/user/update/${adminId}`, updatedData, config);
+  return response.data;
+};
+
+/* ================================
+   EVENT OPERATIONS - CREATE
+================================= */
+
+export const createEventByHost = async ({ eventData, role = "HOST", adminId }) => {
+  const config = {
+    headers: {
+      Authorization: getAuthHeader(role),
+    },
+  };
+  const response = await axios.post(`${API_BASE}/event/create/${adminId}`, eventData, config);
+  return response.data;
+};
+
+export const createEventByAdmin = async (adminId, eventData) => {
+  const config = {
+    headers: {
+      Authorization: getAuthHeader("ADMIN"),
+    },
+  };
+  const response = await axios.post(`${API_BASE}/event/create/${adminId}`, eventData, config);
+  return response.data;
+};
+
+/* ================================
+   EVENT OPERATIONS - READ
+================================= */
+
+export const getUpcomingEvents = async () => {
+  const config = {
+    headers: {
+      Authorization: getAuthHeader("USER"),
+    },
+  };
+  const response = await axios.get(`${API_BASE}/event/upcoming`, config);
   return response.data;
 };
 
 export const getHostEvents = async (hostId) => {
-  const staticUser = staticCreds["HOST"]; // or dynamic if needed
-  const authHeader = btoa(`${staticUser.username}:${staticUser.password}`);
-  
   const config = {
     headers: {
-      Authorization: `Basic ${authHeader}`,
+      Authorization: getAuthHeader("HOST"),
     },
   };
-
-  const response = await axios.get(
-    `${API_BASE}/event/host/${hostId}`,
-    config
-  );
+  const response = await axios.get(`${API_BASE}/event/host/${hostId}`, config);
   return response.data;
 };
 
-export const deleteEvent = async ({ eventId, hostId, role = "HOST" }) => {
-  const staticUser = staticCreds[role];
-  const authHeader = btoa(`${staticUser.username}:${staticUser.password}`);
-
+export const getAllEventsForAdmin = async () => {
   const config = {
     headers: {
-      Authorization: `Basic ${authHeader}`,
+      Authorization: getAuthHeader("ADMIN"),
     },
   };
+  const response = await axios.get(`${API_BASE}/event/all`, config);
+  return response.data;
+};
 
+export const getEventById = async (eventId) => {
+  const config = {
+    headers: {
+      Authorization: getAuthHeader("HOST"),
+    },
+  };
+  const response = await axios.get(`${API_BASE}/event/${eventId}`, config);
+  return response.data;
+};
+
+/* ================================
+   EVENT OPERATIONS - UPDATE
+================================= */
+
+export const updateEventByHost = async (hostId, eventId, updatedData) => {
+  const config = {
+    headers: {
+      Authorization: getAuthHeader("HOST"),
+    },
+  };
+  const response = await axios.put(`${API_BASE}/event/update/${hostId}/${eventId}`, updatedData, config);
+  return response.data;
+};
+
+export const updateEventByAdmin = async ({ hostId, eventId, updatedData }) => {
+  const config = {
+    headers: {
+      Authorization: getAuthHeader("ADMIN"),
+    },
+  };
+  const response = await axios.put(`${API_BASE}/event/update/${hostId}/${eventId}`, updatedData, config);
+  return response.data;
+};
+
+/* ================================
+   EVENT OPERATIONS - DELETE
+================================= */
+
+export const deleteEvent = async ({ eventId, hostId, role = "HOST" }) => {
+  const config = {
+    headers: {
+      Authorization: getAuthHeader(role),
+    },
+  };
   await axios.delete(`${API_BASE}/event/delete/${hostId}/${eventId}`, config);
 };
 
-export const getUpcomingEvents = async () => {
-  const staticUser = staticCreds["USER"];
-  const authHeader = btoa(`${staticUser.username}:${staticUser.password}`);
-
-  const response = await axios.get("http://localhost:8080/api/event/upcoming", {
-    headers: {
-      Authorization: `Basic ${authHeader}`,
-    },
-  });
-
-  return response.data;
-};
-
-
+/* ================================
+   RSVP OPERATIONS
+================================= */
 
 export const rsvpToEvent = async ({ userId, eventId }) => {
-  const staticUser = staticCreds["USER"];
-  const authHeader = btoa(`${staticUser.username}:${staticUser.password}`);
   const config = {
     headers: {
-      Authorization: `Basic ${authHeader}`,
+      Authorization: getAuthHeader("USER"),
     },
   };
   const response = await axios.post(`${API_BASE}/user/rsvp/${userId}/${eventId}`, {}, config);
   return response.data;
 };
 
-
 export const cancelRSVP = async ({ userId, eventId }) => {
-  const staticUser = staticCreds["USER"];
-  const authHeader = btoa(`${staticUser.username}:${staticUser.password}`);
-
   const config = {
     headers: {
-      Authorization: `Basic ${authHeader}`,
-    }
-  };
-
-  const response = await axios.delete(
-    `${API_BASE}/user/rsvp/${userId}/${eventId}`, 
-    config
-  );
-  return response.data;
-};
-
-export const getUserProfile = async (userId) => {
-  const staticUser = {
-    username: "user",
-    password: "userpass",
-  };
-
-  const authHeader = btoa(`${staticUser.username}:${staticUser.password}`);
-  const config = {
-    headers: {
-      Authorization: `Basic ${authHeader}`,
+      Authorization: getAuthHeader("USER"),
     },
   };
-
-  const response = await axios.get(`${API_BASE}/user/${userId}`, config);
+  const response = await axios.delete(`${API_BASE}/user/rsvp/${userId}/${eventId}`, config);
   return response.data;
 };
 
-export const getAllEventsForAdmin = async () => {
-  const staticUser = staticCreds["ADMIN"];
-  const authHeader = btoa(`${staticUser.username}:${staticUser.password}`);
-
-  const config = {
-    headers: {
-      Authorization: `Basic ${authHeader}`,
-    },
-  };
-
-  const response = await axios.get(`${API_BASE}/event/all`, config);
-  return response.data;
-};
-
-export const getAdminProfile = async (adminId) => {
-  const staticUser = { username: "admin", password: "adminpass" };
-  const authHeader = btoa(`${staticUser.username}:${staticUser.password}`);
-
-  const config = {
-    headers: {
-      Authorization: `Basic ${authHeader}`,
-    },
-  };
-
-  const response = await axios.get(`http://localhost:8080/api/user/${adminId}`, config);
-  return response.data;
-};
-
-export const updateAdminProfile = async (adminId, updatedData) => {
-  const staticUser = { username: "admin", password: "adminpass" };
-  const authHeader = btoa(`${staticUser.username}:${staticUser.password}`);
-
-  const config = {
-    headers: {
-      Authorization: `Basic ${authHeader}`,
-      "Content-Type": "application/json",
-    },
-  };
-
-  const response = await axios.put(
-    `http://localhost:8080/api/user/update/${adminId}`,
-    updatedData,
-    config
-  );
-  return response.data;
-};
-
-export const createEventByAdmin = async (adminId, eventData) => {
-  const staticUser = { username: "admin", password: "adminpass" };
-  const authHeader = btoa(`${staticUser.username}:${staticUser.password}`);
-
-  const config = {
-    headers: {
-      Authorization: `Basic ${authHeader}`,
-    },
-  };
-
-  const response = await axios.post(
-    `http://localhost:8080/api/event/create/${adminId}`,
-    eventData,
-    config
-  );
-
-  return response.data;
-};
-
-
-export const updateEventByAdmin = async ({ hostId, eventId, updatedData }) => {
-  const staticUser = { username: "admin", password: "adminpass" };
-  const authHeader = btoa(`${staticUser.username}:${staticUser.password}`);
-
-  const config = {
-    headers: {
-      Authorization: `Basic ${authHeader}`,
-    },
-  };
-
-  const response = await axios.put(
-    `http://localhost:8080/api/event/update/${hostId}/${eventId}`,
-    updatedData,
-    config
-  );
-
-  return response.data;
-};
-
-
-// ====== Notifications ======
+/* ================================
+   NOTIFICATIONS
+================================= */
 
 export const fetchUserNotifications = async (userId) => {
-  const staticUser = {
-    username: "user",
-    password: "userpass",
-  };
-  const authHeader = btoa(`${staticUser.username}:${staticUser.password}`);
-
   const config = {
-    headers: { Authorization: `Basic ${authHeader}` },
+    headers: {
+      Authorization: getAuthHeader("USER"),
+    },
   };
-
   const response = await axios.get(`${API_BASE}/notifications/user/${userId}`, config);
-  return response.data;
-};
-
-export const getEventById = async (eventId) => {
-  const staticUser = { username: "host", password: "hostpass" };
-  const authHeader = btoa(`${staticUser.username}:${staticUser.password}`);
-
-  const config = {
-    headers: {
-      Authorization: `Basic ${authHeader}`,
-    },
-  };
-
-  const response = await axios.get(
-    `${API_BASE}/event/${eventId}`,
-    config
-  );
-  return response.data;
-};
-
-
-export const updateEventByHost = async (hostId, eventId, updatedData) => {
-  const staticUser = { username: "host", password: "hostpass" };
-  const authHeader = btoa(`${staticUser.username}:${staticUser.password}`);
-
-  const config = {
-    headers: {
-      Authorization: `Basic ${authHeader}`,
-    },
-  };
-
-  const response = await axios.put(
-    `${API_BASE}/event/update/${hostId}/${eventId}`,
-    updatedData,
-    config
-  );
-  return response.data;
-};
-
-export const getHostProfile = async (hostId) => {
-  const staticUser = { username: "host", password: "hostpass" };
-  const authHeader = btoa(`${staticUser.username}:${staticUser.password}`);
-
-  const config = {
-    headers: {
-      Authorization: `Basic ${authHeader}`,
-    },
-  };
-
-  const response = await axios.get(`${API_BASE}/user/${hostId}`, config);
-  return response.data;
-};
-
-
-export const updateHostProfile = async (hostId, updatedData) => {
-  const staticUser = { username: "host", password: "hostpass" };
-  const authHeader = btoa(`${staticUser.username}:${staticUser.password}`);
-
-  const config = {
-    headers: {
-      Authorization: `Basic ${authHeader}`,
-      "Content-Type": "application/json",
-    },
-  };
-
-  const response = await axios.put(
-    `${API_BASE}/user/update/${hostId}`,
-    updatedData,
-    config
-  );
-  return response.data;
-};
-
-
-export const updateUserById = async (userId, payload) => {
-  const staticUser = { username: "user", password: "userpass" };
-  const authHeader = btoa(`${staticUser.username}:${staticUser.password}`);
-
-  const config = {
-    headers: {
-      Authorization: `Basic ${authHeader}`,
-      "Content-Type": "application/json",
-    },
-  };
-
-  const response = await axios.put(`${API_BASE}/user/update/${userId}`, payload, config);
   return response.data;
 };

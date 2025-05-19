@@ -150,3 +150,21 @@ html, body, #root {
     font-size: 2rem;
   }
 }
+
+/* .event-search-input {
+  width: 300px;
+  padding: 0.6rem 1rem;
+  margin-bottom: 2rem;
+  font-size: 1rem;
+  border: none;
+  border-radius: 12px;
+  outline: none;
+  box-shadow: 0 0 10px rgba(255, 0, 128, 0.25);
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+  backdrop-filter: blur(6px);
+}
+
+.event-search-input::placeholder {
+  color: #ccc;
+} */

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { createEvent } from "../../services/api";
+import { createEventByHost } from "../../services/api";
 import Navbar from "../../components/Navbar";
 import "./HostCreateEventPage.css";
 
@@ -54,7 +54,7 @@ export default function HostCreateEventPage() {
         maxAttendees: Number(eventData.maxAttendees),
       };
 
-      const result = await createEvent({
+      const result = await createEventByHost({
         eventData: payload,
         role: "HOST",
         adminId: hostId,

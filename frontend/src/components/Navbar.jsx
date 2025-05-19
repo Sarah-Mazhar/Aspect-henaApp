@@ -1,6 +1,6 @@
 import { useEffect, useState, useRef } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { FaUserCircle, FaSignOutAlt } from "react-icons/fa";
+import { FaUserCircle, FaSignOutAlt, FaArrowLeft } from "react-icons/fa";
 import { fetchUserNotifications } from "../services/api";
 import "./Navbar.css";
 
@@ -68,7 +68,16 @@ export default function Navbar() {
 
   return (
     <nav className="navbar">
-      <div className="nav-logo gradient-text">HENA</div>
+      <div className="nav-left">
+        {!isLanding && !isLoginOrSignup && isLoggedIn && (
+          <FaArrowLeft
+            className="nav-icon back-icon"
+            onClick={() => navigate(-1)}
+            title="Go Back"
+          />
+        )}
+        <div className="nav-logo gradient-text">HENA</div>
+      </div>
 
       {isLanding && (
         <div className="nav-right">
