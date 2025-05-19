@@ -1,3 +1,10 @@
+@font-face {
+  font-family: 'DoorPrice';
+  src: url('../assets/Door Price.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+}
+
 .navbar {
   position: fixed;
   top: 0;
@@ -14,30 +21,21 @@
   box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
 }
 
-/* Left section: back + logo */
-.nav-left {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-}
-
-/* Logo */
 .nav-logo {
-  font-size: clamp(1rem, 3vw, 2rem);
-  font-weight: bold;
-  letter-spacing: 1px;
+  font-family: 'DoorPrice', sans-serif;
+  font-size: clamp(4rem, 3vw, 4rem);
+  letter-spacing: 1 px;
   display: flex;
   align-items: center;
 }
 
-/* Gradient effect on logo */
+
 .gradient-text {
   background: linear-gradient(to right, #ff00ff, #ff0077, #ff0000);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 
-/* Login button on landing */
 .nav-right button {
   background: transparent;
   color: white;
@@ -53,11 +51,6 @@
   font-size: 2rem;
   cursor: pointer;
   transition: transform 0.2s ease;
-}
-
-/* Back icon - grey */
-.back-icon {
-  color: #888;
 }
 
 /* Profile icon - pink */
