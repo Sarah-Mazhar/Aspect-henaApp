@@ -32,34 +32,33 @@ public class AdminController {
     private AdminLogRepository adminLogRepository;
 
 
-    // Update user (Admin only)
-    // ✅ Admin updates an existing user
-    // Update user (Admin only)
-    // Update user (Admin only)
-    @PreAuthorize("hasRole('ADMIN')")
-    @PutMapping("/updateUser/{adminId}/{userId}")
-    public User updateUser(@PathVariable Long adminId, @PathVariable Long userId, @RequestBody UpdateUserDTO userDTO) {
-        // Find the admin by ID (via path variable)
-        User adminUser = userService.getUserById(adminId);
-
-        // Find and update the user by ID
-        User updatedUser = new User();
-        updatedUser.setUsername(userDTO.getUsername());
-        updatedUser.setEmail(userDTO.getEmail());
-        updatedUser.setRole(userDTO.getRole());
-        User userAfterUpdate = userService.updateUser(userId, updatedUser);
-
-        // Log the action of the admin
-        AdminLog log = new AdminLog();
-        log.setAdminId(adminUser.getId());  // Store the ID of the admin performing the action
-        log.setAction("UPDATE_USER");  // Log the action as "UPDATE_USER"
-        log.setTargetEntity(userAfterUpdate.getUsername());  // Store the updated user's username as the target entity
-        log.setTimestamp(LocalDateTime.now());  // Store the current timestamp of the action
-        adminLogRepository.save(log);  // Save the log to the database
-
-        return userAfterUpdate;  // Return the updated user
-    }
-
+//    // Update user (Admin only)
+//    // ✅ Admin updates an existing user
+//    // Update user (Admin only)
+//    // Update user (Admin only)
+//    @PreAuthorize("hasRole('ADMIN')")
+//    @PutMapping("/updateUser/{adminId}/{userId}")
+//    public User updateUser(@PathVariable Long adminId, @PathVariable Long userId, @RequestBody UpdateUserDTO userDTO) {
+//        // Find the admin by ID (via path variable)
+//        User adminUser = userService.getUserById(adminId);
+//
+//        // Find and update the user by ID
+//        User updatedUser = new User();
+//        updatedUser.setUsername(userDTO.getUsername());
+//        updatedUser.setEmail(userDTO.getEmail());
+//        updatedUser.setRole(userDTO.getRole());
+//        User userAfterUpdate = userService.updateUser(userId, updatedUser);
+//
+//        // Log the action of the admin
+//        AdminLog log = new AdminLog();
+//        log.setAdminId(adminUser.getId());  // Store the ID of the admin performing the action
+//        log.setAction("UPDATE_USER");  // Log the action as "UPDATE_USER"
+//        log.setTargetEntity(userAfterUpdate.getUsername());  // Store the updated user's username as the target entity
+//        log.setTimestamp(LocalDateTime.now());  // Store the current timestamp of the action
+//        adminLogRepository.save(log);  // Save the log to the database
+//
+//        return userAfterUpdate;  // Return the updated user
+//    }
 
 
     //    to log actions by admin username

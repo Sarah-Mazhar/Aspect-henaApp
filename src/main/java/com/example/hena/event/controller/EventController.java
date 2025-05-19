@@ -80,24 +80,24 @@
         }
 
 
-        // ✅ View all events created by a specific admin
-        @PreAuthorize("hasRole('ADMIN')")
-        @GetMapping("/admin/{adminId}")
-        public ResponseEntity<?> getAdminEvents(@PathVariable Long adminId) {
-            User admin = userService.getUserById(adminId);
-
-            if (admin == null) {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Admin not found.");
-            }
-
-            if (!"ADMIN".equals(admin.getRole())) {
-                return ResponseEntity.status(HttpStatus.FORBIDDEN)
-                        .body("Access denied: Only admins can view admin-created events.");
-            }
-
-            List<Event> events = eventService.findEventsByAdmin(adminId);
-            return ResponseEntity.ok(events);
-        }
+//        // ✅ View all events created by a specific admin
+//        @PreAuthorize("hasRole('ADMIN')")
+//        @GetMapping("/admin/{adminId}")
+//        public ResponseEntity<?> getAdminEvents(@PathVariable Long adminId) {
+//            User admin = userService.getUserById(adminId);
+//
+//            if (admin == null) {
+//                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Admin not found.");
+//            }
+//
+//            if (!"ADMIN".equals(admin.getRole())) {
+//                return ResponseEntity.status(HttpStatus.FORBIDDEN)
+//                        .body("Access denied: Only admins can view admin-created events.");
+//            }
+//
+//            List<Event> events = eventService.findEventsByAdmin(adminId);
+//            return ResponseEntity.ok(events);
+//        }
 
         // ✅ Get a specific event by ID
         @GetMapping("/{id}")
@@ -105,41 +105,41 @@
             return eventService.findEventById(id);
         }
 
-        // ✅ RSVP to an event (User only)
-        @PreAuthorize("hasRole('USER')")
-        @PostMapping("/rsvp/{userId}/{eventId}")
-        public String rsvpToEvent(@PathVariable Long userId, @PathVariable Long eventId) {
-            User user = userService.getUserById(userId);
-            Event event = eventService.findEventById(eventId);
-            eventService.rsvpToEvent(eventId, user);
-            return "Responded successfully to attend: " + event.getName();
-        }
+//        // ✅ RSVP to an event (User only)
+//        @PreAuthorize("hasRole('USER')")
+//        @PostMapping("/rsvp/{userId}/{eventId}")
+//        public String rsvpToEvent(@PathVariable Long userId, @PathVariable Long eventId) {
+//            User user = userService.getUserById(userId);
+//            Event event = eventService.findEventById(eventId);
+//            eventService.rsvpToEvent(eventId, user);
+//            return "Responded successfully to attend: " + event.getName();
+//        }
 
-        // ✅ Search events by date and/or category
-        @GetMapping("/search")
-        public List<Event> searchEvents(@RequestParam(required = false) String date,
-                                        @RequestParam(required = false) String category) {
-            return eventService.searchEvents(date, category);
-        }
+//        // ✅ Search events by date and/or category
+//        @GetMapping("/search")
+//        public List<Event> searchEvents(@RequestParam(required = false) String date,
+//                                        @RequestParam(required = false) String category) {
+//            return eventService.searchEvents(date, category);
+//        }
 
-        // ✅ Admin can view all events with attendee details
-        @PreAuthorize("hasRole('ADMIN')")
-        @GetMapping("/admin/events-with-attendee-details/{adminId}")
-        public ResponseEntity<?> getAllEventsWithAttendeeDetails(@PathVariable Long adminId) {
-            User adminUser = userService.getUserById(adminId);
-
-            if (adminUser == null) {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Admin not found");
-            }
-
-            if (!"ADMIN".equals(adminUser.getRole())) {
-                return ResponseEntity.status(HttpStatus.FORBIDDEN)
-                        .body("Access denied: Only admins can perform this action.");
-            }
-
-            List<Map<String, Object>> events = eventService.getAllEventsWithAttendeeDetails();
-            return ResponseEntity.ok(events);
-        }
+//        // ✅ Admin can view all events with attendee details
+//        @PreAuthorize("hasRole('ADMIN')")
+//        @GetMapping("/admin/events-with-attendee-details/{adminId}")
+//        public ResponseEntity<?> getAllEventsWithAttendeeDetails(@PathVariable Long adminId) {
+//            User adminUser = userService.getUserById(adminId);
+//
+//            if (adminUser == null) {
+//                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Admin not found");
+//            }
+//
+//            if (!"ADMIN".equals(adminUser.getRole())) {
+//                return ResponseEntity.status(HttpStatus.FORBIDDEN)
+//                        .body("Access denied: Only admins can perform this action.");
+//            }
+//
+//            List<Map<String, Object>> events = eventService.getAllEventsWithAttendeeDetails();
+//            return ResponseEntity.ok(events);
+//        }
 
         @GetMapping("/upcoming")
         public List<Event> getUpcomingEvents() {

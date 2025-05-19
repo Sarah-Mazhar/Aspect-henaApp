@@ -129,13 +129,13 @@ public class UserController {
     }
 
 
-    // Placeholder endpoint: Search for events
-    @GetMapping("/search")
-    public String searchEvents(@RequestParam(required = false) String date,
-                               @RequestParam(required = false) String category) {
-        // You will integrate with EventService for real search logic
-        return "Searched for events on date: " + date + ", category: " + category;
-    }
+//    // Placeholder endpoint: Search for events
+//    @GetMapping("/search")
+//    public String searchEvents(@RequestParam(required = false) String date,
+//                               @RequestParam(required = false) String category) {
+//        // You will integrate with EventService for real search logic
+//        return "Searched for events on date: " + date + ", category: " + category;
+//    }
 
     @GetMapping("/test-log")
     public String testLog() {
