@@ -148,11 +148,17 @@ public class UserService {
         try {
             String cached = redis.get(key);
             if (cached != null) {
-                System.out.println(" [CACHE] Returning user by ID from Redis");
-                return objectMapper.readValue(cached, User.class);
+                User cachedUser = objectMapper.readValue(cached, User.class);
+
+                // ❗ Avoid stale data
+                if (cachedUser.getRole() != null) {
+                    return cachedUser;
+                }
+
+                System.out.println("⚠️ Cached user missing role. Fetching from DB...");
             }
         } catch (Exception e) {
-            System.err.println(" Redis error (getUserById): " + e.getMessage());
+            System.err.println("Redis error (getUserById): " + e.getMessage());
         }
 
         User user = userRepository.findById(id)
@@ -161,11 +167,12 @@ public class UserService {
         try {
             redis.set(key, objectMapper.writeValueAsString(user), Duration.ofMinutes(10));
         } catch (Exception e) {
-            System.err.println(" Redis set error (getUserById): " + e.getMessage());
+            System.err.println("Redis set error (getUserById): " + e.getMessage());
         }
 
         return user;
     }
+
 
     // ============================
     // 🔹 Password Utilities

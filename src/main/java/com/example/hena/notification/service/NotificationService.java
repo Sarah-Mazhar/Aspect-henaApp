@@ -73,12 +73,19 @@ public class NotificationService {
      * @param user  The user who RSVP'd
      */
     public void notifyUserRSVP(Event event, User user) {
-        if ("user".equalsIgnoreCase(user.getRole())) {
+        System.out.println("🔔 Attempting to notify user with role: " + user.getRole());
+
+        if ("USER".equalsIgnoreCase(user.getRole())) {
             String content = "🌟 Successfully Registered For '" + event.getName() +
                     "'! 📅 Mark your calendar for " + event.getEventDate().toLocalDate() +
                     " at " + event.getEventDate().toLocalTime() +
                     " — SAVE THE DATE! 🎉";
+
             create(user.getId(), event.getId(), "RSVP_CONFIRMATION", content);
+            System.out.println("✅ Notification created for user " + user.getUsername());
+        } else {
+            System.out.println("❌ User role did not match. Notification skipped.");
         }
     }
+
 }
