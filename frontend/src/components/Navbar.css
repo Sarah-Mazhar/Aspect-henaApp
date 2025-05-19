@@ -19,12 +19,21 @@
   background: rgba(255, 255, 255, 0.05);
   backdrop-filter: blur(10px);
   box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+
 }
+.nav-left {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  height: 100%; /* Ensure full height */
+  color: grey;
+}
+
 
 .nav-logo {
   font-family: 'DoorPrice', sans-serif;
   font-size: clamp(4rem, 3vw, 4rem);
-  letter-spacing: 1 px;
+  letter-spacing: 1px;
   display: flex;
   align-items: center;
 }

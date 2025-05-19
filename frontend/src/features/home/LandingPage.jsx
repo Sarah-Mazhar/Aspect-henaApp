@@ -59,7 +59,7 @@ const LandingPage = () => {
           PLAN. ENGAGE. CELEBRATE.
         </p>
 
-        <button className="get-started" onClick={() => navigate('/login')}>
+        <button className="get-started" onClick={() => navigate('/signup')}>
           Get Started
         </button>
 

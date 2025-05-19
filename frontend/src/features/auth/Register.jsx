@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import "./Register.css";
+import { FaArrowLeft } from "react-icons/fa";
 
 function Register() {
   const navigate = useNavigate();
@@ -57,7 +58,14 @@ function Register() {
       transition={{ duration: 0.6 }}
     >
       <nav className="navbar">
-        <div className="nav-logo gradient-text">HENA</div>
+        <div className="nav-left">
+          <FaArrowLeft
+            className="nav-icon back-icon"
+            onClick={() => navigate("/")}
+            title="Back to Home"
+          />
+          <div className="nav-logo gradient-text">HENA</div>
+        </div>
       </nav>
 
       <div className="register-body">

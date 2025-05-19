@@ -21,12 +21,15 @@ export default function Navbar() {
     setRole(userRole);
   }, [location]);
 
-  useEffect(() => {
-    if (!isLoggedIn) return;
+ useEffect(() => {
+  const token = localStorage.getItem("token");
+  const userRole = localStorage.getItem("role");
 
-    const interval = setInterval(fetchNewNotification, 1500);
-    return () => clearInterval(interval);
-  }, [isLoggedIn]);
+  const hasToken = !!token || !!localStorage.getItem("userId"); // fallback
+  setIsLoggedIn(hasToken);
+  setRole(userRole);
+}, [location]);
+
 
   const fetchNewNotification = async () => {
     const userId = localStorage.getItem("userId");
