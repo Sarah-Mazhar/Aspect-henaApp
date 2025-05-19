@@ -4,22 +4,40 @@ import com.example.hena.notification.entity.Notification;
 import com.example.hena.notification.repository.NotificationRepository;
 import com.example.hena.event.entity.Event;
 import com.example.hena.user.entity.User;
+
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
+/**
+ * Service layer for managing notifications.
+ */
 @Service
 public class NotificationService {
 
     private final NotificationRepository notificationRepository;
 
-    // Inject the NotificationRepository via constructor
+    // ============================
+    //  Constructor
+    // ============================
+
     public NotificationService(NotificationRepository repository) {
         this.notificationRepository = repository;
     }
 
-    // Generic method to create and store a new notification
+    // ============================
+    //  Create Notification
+    // ============================
+
+    /**
+     * Generic method to create and store a new notification.
+     * @param userId  Target user ID
+     * @param eventId Related event ID
+     * @param type    Notification type
+     * @param content Message content
+     * @return Saved Notification
+     */
     public Notification create(Long userId, Long eventId, String type, String content) {
         Notification n = new Notification();
         n.setUserId(userId);
@@ -31,30 +49,29 @@ public class NotificationService {
         return notificationRepository.save(n);
     }
 
-    // Retrieve all notifications for a given user
+    // ============================
+    //  Get Notifications
+    // ============================
+
+    /**
+     * Retrieve all notifications for a specific user.
+     * @param userId User ID
+     * @return List of Notifications
+     */
     public List<Notification> getUserNotifications(Long userId) {
         return notificationRepository.findByUserId(userId);
     }
 
-    // Send reminder notifications to users 1 hour before the event starts
-    public void createEventReminder(Event event, List<User> users) {
-        if (event.getEventDate() == null) return;
+    // ============================
+    //  Predefined Notification: RSVP Confirmation
+    // ============================
 
-        LocalDateTime now = LocalDateTime.now();
-        LocalDateTime eventTime = event.getEventDate();
-
-        long minutesUntilEvent = java.time.Duration.between(now, eventTime).toMinutes();
-        if (minutesUntilEvent <= 60 && minutesUntilEvent >= 0) {
-            for (User user : users) {
-                if ("user".equalsIgnoreCase(user.getRole())) {
-                    String content = "⏰ Reminder: Your event '" + event.getName() + "' starts in " + minutesUntilEvent + " minutes.";
-                    create(user.getId(), event.getId(), "REMINDER", content);
-                }
-            }
-        }
-    }
-
-    // Notify a USER that they have successfully RSVP'd
+    /**
+     * Notify a user that they have successfully RSVP'd to an event.
+     * Only applies to users with role "user".
+     * @param event Event the user RSVP'd to
+     * @param user  The user who RSVP'd
+     */
     public void notifyUserRSVP(Event event, User user) {
         if ("user".equalsIgnoreCase(user.getRole())) {
             String content = "🌟 Successfully Registered For '" + event.getName() +
@@ -62,42 +79,6 @@ public class NotificationService {
                     " at " + event.getEventDate().toLocalTime() +
                     " — SAVE THE DATE! 🎉";
             create(user.getId(), event.getId(), "RSVP_CONFIRMATION", content);
-        }
-    }
-
-    // Notify the host and admin when a user RSVPs to the event
-    public void notifyHostRSVP(Event event, User attendee) {
-        User host = event.getHost();
-        if (host != null && "host".equalsIgnoreCase(host.getRole())) {
-            String content = attendee.getUsername() + " has RSVP’d to your event: " + event.getName();
-            create(host.getId(), event.getId(), "RSVP", content);
-        }
-
-        for (User u : event.getRsvps()) {
-            if ("admin".equalsIgnoreCase(u.getRole())) {
-                String content = attendee.getUsername() + " has RSVP’d to an event: " + event.getName();
-                create(u.getId(), event.getId(), "RSVP", content);
-            }
-        }
-    }
-
-    // Notify users who RSVP’d when the event’s time or location is updated
-    public void notifyEventUpdate(Event event, List<User> rsvps, String fieldChanged) {
-        for (User u : rsvps) {
-            if ("user".equalsIgnoreCase(u.getRole())) {
-                String content = "Event '" + event.getName() + "' had its " + fieldChanged + " updated.";
-                create(u.getId(), event.getId(), "UPDATE", content);
-            }
-        }
-    }
-
-    // Notify all attending users when the event is canceled
-    public void notifyEventCancellation(Event event, List<User> rsvps) {
-        for (User u : rsvps) {
-            if ("user".equalsIgnoreCase(u.getRole())) {
-                String content = "🚫 The event '" + event.getName() + "' has been canceled.";
-                create(u.getId(), event.getId(), "CANCELLATION", content);
-            }
         }
     }
 }
