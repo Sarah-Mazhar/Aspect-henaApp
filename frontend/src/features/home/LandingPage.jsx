@@ -40,7 +40,7 @@ const LandingPage = () => {
       <div className="landing-container">
         <img src="/logo.png" alt="Logo" className="landing-logo" />
 
-        <div className="main-title">Event Management</div>
+        <div className="main-title">HENA <br></br>EVENT MANAGEMENT</div>
 
         <AnimatePresence mode="wait">
           <motion.div
@@ -56,8 +56,7 @@ const LandingPage = () => {
         </AnimatePresence>
 
         <p className="description">
-          Deliver exceptional events with ease. Our powerful platform streamlines
-          planning, maximizes engagement, and ensures unforgettable experiences every time.
+          PLAN. ENGAGE. CELEBRATE.
         </p>
 
         <button className="get-started" onClick={() => navigate('/login')}>

@@ -85,8 +85,8 @@ export default function Login() {
           transition={{ duration: 0.6 }}
         >
           <div className="login-container">
-            <h2 className="login-title login-purple">Log in</h2>
-            <p className="login-subtitle">Welcome Back!</p>
+            <h2 className="login-title login-purple">Login</h2>
+            {/* <p className="login-subtitle">Welcome Back!</p> */}
 
             <form className="login-form" onSubmit={handleSubmit}>
               <input

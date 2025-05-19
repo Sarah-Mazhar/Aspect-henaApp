@@ -1,3 +1,9 @@
+@font-face {
+  font-family: 'Girloy';
+  src: url('../../assets/Gilroy-Heavy.ttf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+}
 /* === RESET & BASE === */
 * {
   box-sizing: border-box;
@@ -131,6 +137,7 @@ html, body, #root {
   font-weight: bold;
   margin-bottom: 2.5rem;
   text-align: center;
+  font-family: 'Girloy', sans-serif;
 }
 
 .browse-text {

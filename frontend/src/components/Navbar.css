@@ -1,3 +1,10 @@
+@font-face {
+  font-family: 'DoorPrice';
+  src: url('../assets/Door Price.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+}
+
 .navbar {
   position: fixed;
   top: 0;
@@ -15,13 +22,13 @@
 }
 
 .nav-logo {
-  font-size: clamp(1rem, 3vw, 2rem);
-  font-weight: bold;
-  letter-spacing: 1px;
+  font-family: 'DoorPrice', sans-serif;
+  font-size: clamp(4rem, 3vw, 4rem);
+  letter-spacing: 1 px;
   display: flex;
   align-items: center;
- 
 }
+
 
 .gradient-text {
   background: linear-gradient(to right, #ff00ff, #ff0077, #ff0000);
